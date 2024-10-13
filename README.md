@@ -14,11 +14,17 @@ git pull/push
 git add  
     * Don’t use this; stage in Sublime Merge instead  
 git rebase -i HEAD~[n]  
-    * Allows you to edit multiple previous commits  
+    * Allows you to edit multiple (n) previous commits  
         This is especially useful if you have many small commits that build upon one another  
     * Can use for editing commit messages (though you can do that in Sublime Merge)  
 git status  
     * Can be used to check what your branch status is (i.e. if you are ahead/behind main)  
+git checkout -b [name]  
+    * Allows you to create a branch called [name] and move to it  
+git checkout [name]  
+    * Allows you to move to the branch called [name] if it exists  
+git branch -d [name]  
+    * Allows you to delete a branch you no longer need  
 
 # Tools
 VSCode  
