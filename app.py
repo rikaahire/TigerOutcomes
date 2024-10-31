@@ -1,32 +1,21 @@
-import flask
-import database
+from shiny import reactive, render
+from shiny.express import input, ui
 
-#----------------------------------------------------------------------
+income_range = 1
+degree = "string"
 
-app = flask.Flask(__name__, template_folder='.')
+# Add page title and sidebar
+ui.page_opts(title="TigerOutcomes", fillable=True)
 
-#----------------------------------------------------------------------
-# General Routes
-#----------------------------------------------------------------------
-# Homepage
-@app.route('/', methods=['GET'])
-@app.route('/index', methods=['GET'])
-def index():
-    html = flask.render_template('templates/homepage.html')
-    response = flask.make_response(html)
-    return response
-@app.route('/job', methods=['GET'])
-def index():
-    html = flask.render_template('templates/job.html')
-    response = flask.make_response(html)
-    return response
-@app.route('/search', methods=['GET'])
-def index():
-    html = flask.render_template('templates/search.html')
-    response = flask.make_response(html)
-    return response
-@app.route('/settings', methods=['GET'])
-def index():
-    html = flask.render_template('templates/settings.html')
-    response = flask.make_response(html)
-    return response
+with ui.sidebar(open="desktop"):
+    ui.input_text("major_search", "Major:", ""),
+    ui.input_action_button("search", "Search", class_="btn-success"),
+
+with ui.layout_columns(fill=False):
+    with ui.value_box():
+        "Income Range",
+        income_range
+
+    with ui.value_box():
+        "Degree",
+        degree
