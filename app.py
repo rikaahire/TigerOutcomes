@@ -35,7 +35,7 @@ with ui.layout_columns(fill=False):
         "Income",
         @render.text(inline=True)  
         def income_txt():
-            return values[3]
+            return "$" + str (values[3])
     
     with ui.value_box():
         "Legal Sex",

@@ -6,6 +6,6 @@ def get_values(major_in):
     # first_gen = x[:,2]
     # income = x[:,3]
     # major = x[:,5]
-    out = [0, 1, 2, 3, "Female"]
+    out = [0, 1, "Yes", 30000, "Female"]
     print(major_in)
     return out
