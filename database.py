@@ -89,6 +89,22 @@ def get_rows(table_name, major):
 
     return rows
 
+def get_first_rows(table_name, number):
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(engine)
+
+    # Get table
+    table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
+
+    # Create a select query
+    stmt = sqlalchemy.select(table).limit(number)
+
+    # Execute the query and fetch the results
+    with engine.connect() as conn:
+        rows = conn.execute(stmt).fetchall()
+
+    return rows
+
 
 def main():
     parser = argparse.ArgumentParser(
