@@ -1,20 +1,16 @@
 #!/usr/bin/env python
-
-import os
-os.environ['DYLD_LIBRARY_PATH'] = '/Volumes/TigerOutcomes/PostgreSQL/17/lib'
-
+from sqlalchemy.sql import text
 import keyring
 import pandas as pd
-
+import os
 import sys
-sys.path.append('/Volumes/TigerOutcomes/SQL')
-
 import psycopg2
 from psycopg2 import sql
 import argparse
-
 import sqlalchemy
-from sqlalchemy.sql import text
+
+os.environ['DYLD_LIBRARY_PATH'] = '/Volumes/TigerOutcomes/PostgreSQL/17/lib'
+sys.path.append('/Volumes/TigerOutcomes/SQL')
 
 # Database and SMB configuration
 DATABASE_URL = 'postgresql://bz5989@localhost:5432/mydb'
