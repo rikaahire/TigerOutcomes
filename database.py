@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import os
+os.environ['DYLD_LIBRARY_PATH'] = '/Volumes/TigerOutcomes/PostgreSQL/17/lib'
+
 import keyring
 import pandas as pd
 import psycopg2
