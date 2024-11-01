@@ -3,6 +3,8 @@
 import pandas as pd
 import psycopg2
 from psycopg2 import sql
+import argparse
+import sys
 
 DATABASE_URL = 'postgresql://bz5989@localhost:5432/mydb'
 
@@ -39,5 +41,24 @@ def load_data_to_postgres(file_path, table_name):
         print("Data loaded")
 
 # Load files
-for file_name, table_name in files_to_tables.items():
-    load_data_to_postgres(smb_mount_path + file_name, table_name)
+
+def main():
+    parser = argparse.ArgumentParser(
+        prog=sys.argv[0],
+        description='Database running')
+    parser.add_argument('load', nargs='?',
+        help='load in data?')
+    load = parser.parse_args().load
+
+    try:
+        if load is not None:
+            for file_name, table_name in files_to_tables.items():
+                load_data_to_postgres(smb_mount_path + file_name, table_name)
+        else:
+            print("Didn't choose to load data")
+    except Exception as ex:
+        print(ex, file=sys.stderr)
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()
