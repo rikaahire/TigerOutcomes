@@ -6,7 +6,7 @@ import prototype
 
 income_range = 1
 degree = "string"
-values = prototype.get_values(input.major_search)
+values = prototype.get_values(input.major_search.get)
 
 print(values)
 
