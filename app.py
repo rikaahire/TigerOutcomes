@@ -6,9 +6,7 @@ import prototype
 
 income_range = 1
 degree = "string"
-values = prototype.get_values(input.major_search.get)
-
-print(values)
+values = []
 
 # Add page title
 ui.page_opts(title="TigerOutcomes", fillable=True)
@@ -23,6 +21,8 @@ with ui.layout_columns(fill=False):
         "Degree",
         @render.text(inline=True)  
         def text():
+            values = prototype.get_values(input.major_search())
+            print(values)
             return input.major_search()
 
     with ui.value_box():
