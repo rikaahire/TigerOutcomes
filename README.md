@@ -5,10 +5,10 @@ VCR for COS 333 project
 run `pip install -r requirements.txt` in order to install necessary libraries
 
 # How to run different things
-* Run server (from /Volumes/TigerOutcomes)
-    * PostgreSQL/17/bin/pg_ctl -D data/ -l logfile start
+* Run server (navigate to /Volumes/TigerOutcomes)
+    * SQL/bin/pg_ctl -D data/ -l logfile start
 * Remember to stop the server when you are done:
-    * PostgreSQL/17/bin/pg_ctl -D data/ -l logfile stop
+    * SQL/bin/pg_ctl -D data/ -l logfile stop
 * Run Shiny app
     * Click the arrow next to the Run triangle and select "Run Shiny App"
 
