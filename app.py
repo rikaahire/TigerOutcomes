@@ -6,9 +6,10 @@ income_range = 1
 degree = "string"
 values = prototype.get_values()[1]
 
-# Add page title and sidebar
+# Add page title
 ui.page_opts(title="TigerOutcomes", fillable=True)
 
+# Add sidebar
 with ui.sidebar(open="desktop"):
     ui.input_text("major_search", "Major:", ""),
     "You entered:"
