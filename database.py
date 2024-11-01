@@ -27,6 +27,9 @@ files_to_tables = {
     "COS333_NSC_ST_Degrees2.xlsx": "st_degrees"
 }
 
+# Create SQLAlchemy engine
+engine = sqlalchemy.create_engine(DATABASE_URL)
+
 def mount_smb_share():
     # Retrieve credentials from Keychain
     username = keyring.get_password("TigerOutcomes_Service", "username_key")
@@ -38,9 +41,7 @@ def mount_smb_share():
             f"osascript -e 'do shell script \"mount volume \\\"{server_path}\\\" "
             f"as user name \\\"{username}\\\" with password \\\"{password}\\\"\"'"
         )
-        print("SMB share mounted successfully.")
-    else:
-        print("Failed to retrieve SMB credentials.")
+    print("SMB share mounted successfully.")
 
 def create_table_if_not_exists(connection, table_name, df):
     with connection.cursor() as cursor:
@@ -57,14 +58,36 @@ def load_data_to_postgres(file_path, table_name):
         # Read Excel file
         df = pd.read_excel(file_path)
 
-        # Create SQLAlchemy engine
-        engine = sqlalchemy.create_engine(DATABASE_URL)
-
         # Load DataFrame into PostgreSQL table, replacing if it exists
         df.to_sql(table_name, engine, if_exists='replace', index=False)
         print(f"Data loaded into {table_name} successfully.")
     except Exception as e:
         print(f"Error loading data into {table_name}: {e}")
+
+def get_cols():
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('demographics', metadata, autoload_with=engine)
+    
+    cols = [column.name for column in table.columns]
+    
+    return cols
+
+def get_rows(table_name, num_rows):
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(engine)
+
+    # Get table
+    table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
+
+    # Create a select query
+    stmt = sqlalchemy.select(table).limit(num_rows)
+
+    # Execute the query and fetch the results
+    with engine.connect() as conn:
+        rows = conn.execute(stmt).fetchall()
+
+    return rows
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -87,6 +110,13 @@ def main():
                 print(f"File {file_name} not found on SMB share.")
     else:
         print("No data loading")
+
+    cols = get_cols()
+    print(cols)
+
+    rows = get_rows("demographics", 10)
+    for row in rows:
+        print(row)
 
 if __name__ == '__main__':
     main()
