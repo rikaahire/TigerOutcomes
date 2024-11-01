@@ -81,7 +81,7 @@ def get_rows(table_name, major):
     table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
 
     # Create a select query
-    stmt = sqlalchemy.select(table).where(text(major))
+    stmt = sqlalchemy.select(table).where(table.columns.AcadPlanDescr == major).limit(10)
 
     # Execute the query and fetch the results
     with engine.connect() as conn:

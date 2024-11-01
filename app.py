@@ -13,7 +13,7 @@ ui.page_opts(title="TigerOutcomes", fillable=True)
 
 # Add sidebar
 with ui.sidebar(open="desktop"):
-    ui.input_text("major_search", "Major:", ""),
+    ui.input_text("major_search", "Major:", "Computer Science"),
     ui.input_action_button("search", "Search", class_="btn-success"),
 
 with ui.layout_columns(fill=False):
@@ -21,7 +21,6 @@ with ui.layout_columns(fill=False):
         "Degree",
         @render.text(inline=True)  
         def text():
-            values = prototype.get_values(input.major_search())
             return input.major_search()
 
     with ui.value_box():
