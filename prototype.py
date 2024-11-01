@@ -7,7 +7,7 @@ def get_values(major_in):
     # first_gen = x[:,2]
     # income = x[:,3]
     # major = x[:,5]
-    major = "AcadPlanDescr = " + str(major_in)
+    major = "demographics.AcadPlanDescr = 'Computer Science'"
     out = db.get_rows("demographics", major)
     # out = [0, 1, "Yes", 30000, "Female"]
     return out[1]

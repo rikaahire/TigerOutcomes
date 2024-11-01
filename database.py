@@ -7,13 +7,14 @@ import keyring
 import pandas as pd
 
 import sys
-sys.path.append('/Volumes/TigerOutcomes/PostgreSQL')
+sys.path.append('/Volumes/TigerOutcomes/SQL')
 
 import psycopg2
 from psycopg2 import sql
 import argparse
 
 import sqlalchemy
+from sqlalchemy.sql import text
 
 # Database and SMB configuration
 DATABASE_URL = 'postgresql://bz5989@localhost:5432/mydb'
@@ -80,7 +81,7 @@ def get_rows(table_name, major):
     table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
 
     # Create a select query
-    stmt = sqlalchemy.select(table).where(major)
+    stmt = sqlalchemy.select(table).where(text(major))
 
     # Execute the query and fetch the results
     with engine.connect() as conn:
@@ -114,9 +115,9 @@ def main():
     cols = get_cols()
     print(cols)
 
-    rows = get_rows("demographics", 10)
-    for row in rows:
-        print(row)
+    # rows = get_rows("demographics", 10)
+    # for row in rows:
+    #     print(row)
 
 if __name__ == '__main__':
     main()
