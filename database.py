@@ -5,10 +5,15 @@ os.environ['DYLD_LIBRARY_PATH'] = '/Volumes/TigerOutcomes/PostgreSQL/17/lib'
 
 import keyring
 import pandas as pd
+
+import sys
+sys.path.append('/Volumes/TigerOutcomes/PostgreSQL')
+
 import psycopg2
 from psycopg2 import sql
 import argparse
-import sys
+
+import sqlalchemy
 
 # Database and SMB configuration
 DATABASE_URL = 'postgresql://bz5989@localhost:5432/mydb'
@@ -37,26 +42,27 @@ def mount_smb_share():
     else:
         print("Failed to retrieve SMB credentials.")
 
+def create_table_if_not_exists(connection, table_name, df):
+    with connection.cursor() as cursor:
+        # Generate SQL command for table creation
+        columns = ", ".join(
+            f"{col} TEXT" for col in df.columns
+        )
+        create_statement = f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});"
+        cursor.execute(create_statement)
+        print(f"Table {table_name} created or already exists.")
+
 def load_data_to_postgres(file_path, table_name):
     try:
         # Read Excel file
         df = pd.read_excel(file_path)
 
-        # Convert Excel file to Postgres table
-        with psycopg2.connect(DATABASE_URL) as connection:
-            cursor = connection.cursor()
-            for _, row in df.iterrows():
-                columns = list(df.columns)
-                values = [row[col] for col in columns]
-                insert_statement = sql.SQL(
-                    "INSERT INTO {} ({}) VALUES ({})"
-                ).format(
-                    sql.Identifier(table_name),
-                    sql.SQL(', ').join(map(sql.Identifier, columns)),
-                    sql.SQL(', ').join(sql.Placeholder() * len(values))
-                )
-                cursor.execute(insert_statement, values)
-            print(f"Data loaded into {table_name}")
+        # Create SQLAlchemy engine
+        engine = sqlalchemy.create_engine(DATABASE_URL)
+
+        # Load DataFrame into PostgreSQL table, replacing if it exists
+        df.to_sql(table_name, engine, if_exists='replace', index=False)
+        print(f"Data loaded into {table_name} successfully.")
     except Exception as e:
         print(f"Error loading data into {table_name}: {e}")
 
@@ -65,13 +71,13 @@ def main():
         prog=sys.argv[0],
         description='Database loading and SMB mounting script'
     )
-    parser.add_argument('load', help='load data into the database')
+    parser.add_argument('--load', action='store_true', help='Load data into the database')
     load = parser.parse_args().load
 
     # Mount SMB share
     mount_smb_share()
 
-    if load is not None:
+    if load:
         for file_name, table_name in files_to_tables.items():
             # Path to Excel file on mounted server
             file_path = f"{mount_path}/{file_name}"
