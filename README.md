@@ -1,6 +1,11 @@
 # TigerOutcomes
 VCR for COS 333 project
 
+
+# Dependencies
+run `pip install -r requirements.txt` in order to install necessary libraries
+
+
 # Preferred Setup for git
 git config --global user.name [Username]  
 git config --global user.email [Email]  
