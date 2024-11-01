@@ -4,7 +4,7 @@ import pandas as pd
 import psycopg2
 from psycopg2 import sql
 
-DATABASE_URL = ''
+DATABASE_URL = 'postgresql://bz5989@localhost:5432/mydb'
 
 # Mount path to SMB share
 smb_mount_path = "/Volumes/TigerOutcomes/"
@@ -36,7 +36,7 @@ def load_data_to_postgres(file_path, table_name):
             )
             cursor.execute(insert_statement, values)
 
-        print(f"Data loaded")
+        print("Data loaded")
 
 # Load files
 for file_name, table_name in files_to_tables.items():
