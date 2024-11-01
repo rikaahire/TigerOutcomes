@@ -16,6 +16,12 @@ with ui.layout_columns(fill=False):
         "Income Range",
         income_range
 
+    ui.input_text("Text", "We will repeat this", "Example")
+    "You entered:"
+    @render.text(inline=True)  
+    def text():
+        return input.Text()
+
     with ui.value_box():
         "Degree",
         degree

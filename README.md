@@ -1,10 +1,16 @@
 # TigerOutcomes
 VCR for COS 333 project
 
-
 # Dependencies
 run `pip install -r requirements.txt` in order to install necessary libraries
 
+# How to run different things
+* Run server (from /Volumes/TigerOutcomes)
+    * PostgreSQL/17/bin/pg_ctl -D data/ -l logfile start
+* Remember to stop the server when you are done:
+    * PostgreSQL/17/bin/pg_ctl -D data/ -l logfile stop
+* Run Shiny app
+    * Click the arrow next to the Run triangle and select "Run Shiny App"
 
 # Preferred Setup for git
 git config --global user.name [Username]  
@@ -14,32 +20,32 @@ git config --global pull.rebase true
 git config --global rebase.autostash true  
 
 # git commands
-git pull/push  
+* git pull/push  
     * Please always pull before pushing. It’s better to solve merge conflicts locally  
-git add  
+* git add  
     * Don’t use this; stage in Sublime Merge instead  
-git rebase -i HEAD~[n]  
+* git rebase -i HEAD~[n]  
     * Allows you to edit multiple (n) previous commits  
-        This is especially useful if you have many small commits that build upon one another  
+        * This is especially useful if you have many small commits that build upon one another  
     * Can use for editing commit messages (though you can do that in Sublime Merge)  
-git status  
+* git status  
     * Can be used to check what your branch status is (i.e. if you are ahead/behind main)  
-git checkout -b [name]  
+* git checkout -b [name]  
     * Allows you to create a branch called [name] and move to it  
-git checkout [name]  
+* git checkout [name]  
     * Allows you to move to the branch called [name] if it exists  
-git branch -d [name]  
+* git branch -d [name]  
     * Allows you to delete a branch you no longer need  
 
 # Tools
-VSCode  
+* VSCode  
     * Ctrl-Shift-P for command palette, search for ”Install 'code' command in PATH”  
-        This will make git merge/squash/edit attempts redirect to VSCode  
-Sublime Merge  
+        * This will make git merge/squash/edit attempts redirect to VSCode  
+* Sublime Merge  
     * Ignore the “free trial” messages, they pop up but don’t do anything  
     * Settings -> Preferences -> Commit Messages -> Ruler, type in 50, 72  
-        This makes it so that marking lines appear at 50 and 72 characters  
-Linear  
+        * This makes it so that marking lines appear at 50 and 72 characters  
+* Linear  
     * Change Display to Board and open Issues tab (for full view)  
 
 # Commits
