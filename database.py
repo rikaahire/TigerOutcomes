@@ -72,7 +72,7 @@ def get_cols():
     
     return cols
 
-def get_rows(table_name, num_rows):
+def get_rows(table_name, major):
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
 
@@ -80,7 +80,7 @@ def get_rows(table_name, num_rows):
     table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
 
     # Create a select query
-    stmt = sqlalchemy.select(table).limit(num_rows)
+    stmt = sqlalchemy.select(table).where(major)
 
     # Execute the query and fetch the results
     with engine.connect() as conn:
