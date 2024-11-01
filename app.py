@@ -22,25 +22,27 @@ with ui.layout_columns(fill=False):
         @render.text(inline=True)  
         def text():
             values = prototype.get_values(input.major_search())
-            print(values)
             return input.major_search()
 
     with ui.value_box():
         "First Gen",
         @render.text(inline=True)  
         def value_txt():
+            values = prototype.get_values(input.major_search())            
             return values[2]
         
     with ui.value_box():
         "Income",
         @render.text(inline=True)  
         def income_txt():
+            values = prototype.get_values(input.major_search())
             return "$" + str (values[3])
     
     with ui.value_box():
-        "Legal Sex",
+        "Degree Type",
         @render.text(inline=True)  
         def sex_txt():
+            values = prototype.get_values(input.major_search())
             return values[4]
         
 
