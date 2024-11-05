@@ -1,8 +1,9 @@
 from shiny import reactive, render
 from shiny.express import input, ui
 import prototype
+import os
 
-
+secret_key = os.environ['APP_SECRET_KEY']
 
 income_range = 1
 degree = "string"
