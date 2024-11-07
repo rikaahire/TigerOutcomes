@@ -10,7 +10,7 @@ import urllib.parse
 import re
 import flask
 
-import app
+from top import app
 
 #-----------------------------------------------------------------------
 

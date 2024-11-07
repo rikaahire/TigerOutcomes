@@ -1,5 +1,5 @@
 from sys import argv, exit, stderr
-from app import app
+from top import app
 
 def main():
     if len(argv) != 2:
