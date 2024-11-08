@@ -18,12 +18,13 @@ dotenv.load_dotenv()
 def reg_overviews():
 
     # auth.authenticate()
-    major = flask.request.args.get('major')
-
+    # major = flask.request.args.get('major')
+    major = 'English'
     try:
-        # courses = db.get_rows("demographics", major)
-        html_code = flask.render_template('search.html')
-    except Exception:
+        courses = db.get_rows("demographics", major)
+        html_code = flask.render_template('search.html', courses=courses)
+    except Exception as ex:
+        print(ex)
         html_code = flask.render_template('servererror.html')
 
     response = flask.make_response(html_code)
