@@ -1,5 +1,6 @@
 from sys import argv, exit, stderr
 from top import app
+import tigeroutcomes
 
 def main():
     if len(argv) != 2:

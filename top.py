@@ -7,4 +7,4 @@
 
 import flask
 
-app = flask.Flask('TigerOutcomes')
+app = flask.Flask(__name__)

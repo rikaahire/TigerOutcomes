@@ -2,7 +2,7 @@
 
 import flask
 import database as db
-import auth
+# import auth
 from top import app
 import dotenv
 
@@ -17,11 +17,11 @@ dotenv.load_dotenv()
 @app.route('/index', methods=['GET'])
 def reg_overviews():
 
-    auth.authenticate()
+    # auth.authenticate()
     major = flask.request.args.get('major')
 
     try:
-        courses = db.get_rows("demographics", major)
+        # courses = db.get_rows("demographics", major)
         html_code = flask.render_template('search.html')
     except Exception:
         html_code = flask.render_template('servererror.html')
@@ -34,7 +34,7 @@ def reg_overviews():
 @app.route('/job', methods=['GET'])
 def reg_details():
 
-    auth.authenticate()
+    # auth.authenticate()
     html_code = flask.render_template('job.html')
     response = flask.make_response(html_code)
 
