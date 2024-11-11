@@ -4,9 +4,10 @@ import flask
 import database as db
 # import auth
 from top import app
-import dotenv
+# import dotenv
+# import os
 
-dotenv.load_dotenv()
+# dotenv.load_dotenv()
 # secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
@@ -22,7 +23,8 @@ def reg_overviews():
     major = 'English'
     try:
         courses = db.get_rows("demographics", major)
-        html_code = flask.render_template('search.html', courses=courses)
+        html_code = flask.render_template('search.html', major_search='English',
+                                          data=courses)
     except Exception as ex:
         print(ex)
         html_code = flask.render_template('servererror.html')

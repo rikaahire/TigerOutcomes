@@ -67,7 +67,7 @@ def get_cols():
     
     return cols
 
-def get_rows(table_name, major):
+def get_rows(table_name, major, limit=10):
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
 
@@ -75,7 +75,7 @@ def get_rows(table_name, major):
     table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
 
     # Create a select query
-    stmt = sqlalchemy.select(table).where(table.columns.AcadPlanDescr == major).limit(10)
+    stmt = sqlalchemy.select(table).where(table.columns.AcadPlanDescr == major).limit(limit)
 
     # Execute the query and fetch the results
     with engine.connect() as conn:
