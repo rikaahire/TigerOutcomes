@@ -18,10 +18,18 @@ mount_path = "/Volumes/TigerOutcomes"  # Where the server will be mounted on you
 
 # Excel files and their corresponding Postgres tables
 files_to_tables = {
-    "COS333_AcA_Student_Outcomes.xlsx": "student_outcomes",
-    "COS333_Demographics.xlsx": "demographics",
-    "COS333_NSC_ST_Degrees2.xlsx": "st_degrees",
-    "Occupation Data.xlsx": "onet_occupation_data"
+    "COS333_AcA_Student_Outcomes.xlsx": "pton_student_outcomes",
+    "COS333_Demographics.xlsx": "pton_demographics",
+    "COS333_NSC_ST_Degrees2.xlsx": "pton_degrees",
+    "Occupation Data.xlsx": "onet_occupation_data",
+    "Job Zone Reference.xlsx": "onet_job_zone_reference",
+    "Job Zones.xlsx": "onet_job_zones",
+    "Abilities.xlsx": "onet_abilities",
+    "Skills.xlsx": "onet_skills",
+    "Knowledge.xlsx": "onet_knowledge",
+    "Alternate Titles.xlsx": "onet_alternate_titles"
+    "soc_classification_definitions.xlsx": "soc_classification_definitions",
+    "bls_wage_data_2023.xlsx": "bls_wage_data",
 }
 
 # Create SQLAlchemy engine
