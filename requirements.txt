@@ -1,6 +1,10 @@
+Flask
+psycopg2-binary==2.9.10
+SQLAlchemy==2.0.36
+python-dotenv
+gunicorn
+
 pandas==2.2.3
 keyring==25.5.0
-psycopg2-binary==2.9.10
 shiny==1.2.0
 openpyxl==3.1.5
-SQLAlchemy==2.0.36
