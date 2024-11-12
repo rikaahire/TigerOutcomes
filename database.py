@@ -1,18 +1,28 @@
 #!/usr/bin/env python
-from sqlalchemy.sql import text
 import keyring
 import pandas as pd
 import os
 import sys
 import argparse
 import sqlalchemy
+import sqlalchemy.orm
 from sqlalchemy import select, distinct
+from sqlalchemy.sql import text
+import dotenv
+
+#-----------------------------------------------------------------------
+
+dotenv.load_dotenv()
+DATABASE_URL = os.environ['postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKVjV@dpg-cspdgmrtq21c739rtrrg-a/tigeroutcomesdb']
+engine = sqlalchemy.create_engine(DATABASE_URL)
+
+#-----------------------------------------------------------------------
 
 os.environ['DYLD_LIBRARY_PATH'] = '/Volumes/TigerOutcomes/PostgreSQL/17/lib'
 sys.path.append('/Volumes/TigerOutcomes/SQL')
 
 # Database and SMB configuration
-DATABASE_URL = 'postgresql://bz5989@localhost:5432/mydb'
+#DATABASE_URL = 'postgresql://bz5989@localhost:5432/mydb'
 server_path = "smb://files/dept/InstResearch/TigerOutcomes"
 mount_path = "/Volumes/TigerOutcomes-1"  # Where the server will be mounted on your Mac
 
@@ -20,6 +30,8 @@ mount_path = "/Volumes/TigerOutcomes-1"  # Where the server will be mounted on y
 files_to_tables = {
     "COS333_AcA_Student_Outcomes.xlsx": "pton_student_outcomes",
     "COS333_Demographics.xlsx": "pton_demographics",
+    "COS333_AcA_Student_Outcomes_rand.xlsx": "pton_student_outcomes_rand",
+    "COS333_Demographics_rand.xlsx": "pton_demographics_rand",
     "COS333_NSC_ST_Degrees2.xlsx": "pton_degrees", # not used
     "Occupation Data.xlsx": "onet_occupation_data",
     "Job Zone Reference.xlsx": "onet_job_zone_reference", # not relevant
@@ -31,9 +43,6 @@ files_to_tables = {
     "soc_classification_definitions.xlsx": "soc_classification_definitions", # not relevant
     "bls_wage_data_2023.xlsx": "bls_wage_data",
 }
-
-# Create SQLAlchemy engine
-engine = sqlalchemy.create_engine(DATABASE_URL)
 
 def mount_smb_share():
     # Retrieve credentials from Keychain
