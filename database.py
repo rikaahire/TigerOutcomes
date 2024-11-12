@@ -6,6 +6,7 @@ import os
 import sys
 import argparse
 import sqlalchemy
+from sqlalchemy import select, distinct
 
 os.environ['DYLD_LIBRARY_PATH'] = '/Volumes/TigerOutcomes/PostgreSQL/17/lib'
 sys.path.append('/Volumes/TigerOutcomes/SQL')
@@ -69,6 +70,7 @@ def get_cols():
     return cols
 
 def get_student_by_major(table_name, major, limit=10):
+    # deprecated, see get_rows
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
 
@@ -76,7 +78,48 @@ def get_student_by_major(table_name, major, limit=10):
     table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
 
     # Create a select query
-    stmt = sqlalchemy.select(table).where(table.columns.AcadPlanDescr == major).limit(limit)
+    stmt = select(table).where(table.columns.AcadPlanDescr == major).limit(limit)
+
+    # Execute the query and fetch the results
+    with engine.connect() as conn:
+        rows = conn.execute(stmt).fetchall()
+
+    return rows
+
+def get_rows(table_name, col_name, query, limit=10):
+    # input: table_name (sqlalchemy.Table): query table , col_name (str): target str, 
+    #   query (str): rows we want to match
+    #   limit (int): maximum number of rows that we want to return
+    # output: finds all rows in table where row.col_name = query
+
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(engine)
+
+    # Get table
+    table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
+
+    # Create a select query
+    stmt = select(table).where(table.c[col_name] == query).limit(limit)
+
+    # Execute the query and fetch the results
+    with engine.connect() as conn:
+        rows = conn.execute(stmt).fetchall()
+
+    return rows
+
+
+def get_all_instances(table_name, col_name):
+    # input: table name and column name
+    # output: returns a list of all unique rows within the column
+
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(engine)
+
+    # Get table
+    table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
+
+    # Create a select query
+    stmt = select(distinct(table.c[col_name]))
 
     # Execute the query and fetch the results
     with engine.connect() as conn:

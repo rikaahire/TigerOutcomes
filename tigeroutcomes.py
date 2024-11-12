@@ -38,7 +38,8 @@ def search():
     # major = flask.request.args.get('major')
     major = 'English'
     try:
-        courses = db.get_student_by_major("demographics", major)
+        # courses = db.get_student_by_major("demographics", major) - deprecated, see below
+        courses = db.get_rows("demographics", "AcadPlanDescr", major)
         html_code = flask.render_template('search.html', majorsearch='English',
                                           data=courses)
     except Exception as ex:
