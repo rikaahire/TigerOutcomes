@@ -19,7 +19,8 @@ mount_path = "/Volumes/TigerOutcomes"  # Where the server will be mounted on you
 files_to_tables = {
     "COS333_AcA_Student_Outcomes.xlsx": "student_outcomes",
     "COS333_Demographics.xlsx": "demographics",
-    "COS333_NSC_ST_Degrees2.xlsx": "st_degrees"
+    "COS333_NSC_ST_Degrees2.xlsx": "st_degrees",
+    "Occupation Data.xlsx": "onet_occupation_data"
 }
 
 # Create SQLAlchemy engine
@@ -67,7 +68,7 @@ def get_cols():
     
     return cols
 
-def get_rows(table_name, major, limit=10):
+def get_student_by_major(table_name, major, limit=10):
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
 
@@ -76,6 +77,23 @@ def get_rows(table_name, major, limit=10):
 
     # Create a select query
     stmt = sqlalchemy.select(table).where(table.columns.AcadPlanDescr == major).limit(limit)
+
+    # Execute the query and fetch the results
+    with engine.connect() as conn:
+        rows = conn.execute(stmt).fetchall()
+
+    return rows
+
+
+def get_occupational_data_desc(table_name, title):
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(engine)
+
+    # Get table
+    table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
+
+    # Create a select query
+    stmt = sqlalchemy.select(table.Description).where(table.columns.Title == title).limit(1)
 
     # Execute the query and fetch the results
     with engine.connect() as conn:
