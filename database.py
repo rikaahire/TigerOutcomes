@@ -14,21 +14,21 @@ sys.path.append('/Volumes/TigerOutcomes/SQL')
 # Database and SMB configuration
 DATABASE_URL = 'postgresql://bz5989@localhost:5432/mydb'
 server_path = "smb://files/dept/InstResearch/TigerOutcomes"
-mount_path = "/Volumes/TigerOutcomes"  # Where the server will be mounted on your Mac
+mount_path = "/Volumes/TigerOutcomes-1"  # Where the server will be mounted on your Mac
 
 # Excel files and their corresponding Postgres tables
 files_to_tables = {
     "COS333_AcA_Student_Outcomes.xlsx": "pton_student_outcomes",
     "COS333_Demographics.xlsx": "pton_demographics",
-    "COS333_NSC_ST_Degrees2.xlsx": "pton_degrees",
+    "COS333_NSC_ST_Degrees2.xlsx": "pton_degrees", # not used
     "Occupation Data.xlsx": "onet_occupation_data",
-    "Job Zone Reference.xlsx": "onet_job_zone_reference",
-    "Job Zones.xlsx": "onet_job_zones",
+    "Job Zone Reference.xlsx": "onet_job_zone_reference", # not relevant
+    "Job Zones.xlsx": "onet_job_zones", # not relevant
     "Abilities.xlsx": "onet_abilities",
     "Skills.xlsx": "onet_skills",
     "Knowledge.xlsx": "onet_knowledge",
-    "Alternate Titles.xlsx": "onet_alternate_titles"
-    "soc_classification_definitions.xlsx": "soc_classification_definitions",
+    "Alternate Titles.xlsx": "onet_alternate_titles",
+    "soc_classification_definitions.xlsx": "soc_classification_definitions", # not relevant
     "bls_wage_data_2023.xlsx": "bls_wage_data",
 }
 
@@ -71,10 +71,43 @@ def load_data_to_postgres(file_path, table_name):
 
 def get_cols():
     metadata = sqlalchemy.MetaData()
-    table = sqlalchemy.Table('demographics', metadata, autoload_with=engine)
+    cols = {}
+    table = sqlalchemy.Table('pton_student_outcomes', metadata, autoload_with=engine)
+    cols['pton_student_outcomes'] = [column.name for column in table.columns]
+
+    table = sqlalchemy.Table('pton_demographics', metadata, autoload_with=engine)
+    cols['pton_demographics'] = [column.name for column in table.columns]
+
+    # table = sqlalchemy.Table('pton_degrees', metadata, autoload_with=engine)
+    # cols['pton_degrees'] = [column.name for column in table.columns]
+
+    table = sqlalchemy.Table('onet_occupation_data', metadata, autoload_with=engine)
+    cols['onet_occupation_data'] = [column.name for column in table.columns]
+
+    # table = sqlalchemy.Table('onet_job_zone_reference', metadata, autoload_with=engine)
+    # cols['onet_job_zone_reference'] = [column.name for column in table.columns]
+
+    # table = sqlalchemy.Table('onet_job_zones', metadata, autoload_with=engine)
+    # cols['onet_job_zones'] = [column.name for column in table.columns]
+
+    table = sqlalchemy.Table('onet_abilities', metadata, autoload_with=engine)
+    cols['onet_abilities'] = [column.name for column in table.columns]
+
+    table = sqlalchemy.Table('onet_skills', metadata, autoload_with=engine)
+    cols['onet_skills'] = [column.name for column in table.columns]
+
+    table = sqlalchemy.Table('onet_knowledge', metadata, autoload_with=engine)
+    cols['onet_knowledge'] = [column.name for column in table.columns]
     
-    cols = [column.name for column in table.columns]
-    
+    table = sqlalchemy.Table('onet_alternate_titles', metadata, autoload_with=engine)
+    cols['onet_alternate_titles'] = [column.name for column in table.columns]
+
+    # table = sqlalchemy.Table('soc_classification_definitions', metadata, autoload_with=engine)
+    # cols['soc_classification_definitions'] = [column.name for column in table.columns]
+
+    table = sqlalchemy.Table('bls_wage_data', metadata, autoload_with=engine)
+    cols['bls_wage_data'] = [column.name for column in table.columns]
+
     return cols
 
 def get_student_by_major(table_name, major, limit=10):
@@ -144,7 +177,7 @@ def get_occupational_data_desc(table_name, title):
     table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
 
     # Create a select query
-    stmt = sqlalchemy.select(table.Description).where(table.columns.Title == title).limit(1)
+    stmt = sqlalchemy.select(table.Description).where(table.columns.Title == title)
 
     # Execute the query and fetch the results
     with engine.connect() as conn:
@@ -192,8 +225,10 @@ def main():
         print("No data loading")
 
     cols = get_cols()
-    print(cols)
-
+    for key, value in cols.items():
+        print(key + ":")
+        print(value)
+        print("\n")
     # rows = get_rows("demographics", 10)
     # for row in rows:
     #     print(row)
