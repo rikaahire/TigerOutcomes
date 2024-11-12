@@ -39,7 +39,7 @@ def search():
     major = 'English'
     try:
         courses = db.get_rows("demographics", major)
-        html_code = flask.render_template('search.html', major_search='English',
+        html_code = flask.render_template('search.html', majorsearch='English',
                                           data=courses)
     except Exception as ex:
         print(ex)
