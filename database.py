@@ -14,7 +14,7 @@ import dotenv
 
 dotenv.load_dotenv()
 DATABASE_URL = os.environ['postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKVjV@dpg-cspdgmrtq21c739rtrrg-a/tigeroutcomesdb']
-DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
+#DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
 engine = sqlalchemy.create_engine(DATABASE_URL)
 
 #-----------------------------------------------------------------------
