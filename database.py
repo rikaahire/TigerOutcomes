@@ -48,16 +48,6 @@ def mount_smb_share():
         )
     print("SMB share mounted successfully.")
 
-def create_table_if_not_exists(connection, table_name, df):
-    with connection.cursor() as cursor:
-        # Generate SQL command for table creation
-        columns = ", ".join(
-            f"{col} TEXT" for col in df.columns
-        )
-        create_statement = f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});"
-        cursor.execute(create_statement)
-        print(f"Table {table_name} created or already exists.")
-
 def load_data_to_postgres(file_path, table_name):
     try:
         # Read Excel file
@@ -110,22 +100,8 @@ def get_cols():
 
     return cols
 
-def get_student_by_major(table_name, major, limit=10):
-    # deprecated, see get_rows
-    metadata = sqlalchemy.MetaData()
-    metadata.reflect(engine)
-
-    # Get table
-    table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
-
-    # Create a select query
-    stmt = select(table).where(table.columns.AcadPlanDescr == major).limit(limit)
-
-    # Execute the query and fetch the results
-    with engine.connect() as conn:
-        rows = conn.execute(stmt).fetchall()
-
-    return rows
+def get_student_by_major(major, limit=10):
+    return get_rows("pton_demographics", "AcadPlanDescr", major, limit)
 
 def get_rows(table_name, col_name, query, limit=10):
     # input: table_name (sqlalchemy.Table): query table , col_name (str): target str, 
@@ -148,7 +124,6 @@ def get_rows(table_name, col_name, query, limit=10):
 
     return rows
 
-
 def get_all_instances(table_name, col_name):
     # input: table name and column name
     # output: returns a list of all unique rows within the column
@@ -168,38 +143,25 @@ def get_all_instances(table_name, col_name):
 
     return rows
 
-
-def get_occupational_data_desc(table_name, title):
+def get_occupational_data_full(soc_code):
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
 
     # Get table
-    table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
-
+    table_descrip = sqlalchemy.Table("onet_occupation_data", metadata, autoload_with=engine)
+    table_skills = sqlalchemy.Table("onet_skills", metadata, autoload_with=engine)
+    table_knowledge = sqlalchemy.Table("onet_knowledge", metadata, autoload_with=engine)
     # Create a select query
-    stmt = sqlalchemy.select(table.Description).where(table.columns.Title == title)
-
+    stmt_descrip = sqlalchemy.select(table_descrip.c.Description).where(table_descrip.columns["O*NET-SOC Code"] == soc_code)
+    stmt_skills = sqlalchemy.select(distinct(table_skills.c['Element Name'])).where(table_skills.columns["O*NET-SOC Code"] == soc_code)
+    stmt_knowledge = sqlalchemy.select(distinct(table_knowledge.c['Element Name'])).where(table_knowledge.columns["O*NET-SOC Code"] == soc_code)
     # Execute the query and fetch the results
     with engine.connect() as conn:
-        rows = conn.execute(stmt).fetchall()
+        description = conn.execute(stmt_descrip).fetchall()
+        skills = conn.execute(stmt_skills).fetchall()
+        knowledge = conn.execute(stmt_knowledge).fetchall()
 
-    return rows
-
-def get_first_rows(table_name, number):
-    metadata = sqlalchemy.MetaData()
-    metadata.reflect(engine)
-
-    # Get table
-    table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
-
-    # Create a select query
-    stmt = sqlalchemy.select(table).limit(number)
-
-    # Execute the query and fetch the results
-    with engine.connect() as conn:
-        rows = conn.execute(stmt).fetchall()
-
-    return rows
+    return [description, skills, knowledge]
 
 
 def main():

@@ -70,7 +70,9 @@ def landing():
 def job_details():
 
     # auth.authenticate()
-    html_code = flask.render_template('job.html')
+    descript = db.get_occupational_data_full("11-1011.00")
+    html_code = flask.render_template('job.html', description=descript[0], 
+                                      skills=descript[1], knowledge=descript[2])
     response = flask.make_response(html_code)
 
     return response
