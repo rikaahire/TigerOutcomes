@@ -14,6 +14,7 @@ import dotenv
 
 dotenv.load_dotenv()
 DATABASE_URL = os.environ['postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKVjV@dpg-cspdgmrtq21c739rtrrg-a/tigeroutcomesdb']
+DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
 engine = sqlalchemy.create_engine(DATABASE_URL)
 
 #-----------------------------------------------------------------------
@@ -28,19 +29,19 @@ mount_path = "/Volumes/TigerOutcomes-1"  # Where the server will be mounted on y
 
 # Excel files and their corresponding Postgres tables
 files_to_tables = {
-    "COS333_AcA_Student_Outcomes.xlsx": "pton_student_outcomes",
-    "COS333_Demographics.xlsx": "pton_demographics",
-    "COS333_AcA_Student_Outcomes_rand.xlsx": "pton_student_outcomes_rand",
-    "COS333_Demographics_rand.xlsx": "pton_demographics_rand",
-    "COS333_NSC_ST_Degrees2.xlsx": "pton_degrees", # not used
+    # "COS333_AcA_Student_Outcomes.xlsx": "pton_student_outcomes",
+    # "COS333_Demographics.xlsx": "pton_demographics",
+    "COS333_AcA_Student_Outcomes_rand.xlsx": "pton_student_outcomes",
+    "COS333_Demographics_rand.xlsx": "pton_demographics",
+    # "COS333_NSC_ST_Degrees2.xlsx": "pton_degrees", # not used
     "Occupation Data.xlsx": "onet_occupation_data",
-    "Job Zone Reference.xlsx": "onet_job_zone_reference", # not relevant
-    "Job Zones.xlsx": "onet_job_zones", # not relevant
+    # "Job Zone Reference.xlsx": "onet_job_zone_reference", # not relevant
+    # "Job Zones.xlsx": "onet_job_zones", # not relevant
     "Abilities.xlsx": "onet_abilities",
     "Skills.xlsx": "onet_skills",
     "Knowledge.xlsx": "onet_knowledge",
     "Alternate Titles.xlsx": "onet_alternate_titles",
-    "soc_classification_definitions.xlsx": "soc_classification_definitions", # not relevant
+    # "soc_classification_definitions.xlsx": "soc_classification_definitions", # not relevant
     "bls_wage_data_2023.xlsx": "bls_wage_data",
 }
 
