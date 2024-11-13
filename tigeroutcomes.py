@@ -52,18 +52,20 @@ def search():
 
     # auth.authenticate()
     # major = flask.request.args.get('major')
-    major = 'English'
-    try:
+    # major = 'English'
+    # try:
         # courses = db.get_student_by_major("pton_demographics", major) - deprecated, see below
-        courses = db.get_rows("pton_demographics", "AcadPlanDescr", major)
-        html_code = flask.render_template('search.html', majorsearch='English',
-                                          data=courses)
-    except Exception as ex:
-        print(ex)
-        html_code = flask.render_template('servererror.html')
+        # courses = db.get_rows("pton_demographics", "AcadPlanDescr", major)
+        # html_code = flask.render_template('search.html', majorsearch='English',
+        #                                   data=courses)
+    #     html_code = flask.render_template('search.html')
+    # except Exception as ex:
+    #     print(ex)
+    #     html_code = flask.render_template('servererror.html')
 
-    response = flask.make_response(html_code)
-    return response
+    # response = flask.make_response(html_code)
+    # return response
+    return flask.send_file('templates/search.html')
 
 @app.route('/results', methods=['GET'])
 def results():
@@ -72,7 +74,7 @@ def results():
         major = ''
         major = major.strip()
     results = db.get_rows("pton_demographics", "AcadPlanDescr", major)
-    results = [tuple(row) for row in results]
+    results = [{'row':tuple(row)} for row in results]
     # will want to change results to a major -> job call
     json_doc = json.dumps(results)
     response = flask.make_response(json_doc)

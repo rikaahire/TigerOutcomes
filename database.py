@@ -171,7 +171,7 @@ def get_occupational_data_full(soc_code):
         skills = conn.execute(stmt_skills).fetchall()
         knowledge = conn.execute(stmt_knowledge).fetchall()
 
-    return [description, skills, knowledge]
+    return {'description': description, 'skills': skills, 'knowledge' :knowledge}
 
 
 def main():

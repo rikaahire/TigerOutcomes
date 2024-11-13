@@ -7,79 +7,176 @@
     <title>TigerOutcomes</title>
   </head>
   <body>
-    {% include 'header.html' %}
+    <header class="sticky-top">
+      <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
+        <div class="container-fluid">
+          <!-- replace link when hosted -->
+          <a class="navbar-brand" href="tigeroutcomes.com">TigerOutcomes</a>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+            </ul>
+              <button class="btn btn-outline" type="credentials">Account</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </header>
     <div class="container-fluid">
       <div class="row">
         <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
           <div class="container-fluid d-flex">
-            <span class="fs-5 fw-semibold">Results for {{majorsearch}} </span>
-            <input class="form-control" type="text" placeholder="{{majorsearch}}" style="text-align: center" aria-label="majorsearch">
+            <span class="fs-5 fw-semibold" id="repeat"> Results for Course </span>
+            <input class="form-control" type="text" placeholder="English" id="majorInput" style="text-align: center" aria-label="majorsearch">
           </div>  
           <div class="list-group list-group-flush border-bottom scrollarea">
-            {% for row in data %}
-              <div class="list-group-item list-group-item-action py-3 lh-tight">
-                <div class="row align-items-center">
-                  <!-- Column for Jobs -->
-                  <div class="col">
-                    <a href="#" class="text-decoration-none text-dark">
-                      <strong class="mt-1 mb-1">{{ row }}</strong>
-                    </a>
-                  </div>
-                  <!-- Column for Button -->
-                  <div class="col-auto">
-                    <button type="button" class="btn btn-outline-warning" data-bs-toggle="button">⭐️</button>
-                  </div>
-                </div>
-              </div>
-            {% endfor %}
+            <div class="border" id="resultsDiv"></div>
+            <!-- {% for row in data %} -->
+            <!-- {% endfor %} -->
           </div>
         </div>
-        
-        
-          <div class="col-md-9 d-flex flex-column align-items-stretch flex-shrink-0 position=fixed" style="width:max-content;">
-            <div class="row row-cols-1 row-cols-md-2 g-4">
-              <!-- Card Description -->
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Description</h5>
-                    <p class="card-text">{{ description }}</p>
-                  </div>
+        <div class="col-md-9 d-flex flex-column align-items-stretch flex-shrink-0 position=fixed" style="width:max-content;">
+          <div class="row row-cols-1 row-cols-md-2 g-4">
+            <!-- Card Description -->
+            <div class="col">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Description</h5>
+                  <p class="card-text">{{ description }}</p>
                 </div>
               </div>
-              <!-- Card for Tasks & Skills -->
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Tasks and Skills</h5>
-                    <p class="card-text">{{ tasks }}</p>
-                  </div>
+            </div>
+            <!-- Card for Tasks & Skills -->
+            <div class="col">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Tasks and Skills</h5>
+                  <p class="card-text">{{ tasks }}</p>
                 </div>
               </div>
-              <!-- Card for Salary -->
-              <!-- Might need to do some more here with data graphics -->
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Salary Range</h5>
-                    <p class="card-text">{{ salary }}</p>
-                  </div>
+            </div>
+            <!-- Card for Salary -->
+            <!-- Might need to do some more here with data graphics -->
+            <div class="col">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Salary Range</h5>
+                  <p class="card-text">{{ salary }}</p>
                 </div>
               </div>
-              <!-- Card for Common Employers -->
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Common Employers</h5>
-                    <p class="card-text"> {{ employers }} </p>
-                  </div>
+            </div>
+            <!-- Card for Common Employers -->
+            <div class="col">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Common Employers</h5>
+                  <p class="card-text"> {{ employers }} </p>
                 </div>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    {% include 'footer.html' %}
+    <footer class="py-3 bg-light sticky-bottom">
+      <div class="container">
+        <span class="text-muted">Created by the TigerOutcomes <a href="">team</a>.</span>
+      </div>
+    </footer>
+
+    <script 
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+      crossorigin="anonymous">
+    </script>
+
+    <script src=
+      "https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js">
+    </script>
+    
+    <script>
+      'use strict';
+      function convertToHtml(jobs) {
+        let template = `
+          {{#jobs}}
+            <div class="list-group-item list-group-item-action py-3 lh-tight">
+              <div class="row align-items-center">
+                <!-- Column for Jobs -->
+                <div class="col">
+                  <a href="/" class="text-decoration-none text-dark">
+                    <strong class="mt-1 mb-1">{{ row }}</strong>
+                  </a>
+                </div>
+                <!-- Column for Button -->
+                <div class="col-auto">
+                  <button type="button" id="favorite{{soc_code}}" class="btn btn-outline-warning" data-bs-toggle="button">
+                    ⭐️
+                  </button>
+                </div>
+              </div>
+            </div>
+            <br>
+          {{/jobs}}
+        `;
+        let map = {jobs: jobs};
+        let html = Mustache.render(template, map);
+        return html;
+      }
+
+      function handleSearchResponse() {
+        if (this.status !== 200) {
+          alert('Error: Failed to fetch data from server');
+          return;
+        }
+        let jobs = JSON.parse(this.response);
+        console.log(jobs)
+        let html = convertToHtml(jobs);
+        let resultsDiv = document.getElementById('resultsDiv');
+        resultsDiv.innerHTML = html;
+      }
+
+      function handleError() {
+        alert('Error: Failed to fetch data from server');
+      }
+
+      let request = null;
+
+      function getSearchResults() {
+        let majorInput = document.getElementById('majorInput');
+        let major = majorInput.value;
+        let encodedMajor = encodeURIComponent(major);
+        let url = '/results?major=' + encodedMajor;
+
+        let view = {"input": major}
+        let html = Mustache.render("Results for {{input}}", view);
+        let repeat = document.getElementById('repeat');
+        repeat.innerHTML = html;
+
+        if (request !== null)
+          request.abort();
+        request = new XMLHttpRequest();
+        request.onload = handleSearchResponse;
+        request.onerror = handleError;
+        request.open('GET', url);
+        request.send();
+      }
+
+      let timer = null;
+
+      function debouncedGetResults() {
+        clearTimeout(timer);
+        timer = setTimeout(getSearchResults, 500);
+      }
+
+      function setup() {
+        let majorInput = document.getElementById('majorInput');
+        majorInput.addEventListener('input', debouncedGetResults);
+      }
+
+      document.addEventListener('DOMContentLoaded', setup);
+
+   </script>
   </body>
 </html>
