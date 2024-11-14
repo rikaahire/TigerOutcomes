@@ -174,6 +174,80 @@ def get_occupational_data_full(soc_code):
     return {'description': description, 'skills': skills, 'knowledge' :knowledge}
 
 
+
+def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(engine)
+    
+    # Get tables
+    pton_demographics = sqlalchemy.Table('pton_demographics', metadata, autoload_with=engine)
+    pton_student_outcomes = sqlalchemy.Table('pton_student_outcomes', metadata, autoload_with=engine)
+    onet_occupation_data = sqlalchemy.Table('onet_occupation_data', metadata, autoload_with=engine)
+    
+    stmt = (
+        sqlalchemy.select(distinct(onet_occupation_data.c["O*NET-SOC Code"]))
+        .select_from(
+            pton_demographics.join(
+                pton_student_outcomes,
+                pton_demographics.c["StudyID"] == pton_student_outcomes.c["StudyID"]
+            ).join(
+                onet_occupation_data,
+                pton_student_outcomes.c["Position"] == onet_occupation_data.c["Title"]
+            )
+        )
+        .where(pton_demographics.c["AcadPlanDescr"] == acad_plan_descr)
+    )
+    
+    with engine.connect() as conn:
+        results = conn.execute(stmt).fetchall()
+    
+    onet_soc_codes = [row[0] for row in results]
+    
+    return onet_soc_codes
+
+from sqlalchemy import func, and_
+
+def get_positions_by_acadplandesc(acad_plan_descr):
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(engine)
+    
+    # Get tables
+    pton_demographics = sqlalchemy.Table('pton_demographics', metadata, autoload_with=engine)
+    pton_student_outcomes = sqlalchemy.Table('pton_student_outcomes', metadata, autoload_with=engine)
+    
+    # Build  query
+    stmt = (
+        sqlalchemy.select(distinct(pton_student_outcomes.c["Position"]))
+        .select_from(
+            pton_demographics.join(
+                pton_student_outcomes,
+                pton_demographics.c["StudyID"] == pton_student_outcomes.c["StudyID"]
+            )
+        )
+        .where(
+            func.lower(pton_demographics.c["AcadPlanDescr"]) == func.lower(acad_plan_descr)
+        )
+        .where(
+            and_(
+                pton_student_outcomes.c["Position"] != None,
+                pton_student_outcomes.c["Position"] != ''
+            )
+        )
+        .order_by(pton_student_outcomes.c["Position"])
+    )
+    
+
+    with engine.connect() as conn:
+        results = conn.execute(stmt).fetchall()
+    
+
+    positions = [row[0] for row in results]
+    
+    return positions
+
+
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog=sys.argv[0],
