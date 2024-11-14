@@ -7,7 +7,9 @@ import argparse
 import sqlalchemy
 import sqlalchemy.orm
 from sqlalchemy import select, distinct
-from sqlalchemy.sql import text
+from sqlalchemy import Column, String, Integer, Boolean, create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
 import dotenv
 
 #-----------------------------------------------------------------------
@@ -15,7 +17,11 @@ import dotenv
 dotenv.load_dotenv()
 DATABASE_URL = 'postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKVjV@dpg-cspdgmrtq21c739rtrrg-a.ohio-postgres.render.com/tigeroutcomesdb'
 #DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
+Base = declarative_base()
 engine = sqlalchemy.create_engine(DATABASE_URL)
+Session = sessionmaker(bind=engine)
+
+Base.metadata.create_all(engine)
 
 #-----------------------------------------------------------------------
 
@@ -44,6 +50,54 @@ files_to_tables = {
     # "soc_classification_definitions.xlsx": "soc_classification_definitions", # not relevant
     "bls_wage_data_2023.xlsx": "bls_wage_data",
 }
+
+#-----------------------------------------------------------------------
+
+class Favorites(Base):
+    __tablename__ = 'favorites'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, nullable=False)
+    soc_code = Column(String, nullable=False)
+    status = Column(Boolean, nullable=False)
+
+def read_favorites(name, soc_code, status, limit=10):
+    with engine.connect() as conn:
+        metadata = sqlalchemy.MetaData()
+        table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
+        query = select(table)
+        
+        # Apply filters if specified
+        if name:
+            query = query.where(table.c.name == name)
+        if soc_code:
+            query = query.where(table.c.soc_code == soc_code)
+        if status is not None:
+            query = query.where(table.c.status == status)
+        
+        query = query.limit(limit)
+        
+        # Execute the query and fetch results
+        rows = conn.execute(query).fetchall()
+    return rows
+
+def write_favorite(name, soc_code, status):
+    with Session() as session:
+        try:
+            favorite = session.query(Favorites).filter_by(name=name, soc_code=soc_code).first()
+            if favorite:
+                favorite.status = status
+                print(f"Updated favorite for {name} with SOC {soc_code}.")
+            else:
+                favorite = Favorites(name=name, soc_code=soc_code, status=status)
+                session.add(favorite)
+                print(f"Added new favorite for {name} with SOC {soc_code}.")
+            
+            session.commit()
+        except SQLAlchemyError as e:
+            print(f"Error writing favorite: {e}")
+            session.rollback()
+
+#-----------------------------------------------------------------------
 
 def mount_smb_share():
     # Retrieve credentials from Keychain
