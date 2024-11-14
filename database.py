@@ -17,12 +17,13 @@ import dotenv
 dotenv.load_dotenv()
 DATABASE_URL = 'postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKVjV@dpg-cspdgmrtq21c739rtrrg-a.ohio-postgres.render.com/tigeroutcomesdb'
 #DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
-Base = declarative_base()
+# Base = declarative_base()
 engine = sqlalchemy.create_engine(DATABASE_URL)
-Session = sessionmaker(bind=engine)
+# Session = sessionmaker(bind=engine)
 
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
+default_limit = 10
 #-----------------------------------------------------------------------
 
 os.environ['DYLD_LIBRARY_PATH'] = '/Volumes/TigerOutcomes/PostgreSQL/17/lib'
@@ -53,49 +54,75 @@ files_to_tables = {
 
 #-----------------------------------------------------------------------
 
-class Favorites(Base):
-    __tablename__ = 'favorites'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
-    soc_code = Column(String, nullable=False)
-    status = Column(Boolean, nullable=False)
+# class Favorites(Base):
+#     __tablename__ = 'favorites'
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     name = Column(String, nullable=False)
+#     soc_code = Column(String, nullable=False)
+#     status = Column(Boolean, nullable=False)
 
-def read_favorites(name, soc_code, status, limit=10):
-    with engine.connect() as conn:
-        metadata = sqlalchemy.MetaData()
-        table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
-        query = select(table)
-        
-        # Apply filters if specified
-        if name:
-            query = query.where(table.c.name == name)
-        if soc_code:
-            query = query.where(table.c.soc_code == soc_code)
-        if status is not None:
-            query = query.where(table.c.status == status)
-        
-        query = query.limit(limit)
-        
+def read_favorites(name=None, soc_code=None, status=None, limit=default_limit):
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
+    query = select(table)
+    
+    # Apply filters if specified
+    if name:
+        query = query.where(table.c.name == name)
+    if soc_code:
+        query = query.where(table.c.soc_code == soc_code)
+    if status is not None:
+        query = query.where(table.c.status == status)
+    
+    query = query.limit(limit)
+    with engine.connect() as conn:    
         # Execute the query and fetch results
         rows = conn.execute(query).fetchall()
     return rows
 
 def write_favorite(name, soc_code, status):
-    with Session() as session:
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
+    stmt = select(table).where(
+                        table.c.name == name).where(
+                        table.c.soc_code == soc_code).where(
+                        table.c.status == status)
+    with engine.connect() as conn:
         try:
-            favorite = session.query(Favorites).filter_by(name=name, soc_code=soc_code).first()
+            favorite = conn.execute(stmt).fetchall()
             if favorite:
-                favorite.status = status
+                new_stmt = table.update().where(
+                            table.c.name == name).where(
+                            table.c.soc_code == soc_code).where(
+                            table.c.status == status).values(
+                            status=status)
+                conn.execute(new_stmt)
                 print(f"Updated favorite for {name} with SOC {soc_code}.")
             else:
-                favorite = Favorites(name=name, soc_code=soc_code, status=status)
-                session.add(favorite)
+                new_stmt = table.insert().values(name=name, soc_code=soc_code, status=status)
+                conn.execute(new_stmt)
                 print(f"Added new favorite for {name} with SOC {soc_code}.")
-            
-            session.commit()
+            conn.commit()
         except SQLAlchemyError as e:
             print(f"Error writing favorite: {e}")
-            session.rollback()
+            conn.rollback()
+
+# def write_favorite_orig(name, soc_code, status):
+#     with Session() as session:
+#         try:
+#             favorite = session.query(Favorites).filter_by(name=name, soc_code=soc_code).first()
+#             if favorite:
+#                 favorite.status = status
+#                 print(f"Updated favorite for {name} with SOC {soc_code}.")
+#             else:
+#                 favorite = Favorites(name=name, soc_code=soc_code, status=status)
+#                 session.add(favorite)
+#                 print(f"Added new favorite for {name} with SOC {soc_code}.")
+            
+#             session.commit()
+#         except SQLAlchemyError as e:
+#             print(f"Error writing favorite: {e}")
+#             session.rollback()
 
 #-----------------------------------------------------------------------
 
@@ -164,10 +191,10 @@ def get_cols():
 
     return cols
 
-def get_student_by_major(major, limit=10):
+def get_student_by_major(major, limit=default_limit):
     return get_rows("pton_demographics", "AcadPlanDescr", major, limit)
 
-def get_rows(table_name, col_name, query, limit=10):
+def get_rows(table_name, col_name, query, limit=default_limit):
     # input: table_name (sqlalchemy.Table): query table , col_name (str): target str, 
     #   query (str): rows we want to match
     #   limit (int): maximum number of rows that we want to return
