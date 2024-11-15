@@ -3,13 +3,13 @@
 import flask
 import database as db
 import json
-# import auth
+import auth
 # from top import app
-# import dotenv
-# import os
+import dotenv
+import os
 
-# dotenv.load_dotenv()
-# secret_key = os.environ['APP_SECRET_KEY']
+dotenv.load_dotenv()
+secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ app = flask.Flask(__name__)
 @app.route('/home', methods=['GET'])
 def home():
 
-    # auth.authenticate()
+    auth.authenticate()
     try:
         html_code = flask.render_template('homepage.html')
     except Exception as ex:
@@ -79,10 +79,10 @@ def results():
 # details for a job (soc_code)
 @app.route('/job', methods=['GET'])
 def job_details():
+    auth.authenticate()
     soc_code = flask.request.args.get('soc_code')
     if soc_code is None:
         return ['Nada here']
-    # auth.authenticate()
     descript = db.get_occupational_data_full(soc_code)
     description = descript['description']
     skills = descript['skills']
@@ -101,10 +101,10 @@ def job_details():
 # get all favorites for a user
 @app.route('/preferences', methods=['GET'])
 def preferences():
+    auth.authenticate()
     user = flask.request.args.get('user')
     if user is None:
         return []
-    # auth.authenticate()
     descript = db.read_favorites(name=user, status=True)
     # gets soc_codes
     descript = [tuple(row) for row in descript]
@@ -120,6 +120,7 @@ def preferences():
 # get all favorites for a user
 @app.route('/update', methods=['GET'])
 def update():
+    auth.authenticate()
     user = flask.request.args.get('user')
     if user is None:
         return []
@@ -131,7 +132,6 @@ def update():
         return []
     else:
         status = bool(status)
-    # auth.authenticate()
     descript = [db.write_favorite(name=user, soc_code=soc_code, status=status)]
     json_doc = json.dumps(descript)
     response = flask.make_response(json_doc)
@@ -140,6 +140,7 @@ def update():
 
 @app.route('/delete', methods=['GET'])
 def delete():
+    auth.authenticate()
     user = flask.request.args.get('user')
     if user is None:
         return []

@@ -10,8 +10,6 @@ import urllib.parse
 import re
 import flask
 
-from top import app
-
 #-----------------------------------------------------------------------
 
 _CAS_URL = 'https://fed.princeton.edu/cas/'
@@ -84,22 +82,22 @@ def authenticate():
 
 #-----------------------------------------------------------------------
 
-@app.route('/logoutapp', methods=['GET'])
-def logoutapp():
+# @app.route('/logoutapp', methods=['GET'])
+# def logoutapp():
 
-    # Log out of the application.
-    flask.session.clear()
-    html_code = flask.render_template('loggedout.html')
-    response = flask.make_response(html_code)
-    return response
+#     # Log out of the application.
+#     flask.session.clear()
+#     html_code = flask.render_template('loggedout.html')
+#     response = flask.make_response(html_code)
+#     return response
 
-#-----------------------------------------------------------------------
+# #-----------------------------------------------------------------------
 
-@app.route('/logoutcas', methods=['GET'])
-def logoutcas():
+# @app.route('/logoutcas', methods=['GET'])
+# def logoutcas():
 
-    # Log out of the CAS session, and then the application.
-    logout_url = (_CAS_URL + 'logout?service='
-        + urllib.parse.quote(
-            re.sub('logoutcas', 'logoutapp', flask.request.url)))
-    flask.abort(flask.redirect(logout_url))
+#     # Log out of the CAS session, and then the application.
+#     logout_url = (_CAS_URL + 'logout?service='
+#         + urllib.parse.quote(
+#             re.sub('logoutcas', 'logoutapp', flask.request.url)))
+#     flask.abort(flask.redirect(logout_url))
