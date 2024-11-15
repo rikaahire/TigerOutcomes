@@ -138,3 +138,14 @@ def update():
     response.headers['Content-Type'] = 'application/json'
     return response
 
+@app.route('/delete', methods=['GET'])
+def delete():
+    user = flask.request.args.get('user')
+    if user is None:
+        return []
+    status = flask.request.args.get('status')
+    ret = db.clear_favorites(user, status)
+    json_doc = json.dumps(ret)
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response

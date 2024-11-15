@@ -98,6 +98,24 @@ def write_favorite(name, soc_code, status):
             conn.rollback()
     return ret
 
+# clear favorites table for user
+def clear_favorites(name, status=None):
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
+    stmt = table.delete().where(table.c.name == name)
+    if status:
+        stmt = stmt.where(table.c.status == status)
+    ret = ''
+    with engine.connect() as conn:
+        try:
+            conn.execute(stmt)
+            ret = f"Deleted all entries for user {name} with {status if status else 'any'} status"
+            conn.commit()
+        except SQLAlchemyError as e:
+            ret = f"Error writing favorite: {e}"
+            conn.rollback()
+    return ret
+
 #-----------------------------------------------------------------------
 
 # mount share for smb database
