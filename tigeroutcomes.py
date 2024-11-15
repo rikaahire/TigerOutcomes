@@ -4,16 +4,14 @@ import flask
 import database as db
 import json
 import auth
-# from top import app
+from top import app
 import dotenv
 import os
 
 dotenv.load_dotenv()
-secret_key = os.environ['APP_SECRET_KEY']
+app.secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
-
-app = flask.Flask(__name__)
 
 # helper functions here
 #-----------------------------------------------------------------------
