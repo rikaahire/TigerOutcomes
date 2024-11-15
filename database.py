@@ -6,9 +6,7 @@ import sys
 import argparse
 import sqlalchemy
 import sqlalchemy.orm
-from sqlalchemy import select, distinct
-from sqlalchemy import Column, String, Integer, Boolean, create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy import select, distinct, func, and_
 from sqlalchemy.exc import SQLAlchemyError
 import dotenv
 
@@ -17,11 +15,7 @@ import dotenv
 dotenv.load_dotenv()
 DATABASE_URL = 'postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKVjV@dpg-cspdgmrtq21c739rtrrg-a.ohio-postgres.render.com/tigeroutcomesdb'
 #DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
-# Base = declarative_base()
 engine = sqlalchemy.create_engine(DATABASE_URL)
-# Session = sessionmaker(bind=engine)
-
-# Base.metadata.create_all(engine)
 
 default_limit = 10
 #-----------------------------------------------------------------------
@@ -54,13 +48,7 @@ files_to_tables = {
 
 #-----------------------------------------------------------------------
 
-# class Favorites(Base):
-#     __tablename__ = 'favorites'
-#     id = Column(Integer, primary_key=True, autoincrement=True)
-#     name = Column(String, nullable=False)
-#     soc_code = Column(String, nullable=False)
-#     status = Column(Boolean, nullable=False)
-
+# reads from favorites table
 def read_favorites(name, soc_code=None, status=None, limit=default_limit):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
@@ -80,6 +68,7 @@ def read_favorites(name, soc_code=None, status=None, limit=default_limit):
         rows = conn.execute(query).fetchall()
     return rows
 
+# writes to favorites table
 def write_favorite(name, soc_code, status):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
@@ -107,25 +96,9 @@ def write_favorite(name, soc_code, status):
             print(f"Error writing favorite: {e}")
             conn.rollback()
 
-# def write_favorite_orig(name, soc_code, status):
-#     with Session() as session:
-#         try:
-#             favorite = session.query(Favorites).filter_by(name=name, soc_code=soc_code).first()
-#             if favorite:
-#                 favorite.status = status
-#                 print(f"Updated favorite for {name} with SOC {soc_code}.")
-#             else:
-#                 favorite = Favorites(name=name, soc_code=soc_code, status=status)
-#                 session.add(favorite)
-#                 print(f"Added new favorite for {name} with SOC {soc_code}.")
-            
-#             session.commit()
-#         except SQLAlchemyError as e:
-#             print(f"Error writing favorite: {e}")
-#             session.rollback()
-
 #-----------------------------------------------------------------------
 
+# mount share for smb database
 def mount_smb_share():
     # Retrieve credentials from Keychain
     username = keyring.get_password("TigerOutcomes_Service", "username_key")
@@ -139,6 +112,7 @@ def mount_smb_share():
         )
     print("SMB share mounted successfully.")
 
+# load excel into postgres
 def load_data_to_postgres(file_path, table_name):
     try:
         # Read Excel file
@@ -150,6 +124,9 @@ def load_data_to_postgres(file_path, table_name):
     except Exception as e:
         print(f"Error loading data into {table_name}: {e}")
 
+#-----------------------------------------------------------------------
+
+# get all column names (for use with get_rows for column names)
 def get_cols():
     metadata = sqlalchemy.MetaData()
     cols = {}
@@ -191,9 +168,15 @@ def get_cols():
 
     return cols
 
+#-----------------------------------------------------------------------
+
+# get people generic (search placeholder)
 def get_student_by_major(major, limit=default_limit):
     return get_rows("pton_demographics", "AcadPlanDescr", major, limit)
 
+#-----------------------------------------------------------------------
+
+# generic when given table, column, and equal
 def get_rows(table_name, col_name, query, limit=default_limit):
     # input: table_name (sqlalchemy.Table): query table , col_name (str): target str, 
     #   query (str): rows we want to match
@@ -215,6 +198,9 @@ def get_rows(table_name, col_name, query, limit=default_limit):
 
     return rows
 
+#-----------------------------------------------------------------------
+
+# generic for all options (should be initial)
 def get_all_instances(table_name, col_name):
     # input: table name and column name
     # output: returns a list of all unique rows within the column
@@ -234,6 +220,9 @@ def get_all_instances(table_name, col_name):
 
     return rows
 
+#-----------------------------------------------------------------------
+
+# for filling when soc_code is selected
 def get_occupational_data_full(soc_code):
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
@@ -254,8 +243,9 @@ def get_occupational_data_full(soc_code):
 
     return {'description': description, 'skills': skills, 'knowledge' :knowledge}
 
+#-----------------------------------------------------------------------
 
-
+# replacement for results from search (soc_codes from major)
 def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
@@ -286,8 +276,7 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
     
     return onet_soc_codes
 
-from sqlalchemy import func, and_
-
+# gets job titles from major
 def get_positions_by_acadplandesc(acad_plan_descr):
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
@@ -325,9 +314,6 @@ def get_positions_by_acadplandesc(acad_plan_descr):
     positions = [row[0] for row in results]
     
     return positions
-
-
-
 
 def main():
     parser = argparse.ArgumentParser(
