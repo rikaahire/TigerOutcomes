@@ -9,10 +9,10 @@ Base = declarative_base()
 class Favorites(Base):
     __tablename__ = 'favorites'
 
-    name = Column(String, nullable=False)
-    soc_code = Column(String, nullable=False)
-    status = Column(Boolean, nullable=False)
-
+    name = Column(String, primary_key=True)
+    soc_code = Column(String, primary_key=True)
+    status = Column(Boolean, primary_key=True)
+    
     def __repr__(self):
         return f"<Favorites(name={self.name}, soc_code={self.soc_code}, status={self.status})>"
 
