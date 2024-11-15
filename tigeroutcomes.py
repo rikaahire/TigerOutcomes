@@ -57,22 +57,26 @@ def search():
 def favorite():
     return flask.send_file('templates/favorites.html')
 
+#-----------------------------------------------------------------------
+
+# get results from a major search
 @app.route('/results', methods=['GET'])
 def results():
     major = flask.request.args.get('major')
     if major is None:
         major = ''
         major = major.strip()
-    results = db.get_rows("pton_demographics", "AcadPlanDescr", major)
-    results = [{'row':tuple(row), 'soc_code': '11-1011.00'} for row in results]
+    results = db.get_positions_by_acadplandesc(major)
+    results = [{'row': row} for row in results]
+    # results = db.get_rows("pton_demographics", "AcadPlanDescr", major)
+    # results = [{'row':tuple(row), 'soc_code': '11-1011.00'} for row in results]
     # will want to change results to a major -> job call
     json_doc = json.dumps(results)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
     return response
 
-#-----------------------------------------------------------------------
-
+# details for a job (soc_code)
 @app.route('/job', methods=['GET'])
 def job_details():
     soc_code = flask.request.args.get('soc_code')
@@ -94,8 +98,7 @@ def job_details():
 
     return response
 
-#-----------------------------------------------------------------------
-
+# get all favorites for a user
 @app.route('/preferences', methods=['GET'])
 def preferences():
     user = flask.request.args.get('user')
