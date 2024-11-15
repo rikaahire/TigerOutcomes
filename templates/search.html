@@ -7,6 +7,27 @@
     <title>TigerOutcomes</title>
   </head>
   <body>
+    <div class="modal" id="classModal" style="min-width:90%">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h4 class="modal-title">Job Details</h4>
+               <button class="btn-close" data-bs-dismiss="modal">
+               </button>
+            </div>
+            <div class="modal-body" id="classModalBody">
+               
+            </div>
+            <div class="modal-footer">
+               <button class="btn btn-danger"
+                  data-bs-dismiss="modal">
+                  Close
+               </button>
+            </div>
+         </div>
+      </div>
+      <br>
+   </div>
     <header class="sticky-top">
       <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
         <div class="container-fluid">
@@ -35,48 +56,6 @@
             <div class="border" id="resultsDiv"></div>
           </div>
         </div>
-        <!-- Cards -->
-        <div class="col-md-9 d-flex flex-column align-items-stretch flex-shrink-0 position=fixed" style="width:max-content;">
-          <div class="row row-cols-1 row-cols-md-2 g-4">
-            <!-- Card Description -->
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Description</h5>
-                  <p class="card-text" id="descriptionDiv"></p>
-                </div>
-              </div>
-            </div>
-            <!-- Card for Tasks & Skills -->
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Tasks and Skills</h5>
-                  <p class="card-text" id="taskDiv"></p>
-                </div>
-              </div>
-            </div>
-            <!-- Card for Salary -->
-            <!-- Might need to do some more here with data graphics -->
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Salary Range</h5>
-                  <p class="card-text" id="salaryDiv"></p>
-                </div>
-              </div>
-            </div>
-            <!-- Card for Common Employers -->
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Common Employers</h5>
-                  <p class="card-text" id="employerDiv"></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <footer class="py-3 bg-light sticky-bottom">
@@ -97,21 +76,21 @@
     
     <script>
       'use strict';
-      
+
       function convertToHtml(jobs) {
         let template = `
           {{#jobs}}
             <div class="list-group-item list-group-item-action py-3 lh-tight">
               <div class="row align-items-center">
                 <!-- Column for Jobs -->
-                <div class="col">
-                  <a onclick="getJobResults({{soc_code}})" class="text-decoration-none text-dark">
+                <a onclick="getJobResults('{{soc_code}}')" class="col text-decoration-none text-dark">
+                  <div>
                     <strong class="mt-1 mb-1">{{ row }}</strong>
-                  </a>
-                </div>
+                  </div>
+                </a>
                 <!-- Column for Button -->
                 <div class="col-auto">
-                  <button type="button" id="favorite{{soc_code}}" class="btn btn-outline-warning" data-bs-toggle="button">
+                  <button type="button" id="favorite{{'soc_code'}}" class="btn btn-outline-warning" data-bs-toggle="button">
                     ⭐️
                   </button>
                 </div>
@@ -125,14 +104,61 @@
         return html;
       }
 
+      function getCardHtml(info) {
+        info=getJobHtml(info)
+        let template = 
+        `
+        <!-- Card Description -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Description</h5>
+            <p class="card-text"> {{description}} </p>
+          </div>
+        </div>
+        <!-- Card for Tasks & Skills -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Tasks and Skills</h5>
+            <p class="card-text"> {{skills}} </p>
+          </div>
+        </div>
+        <!-- Card for Salary -->
+        <!-- Might need to do some more here with data graphics -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Salary Range</h5>
+            <p class="card-text"> {{salary}} </p>
+          </div>
+        </div>
+        <!-- Card for Common Employers -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Common Employers</h5>
+            <p class="card-text"> {{employer}} </p>
+          </div>
+        </div>
+        `;
+        let map = {
+          description: info['descript'],
+          skills: info['skills'],
+          salary: info['salary'],
+          employer: info['employer']
+        }
+        let html = Mustache.render(template, map);
+        return html;
+      }
+
       function getJobHtml(info) {
-        description = info[0][0]
-        skills = info[1]['skills']
-        knowledge = info[1]['knowledge']
-        description = Mustache.render("{{info}}", description)
-        skills = Mustache.render("{{info}}", skills)
-        template = "Default"
-        return (description, skills, template, template);
+        let description = info['description']
+        let skills = info['skills']
+        let knowledge = info['knowledge']
+        console.log(description)
+        description = Mustache.render("{{.}}", description)
+        skills = Mustache.render("{{.}}", skills)
+        knowledge = Mustache.render("{{.}}", knowledge)
+        console.log(skills)
+        let template = "Default"
+        return {'descript': description, 'skills': skills, 'salary': template, 'employer': template};
       }
 
       function handleSearchResponse() {
@@ -152,15 +178,12 @@
           return;
         }
         let info = JSON.parse(this.response);
-        let descript_html, task_html, salary_html, employer_html = getJobHtml(info);
-        let descriptionDiv = document.getElementById('descriptionDiv');
-        let taskDiv = document.getElementById('taskDiv');
-        let salaryDiv = document.getElementById('salaryDiv');
-        let employerDiv = document.getElementById('employerDiv');
-        descriptionDiv.innerHTML = descript_html;
-        taskDiv.innerHTML = task_html;
-        salaryDiv.innerHTML = salary_html;
-        employerDiv.innerHTML = employer_html;
+        let html = getCardHtml(info);
+        let modal = document.getElementById('classModalBody');
+        modal.innerHTML = html;
+        let classModalNode = document.getElementById('classModal');
+        let classModal = new bootstrap.Modal(classModalNode);
+        classModal.show();
       }
 
       function handleError() {
