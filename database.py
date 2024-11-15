@@ -76,6 +76,7 @@ def write_favorite(name, soc_code, status):
                         table.c.name == name).where(
                         table.c.soc_code == soc_code).where(
                         table.c.status == status)
+    ret = ''
     with engine.connect() as conn:
         try:
             favorite = conn.execute(stmt).fetchall()
@@ -86,15 +87,16 @@ def write_favorite(name, soc_code, status):
                             table.c.status == status).values(
                             status=status)
                 conn.execute(new_stmt)
-                print(f"Updated favorite for {name} with SOC {soc_code}.")
+                ret = f"Updated favorite for {name} with SOC {soc_code}."
             else:
                 new_stmt = table.insert().values(name=name, soc_code=soc_code, status=status)
                 conn.execute(new_stmt)
-                print(f"Added new favorite for {name} with SOC {soc_code}.")
+                ret = f"Added new favorite for {name} with SOC {soc_code}."
             conn.commit()
         except SQLAlchemyError as e:
-            print(f"Error writing favorite: {e}")
+            ret = f"Error writing favorite: {e}"
             conn.rollback()
+    return ret
 
 #-----------------------------------------------------------------------
 

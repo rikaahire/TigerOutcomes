@@ -15,7 +15,7 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="https://tigeroutcomes.onrender.com/">Home</a>
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
               </li>
             </ul>
               <button class="btn btn-outline" type="credentials">Account</button>
@@ -103,8 +103,8 @@
               <div class="row align-items-center">
                 <!-- Column for Jobs -->
                 <div class="col">
-                  <a onclick="getJobResults({{soc_code}})" class="text-decoration-none text-dark">
-                    <strong class="mt-1 mb-1">{{ row }}</strong>
+                  <a onclick="getJobResults('11-1011.00')" class="text-decoration-none text-dark">
+                    <strong class="mt-1 mb-1">{{.}}</strong>
                   </a>
                 </div>
                 <!-- Column for Button -->
@@ -137,10 +137,10 @@
       let request = null;
 
       function getFavorites() {
-        let encodedMajor = "bob"
-        let url = '/preferences?user=' + encodedMajor;
+        let encodedUser = "bob"
+        let url = '/preferences?user=' + encodedUser;
 
-        let view = {"input": encodedMajor}
+        let view = {"input": encodedUser}
         let html = Mustache.render("Favorites for {{input}}", view);
         let repeat = document.getElementById('repeat');
         repeat.innerHTML = html;

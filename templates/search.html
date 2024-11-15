@@ -36,7 +36,7 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="https://tigeroutcomes.onrender.com/">Home</a>
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
               </li>
             </ul>
               <button class="btn btn-outline" type="credentials">Account</button>
@@ -90,7 +90,7 @@
                 </a>
                 <!-- Column for Button -->
                 <div class="col-auto">
-                  <button type="button" id="favorite{{'soc_code'}}" class="btn btn-outline-warning" data-bs-toggle="button">
+                  <button type="button" onclick="favorite('{{row}}')" id="favorite{{soc_code}}" class="btn btn-outline-warning" data-bs-toggle="button">
                     ⭐️
                   </button>
                 </div>
@@ -186,6 +186,15 @@
         classModal.show();
       }
 
+      function handleFavorite() {
+        if (this.status !== 200) {
+          alert('Error: Failed to fetch data from server');
+          return;
+        }
+        let info = JSON.parse(this.response);
+        alert(info);
+      }
+
       function handleError() {
         alert('Error: Failed to fetch data from server');
       }
@@ -220,6 +229,22 @@
           request.abort();
         request = new XMLHttpRequest();
         request.onload = handleJobResponse;
+        request.onerror = handleError;
+        request.open('GET', url);
+        request.send();
+      }
+
+      function favorite(soc_code, user='bob', status='True') {
+        let encodedSOC = encodeURIComponent(soc_code);
+        let encodedUser = encodeURIComponent(user);
+        let encodedStatus = encodeURIComponent(status);
+        let url = '/update?user=' + encodedUser + 
+                  '&soc_code=' + encodedSOC + 
+                  '&status=' + encodedStatus;
+        if (request !== null)
+          request.abort();
+        request = new XMLHttpRequest();
+        request.onload = handleFavorite;
         request.onerror = handleError;
         request.open('GET', url);
         request.send();

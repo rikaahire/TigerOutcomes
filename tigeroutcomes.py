@@ -106,7 +106,7 @@ def preferences():
     # auth.authenticate()
     descript = db.read_favorites(name=user, status=True)
     # gets soc_codes
-    descript = [row[2] for row in descript]
+    descript = [tuple(row) for row in descript]
     json_doc = json.dumps(descript)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
@@ -115,3 +115,25 @@ def preferences():
     # response = flask.make_response(html_code)
 
     return response
+
+# get all favorites for a user
+@app.route('/update', methods=['GET'])
+def update():
+    user = flask.request.args.get('user')
+    if user is None:
+        return []
+    soc_code = flask.request.args.get('soc_code')
+    if soc_code is None:
+        return []
+    status = flask.request.args.get('status')
+    if status is None:
+        return []
+    else:
+        status = bool(status)
+    # auth.authenticate()
+    descript = [db.write_favorite(name=user, soc_code=soc_code, status=status)]
+    json_doc = json.dumps(descript)
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
