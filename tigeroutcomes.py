@@ -87,7 +87,8 @@ def job_details():
     description = descript['description']
     skills = descript['skills']
     knowledge = descript['knowledge']
-    descript= {'description': [tuple(row) for row in description], 'skills': [tuple(row) for row in skills], 'knowledge': [tuple(row) for row in knowledge]}
+    wage = descript['wage']
+    descript= {'description': [tuple(row) for row in description], 'skills': [tuple(row) for row in skills], 'knowledge': [tuple(row) for row in knowledge], 'wage': [tuple(row) for row in wage]}
     json_doc = json.dumps(descript)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'

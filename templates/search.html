@@ -152,13 +152,13 @@
         let description = info['description']
         let skills = info['skills']
         let knowledge = info['knowledge']
-        console.log(description)
+        let wage = info['wage']
         description = Mustache.render("{{.}}", description)
         skills = Mustache.render("{{.}}", skills)
+        wage = Mustache.render("{{.}}", wage)
         knowledge = Mustache.render("{{.}}", knowledge)
-        console.log(skills)
         let template = "Default"
-        return {'descript': description, 'skills': skills, 'salary': template, 'employer': template};
+        return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
       }
 
       function handleSearchResponse() {

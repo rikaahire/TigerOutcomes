@@ -233,17 +233,23 @@ def get_occupational_data_full(soc_code):
     table_descrip = sqlalchemy.Table("onet_occupation_data", metadata, autoload_with=engine)
     table_skills = sqlalchemy.Table("onet_skills", metadata, autoload_with=engine)
     table_knowledge = sqlalchemy.Table("onet_knowledge", metadata, autoload_with=engine)
+    table_wage = sqlalchemy.Table("bls_wage_data", metadata, autoload_with=engine)
     # Create a select query
     stmt_descrip = sqlalchemy.select(table_descrip.c.Description).where(table_descrip.columns["O*NET-SOC Code"] == soc_code)
     stmt_skills = sqlalchemy.select(distinct(table_skills.c['Element Name'])).where(table_skills.columns["O*NET-SOC Code"] == soc_code)
     stmt_knowledge = sqlalchemy.select(distinct(table_knowledge.c['Element Name'])).where(table_knowledge.columns["O*NET-SOC Code"] == soc_code)
+    mod_soc_code = soc_code[:7]
+    stmt_wage = sqlalchemy.select(table_wage).where(table_wage.c["OCC_CODE"] == mod_soc_code)
     # Execute the query and fetch the results
     with engine.connect() as conn:
         description = conn.execute(stmt_descrip).fetchall()
         skills = conn.execute(stmt_skills).fetchall()
         knowledge = conn.execute(stmt_knowledge).fetchall()
+        wage = conn.execute(stmt_wage).fetchall()
 
-    return {'description': description, 'skills': skills, 'knowledge' :knowledge}
+    print(wage)
+    wage = [[wage[0][18]], [wage[0][25]], [wage[0][26]], [wage[0][27]], [wage[0][28]], [wage[0][29]]]
+    return {'description': description, 'skills': skills, 'knowledge': knowledge, 'wage': wage}
 
 #-----------------------------------------------------------------------
 
