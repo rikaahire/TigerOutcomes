@@ -51,23 +51,11 @@ def landing():
 
 @app.route('/search', methods=['GET'])
 def search():
-
-    # auth.authenticate()
-    # major = flask.request.args.get('major')
-    # major = 'English'
-    # try:
-        # courses = db.get_student_by_major("pton_demographics", major) - deprecated, see below
-        # courses = db.get_rows("pton_demographics", "AcadPlanDescr", major)
-        # html_code = flask.render_template('search.html', majorsearch='English',
-        #                                   data=courses)
-    #     html_code = flask.render_template('search.html')
-    # except Exception as ex:
-    #     print(ex)
-    #     html_code = flask.render_template('servererror.html')
-
-    # response = flask.make_response(html_code)
-    # return response
     return flask.send_file('templates/search.html')
+
+@app.route('/favorites', methods=['GET'])
+def favorite():
+    return flask.send_file('templates/favorites.html')
 
 @app.route('/results', methods=['GET'])
 def results():
@@ -97,6 +85,26 @@ def job_details():
     knowledge = descript['knowledge']
     descript = [tuple(row) for row in description]
     descript.append({'skills': [tuple(row) for row in skills], 'knowledge': [tuple(row) for row in knowledge]})
+    json_doc = json.dumps(descript)
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    # html_code = flask.render_template('job.html', description=descript[0], 
+    #                                   skills=descript[1], knowledge=descript[2])
+    # response = flask.make_response(html_code)
+
+    return response
+
+#-----------------------------------------------------------------------
+
+@app.route('/preferences', methods=['GET'])
+def preferences():
+    user = flask.request.args.get('user')
+    if user is None:
+        return []
+    # auth.authenticate()
+    descript = db.read_favorites(name=user, status=True)
+    # gets soc_codes
+    descript = [row[2] for row in descript]
     json_doc = json.dumps(descript)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'

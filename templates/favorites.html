@@ -28,6 +28,7 @@
       <div class="row">
         <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;"> 
           <div class="list-group list-group-flush border-bottom scrollarea">
+            <span class="fs-5 fw-semibold" id="repeat"> Favorites </span>
             <div class="border" id="resultsDiv"></div>
           </div>
         </div>
@@ -93,6 +94,8 @@
     
     <script>
       'use strict';
+
+      // results specifics
       function convertToHtml(jobs) {
         let template = `
           {{#jobs}}
@@ -120,16 +123,6 @@
         return html;
       }
 
-      function getJobHtml(info) {
-        description = info[0][0]
-        skills = info[1]['skills']
-        knowledge = info[1]['knowledge']
-        description = Mustache.render("{{info}}", description)
-        skills = Mustache.render("{{info}}", skills)
-        template = "Default"
-        return (description, skills, template, template);
-      }
-
       function handleSearchResponse() {
         if (this.status !== 200) {
           alert('Error: Failed to fetch data from server');
@@ -139,6 +132,38 @@
         let html = convertToHtml(jobs);
         let resultsDiv = document.getElementById('resultsDiv');
         resultsDiv.innerHTML = html;
+      }
+
+      let request = null;
+
+      function getFavorites() {
+        let encodedMajor = "bob"
+        let url = '/preferences?user=' + encodedMajor;
+
+        let view = {"input": encodedMajor}
+        let html = Mustache.render("Favorites for {{input}}", view);
+        let repeat = document.getElementById('repeat');
+        repeat.innerHTML = html;
+
+        if (request !== null)
+          request.abort();
+        request = new XMLHttpRequest();
+        request.onload = handleSearchResponse;
+        request.onerror = handleError;
+        request.open('GET', url);
+        request.send();
+      }
+
+      // job card specifics
+
+      function getJobHtml(info) {
+        description = info[0][0]
+        skills = info[1]['skills']
+        knowledge = info[1]['knowledge']
+        description = Mustache.render("{{info}}", description)
+        skills = Mustache.render("{{info}}", skills)
+        template = "Default"
+        return (description, skills, template, template);
       }
 
       function handleJobResponse() {
@@ -162,28 +187,6 @@
         alert('Error: Failed to fetch data from server');
       }
 
-      let request = null;
-
-      function getSearchResults() {
-        let majorInput = document.getElementById('majorInput');
-        let major = majorInput.value;
-        let encodedMajor = encodeURIComponent(major);
-        let url = '/results?major=' + encodedMajor;
-
-        let view = {"input": major}
-        let html = Mustache.render("Results for {{input}}", view);
-        let repeat = document.getElementById('repeat');
-        repeat.innerHTML = html;
-
-        if (request !== null)
-          request.abort();
-        request = new XMLHttpRequest();
-        request.onload = handleSearchResponse;
-        request.onerror = handleError;
-        request.open('GET', url);
-        request.send();
-      }
-
       function getJobResults(soc_code) {
         let encodedSOC = encodeURIComponent(soc_code);
         let url = '/job?soc_code=' + encodedSOC;
@@ -197,19 +200,7 @@
         request.send();
       }
 
-      let timer = null;
-
-      function debouncedGetResults() {
-        clearTimeout(timer);
-        timer = setTimeout(getSearchResults, 500);
-      }
-
-      function setup() {
-        let majorInput = document.getElementById('majorInput');
-        majorInput.addEventListener('input', debouncedGetResults);
-      }
-
-      document.addEventListener('DOMContentLoaded', setup);
+      document.addEventListener('DOMContentLoaded', getFavorites);
 
    </script>
   </body>

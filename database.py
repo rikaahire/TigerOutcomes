@@ -61,7 +61,7 @@ files_to_tables = {
 #     soc_code = Column(String, nullable=False)
 #     status = Column(Boolean, nullable=False)
 
-def read_favorites(name=None, soc_code=None, status=None, limit=default_limit):
+def read_favorites(name, soc_code=None, status=None, limit=default_limit):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
     query = select(table)
