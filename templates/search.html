@@ -11,7 +11,7 @@
       <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
         <div class="container-fluid">
           <!-- replace link when hosted -->
-          <a class="navbar-brand" href="tigeroutcomes.com">TigerOutcomes</a>
+          <a class="navbar-brand" href="/">TigerOutcomes</a>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
               <li class="nav-item">
@@ -33,10 +33,9 @@
           </div>  
           <div class="list-group list-group-flush border-bottom scrollarea">
             <div class="border" id="resultsDiv"></div>
-            <!-- {% for row in data %} -->
-            <!-- {% endfor %} -->
           </div>
         </div>
+        <!-- Cards -->
         <div class="col-md-9 d-flex flex-column align-items-stretch flex-shrink-0 position=fixed" style="width:max-content;">
           <div class="row row-cols-1 row-cols-md-2 g-4">
             <!-- Card Description -->
@@ -44,7 +43,7 @@
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Description</h5>
-                  <p class="card-text">{{ description }}</p>
+                  <p class="card-text" id="descriptionDiv"></p>
                 </div>
               </div>
             </div>
@@ -53,7 +52,7 @@
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Tasks and Skills</h5>
-                  <p class="card-text">{{ tasks }}</p>
+                  <p class="card-text" id="taskDiv"></p>
                 </div>
               </div>
             </div>
@@ -63,7 +62,7 @@
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Salary Range</h5>
-                  <p class="card-text">{{ salary }}</p>
+                  <p class="card-text" id="salaryDiv"></p>
                 </div>
               </div>
             </div>
@@ -72,7 +71,7 @@
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Common Employers</h5>
-                  <p class="card-text"> {{ employers }} </p>
+                  <p class="card-text" id="employerDiv"></p>
                 </div>
               </div>
             </div>
@@ -105,7 +104,7 @@
               <div class="row align-items-center">
                 <!-- Column for Jobs -->
                 <div class="col">
-                  <a href="/" class="text-decoration-none text-dark">
+                  <a onclick="getJobResults({{soc_code}})" class="text-decoration-none text-dark">
                     <strong class="mt-1 mb-1">{{ row }}</strong>
                   </a>
                 </div>
@@ -125,16 +124,42 @@
         return html;
       }
 
+      function getJobHtml(info) {
+        description = info[0][0]
+        skills = info[1]['skills']
+        knowledge = info[1]['knowledge']
+        description = Mustache.render("{{info}}", description)
+        skills = Mustache.render("{{info}}", skills)
+        template = "Default"
+        return (description, skills, template, template);
+      }
+
       function handleSearchResponse() {
         if (this.status !== 200) {
           alert('Error: Failed to fetch data from server');
           return;
         }
         let jobs = JSON.parse(this.response);
-        console.log(jobs)
         let html = convertToHtml(jobs);
         let resultsDiv = document.getElementById('resultsDiv');
         resultsDiv.innerHTML = html;
+      }
+
+      function handleJobResponse() {
+        if (this.status !== 200) {
+          alert('Error: Failed to fetch data from server');
+          return;
+        }
+        let info = JSON.parse(this.response);
+        let descript_html, task_html, salary_html, employer_html = getJobHtml(info);
+        let descriptionDiv = document.getElementById('descriptionDiv');
+        let taskDiv = document.getElementById('taskDiv');
+        let salaryDiv = document.getElementById('salaryDiv');
+        let employerDiv = document.getElementById('employerDiv');
+        descriptionDiv.innerHTML = descript_html;
+        taskDiv.innerHTML = task_html;
+        salaryDiv.innerHTML = salary_html;
+        employerDiv.innerHTML = employer_html;
       }
 
       function handleError() {
@@ -158,6 +183,19 @@
           request.abort();
         request = new XMLHttpRequest();
         request.onload = handleSearchResponse;
+        request.onerror = handleError;
+        request.open('GET', url);
+        request.send();
+      }
+
+      function getJobResults(soc_code) {
+        let encodedSOC = encodeURIComponent(soc_code);
+        let url = '/job?soc_code=' + encodedSOC;
+
+        if (request !== null)
+          request.abort();
+        request = new XMLHttpRequest();
+        request.onload = handleJobResponse;
         request.onerror = handleError;
         request.open('GET', url);
         request.send();

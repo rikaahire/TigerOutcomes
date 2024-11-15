@@ -76,7 +76,7 @@ def results():
         major = ''
         major = major.strip()
     results = db.get_rows("pton_demographics", "AcadPlanDescr", major)
-    results = [{'row':tuple(row)} for row in results]
+    results = [{'row':tuple(row), 'soc_code': '11-1011.00'} for row in results]
     # will want to change results to a major -> job call
     json_doc = json.dumps(results)
     response = flask.make_response(json_doc)
@@ -92,7 +92,11 @@ def job_details():
         return []
     # auth.authenticate()
     descript = db.get_occupational_data_full(soc_code)
-    descript = [tuple(row) for row in descript]
+    description = descript['description']
+    skills = descript['skills']
+    knowledge = descript['knowledge']
+    descript = [tuple(row) for row in description]
+    descript.append({'skills': [tuple(row) for row in skills], 'knowledge': [tuple(row) for row in knowledge]})
     json_doc = json.dumps(descript)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
