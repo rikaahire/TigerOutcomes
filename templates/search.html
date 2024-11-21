@@ -50,7 +50,46 @@
         <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
           <div class="container-fluid d-flex">
             <span class="fs-5 fw-semibold" id="repeat"> Results for Course </span>
-            <input class="form-control" type="text" placeholder="English" id="majorInput" style="text-align: center" aria-label="majorsearch">
+            <input class="form-control" list="datalistOptions" type="text" placeholder="" id="majorInput" style="text-align: center" aria-label="majorsearch">
+            <datalist id="majorInput">
+              <option value="African American Studies">
+              <option value="American Studies">
+              <option value="Anthropology">
+              <option value="Architecture">
+              <option value="Art and Archaeology">
+              <option value="Astrophysical Sciences">
+              <option value="Chemical and Biological Engineering">
+              <option value="Chemistry">
+              <option value="Civil and Environmental Engineering">
+              <option value="Classics">
+              <option value="Comparative Literature">
+              <option value="Computer Science">
+              <option value="East Asian Studies">
+              <option value="Ecology and Evolutionary Biology">
+              <option value="Economics">
+              <option value="Electrical and Computer Engineering">
+              <option value="English">
+              <option value="French and Italian">
+              <option value="Geosciences">
+              <option value="German">
+              <option value="History">
+              <option value="Mathematics">
+              <option value="Mechanical and Aerospace Engineering">
+              <option value="Molecular Biology">
+              <option value="Music">
+              <option value="Near Eastern Studies">
+              <option value="Neuroscience">
+              <option value="Operations Research and Financial Engineering">
+              <option value="Philosophy">
+              <option value="Physics">
+              <option value="Politics">
+              <option value="Psychology">
+              <option value="Public Policy">
+              <option value="Religion">
+              <option value="Slavic Languages and Literatures">
+              <option value="Sociology">
+              <option value="Spanish and Portuguese">
+            </datalist>
           </div>  
           <div class="list-group list-group-flush border-bottom scrollarea">
             <div class="border" id="resultsDiv"></div>
