@@ -20,7 +20,7 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 @app.route('/home', methods=['GET'])
 def home():
 
-    auth.authenticate()
+    username = auth.authenticate()
     try:
         html_code = flask.render_template('homepage.html')
     except Exception as ex:
@@ -99,10 +99,10 @@ def job_details():
 # get all favorites for a user
 @app.route('/preferences', methods=['GET'])
 def preferences():
-    auth.authenticate()
-    user = flask.request.args.get('user')
-    if user is None:
-        return []
+    user = auth.authenticate()
+    # user = flask.request.args.get('user')
+    # if user is None:
+    #     return []
     descript = db.read_favorites(name=user, status=True)
     # gets soc_codes
     descript = [tuple(row) for row in descript]
@@ -118,10 +118,10 @@ def preferences():
 # get all favorites for a user
 @app.route('/update', methods=['GET'])
 def update():
-    auth.authenticate()
-    user = flask.request.args.get('user')
-    if user is None:
-        return []
+    user = auth.authenticate()
+    # user = flask.request.args.get('user')
+    # if user is None:
+    #     return []
     soc_code = flask.request.args.get('soc_code')
     if soc_code is None:
         return []
@@ -138,10 +138,10 @@ def update():
 
 @app.route('/delete', methods=['GET'])
 def delete():
-    auth.authenticate()
-    user = flask.request.args.get('user')
-    if user is None:
-        return []
+    user = auth.authenticate()
+    # user = flask.request.args.get('user')
+    # if user is None:
+    #     return []
     status = flask.request.args.get('status')
     ret = db.clear_favorites(user, status)
     json_doc = json.dumps(ret)

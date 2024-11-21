@@ -28,7 +28,7 @@
       <div class="row">
         <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;"> 
           <div class="list-group list-group-flush border-bottom scrollarea">
-            <span class="fs-5 fw-semibold" id="repeat"> Favorites </span>
+            <span class="fs-5 fw-semibold"> Favorites </span>
             <div class="border" id="resultsDiv"></div>
           </div>
         </div>
@@ -137,13 +137,7 @@
       let request = null;
 
       function getFavorites() {
-        let encodedUser = "bob"
-        let url = '/preferences?user=' + encodedUser;
-
-        let view = {"input": encodedUser}
-        let html = Mustache.render("Favorites for {{input}}", view);
-        let repeat = document.getElementById('repeat');
-        repeat.innerHTML = html;
+        let url = '/preferences';
 
         if (request !== null)
           request.abort();

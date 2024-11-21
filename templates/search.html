@@ -234,12 +234,10 @@
         request.send();
       }
 
-      function favorite(soc_code, user='bob', status='True') {
+      function favorite(soc_code, status='True') {
         let encodedSOC = encodeURIComponent(soc_code);
-        let encodedUser = encodeURIComponent(user);
         let encodedStatus = encodeURIComponent(status);
-        let url = '/update?user=' + encodedUser + 
-                  '&soc_code=' + encodedSOC + 
+        let url = '/update?soc_code=' + encodedSOC + 
                   '&status=' + encodedStatus;
         if (request !== null)
           request.abort();
