@@ -30,8 +30,6 @@ def landing():
     response = flask.make_response(html_code)
     return response
 
-#-----------------------------------------------------------------------
-
 @app.route('/home', methods=['GET'])
 def home():
     auth.authenticate()
@@ -53,6 +51,14 @@ def search():
 @app.route('/favorites', methods=['GET'])
 def favorite():
     return flask.send_file('templates/favorites.html')
+
+@app.route('/about', methods=['GET'])
+def about():
+    return flask.send_file('templates/about.html')
+
+@app.route('/help', methods=['GET'])
+def help():
+    return flask.send_file('templates/help.html')
 
 #-----------------------------------------------------------------------
 
