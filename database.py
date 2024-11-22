@@ -324,18 +324,17 @@ def get_positions_by_acadplandesc(acad_plan_descr):
             )
         )
         .where(
-            func.lower(pton_demographics.c["AcadPlanDescr"]) == func.lower(acad_plan_descr)
-        )
-        .where(
             and_(
                 pton_student_outcomes.c["Position"] != None,
                 pton_student_outcomes.c["Position"] != ''
             )
         )
-        .order_by(pton_student_outcomes.c["Position"])
     )
-    
-
+    if acad_plan_descr != 'all':
+        stmt = stmt.where(
+            func.lower(pton_demographics.c["AcadPlanDescr"]) == func.lower(acad_plan_descr)
+        )
+    stmt = stmt.order_by(pton_student_outcomes.c["Position"])
     with engine.connect() as conn:
         results = conn.execute(stmt).fetchall()
     

@@ -143,14 +143,17 @@ def delete():
     # if user is None:
     #     return []
     soc_code = flask.request.args.get('soc_code')
-    if not soc_code:
+    if soc_code is None:
         json_doc = [False, 'missing soc code']
+        response = flask.make_response(json_doc)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
     try:
         status = flask.request.args.get('status')
         ret = [True, db.clear_favorites(user, status, soc_code)]
         json_doc = json.dumps(ret)
-    except Exception as e:
+    except:
         json_doc = [False, ('A server error occurred. Please contact'
                     ' the system administrator')]
 

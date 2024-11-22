@@ -260,6 +260,20 @@
         request.send();
       }
 
+      function getAllSearchResults() {
+        let url = '/results?major=all';
+
+        repeat.innerHTML = 'All jobs';
+
+        if (request !== null)
+          request.abort();
+        request = new XMLHttpRequest();
+        request.onload = handleSearchResponse;
+        request.onerror = handleError;
+        request.open('GET', url);
+        request.send();
+      }
+
       function getJobResults(soc_code) {
         let encodedSOC = encodeURIComponent(soc_code);
         let url = '/job?soc_code=' + encodedSOC;
@@ -300,6 +314,7 @@
       }
 
       document.addEventListener('DOMContentLoaded', setup);
+      document.addEventListener('DOMContentLoaded', getAllSearchResults);
 
    </script>
   </body>

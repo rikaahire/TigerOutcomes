@@ -161,7 +161,7 @@
       }
 
       function deleteFavorite(soc_code) {
-        let url = '/delete';
+        let url = '/delete?soc_code=' + soc_code;
         if (request !== null)
           request.abort();
         request = new XMLHttpRequest();
