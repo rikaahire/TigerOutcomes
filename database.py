@@ -282,25 +282,35 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
     # Get tables
     pton_demographics = sqlalchemy.Table('pton_demographics', metadata, autoload_with=engine)
     pton_student_outcomes = sqlalchemy.Table('pton_student_outcomes', metadata, autoload_with=engine)
+    matching_embeddings = sqlalchemy.Table('matching_embeddings', metadata, autoload_with=engine)
     onet_occupation_data = sqlalchemy.Table('onet_occupation_data', metadata, autoload_with=engine)
     
+    # Build the query with intermediary mapping
     stmt = (
         sqlalchemy.select(distinct(onet_occupation_data.c["O*NET-SOC Code"]))
         .select_from(
-            pton_demographics.join(
+            pton_demographics
+            .join(
                 pton_student_outcomes,
                 pton_demographics.c["StudyID"] == pton_student_outcomes.c["StudyID"]
-            ).join(
+            )
+            .join(
+                matching_embeddings,
+                func.lower(pton_student_outcomes.c["Position"]) == func.lower(matching_embeddings.c["princeton_positions"])
+            )
+            .join(
                 onet_occupation_data,
-                pton_student_outcomes.c["Position"] == onet_occupation_data.c["Title"]
+                func.lower(matching_embeddings.c["o_net_titles"]) == func.lower(onet_occupation_data.c["Title"])
             )
         )
-        .where(pton_demographics.c["AcadPlanDescr"] == acad_plan_descr)
+        .where(func.lower(pton_demographics.c["AcadPlanDescr"]) == func.lower(acad_plan_descr))
     )
     
+    # Execute the query and fetch the results
     with engine.connect() as conn:
         results = conn.execute(stmt).fetchall()
     
+    # Extract O*NET-SOC Codes from the results
     onet_soc_codes = [row[0] for row in results]
     
     return onet_soc_codes
@@ -342,6 +352,31 @@ def get_positions_by_acadplandesc(acad_plan_descr):
     positions = [row[0] for row in results]
     
     return positions
+
+
+def get_onet_soc_code_by_title(title):
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(engine)
+    
+    # Get the onet_occupation_data table
+    onet_occupation_data = sqlalchemy.Table('onet_occupation_data', metadata, autoload_with=engine)
+    
+    # Build the query with case-insensitive matching
+    stmt = (
+        sqlalchemy.select(onet_occupation_data.c["O*NET-SOC Code"])
+        .where(func.lower(onet_occupation_data.c["Title"]) == func.lower(title))
+    )
+    
+    # Execute the query and fetch the result
+    with engine.connect() as conn:
+        result = conn.execute(stmt).fetchone()
+    
+    # Check if a result was found
+    if result:
+        onet_soc_code = result[0]
+        return onet_soc_code
+    else:
+        return None  # or raise an exception, or return an empty list
 
 def main():
     parser = argparse.ArgumentParser(
