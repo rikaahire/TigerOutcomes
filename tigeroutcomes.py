@@ -104,14 +104,13 @@ def preferences():
     #     return []
     descript = db.read_favorites(name=user, status=True)
     # gets soc_codes
-    descript = [tuple(row) for row in descript]
+    descript = [row[1] for row in descript]
     json_doc = json.dumps(descript)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
     # html_code = flask.render_template('job.html', description=descript[0], 
     #                                   skills=descript[1], knowledge=descript[2])
     # response = flask.make_response(html_code)
-
     return response
 
 # get all favorites for a user

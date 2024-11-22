@@ -101,6 +101,7 @@
           {{#jobs}}
             <div class="list-group-item list-group-item-action py-3 lh-tight">
               <div class="row align-items-center">
+                {{#.}}
                 <!-- Column for Jobs -->
                 <div class="col">
                   <a onclick="getJobResults('11-1011.00')" class="text-decoration-none text-dark">
@@ -109,17 +110,19 @@
                 </div>
                 <!-- Column for Button -->
                 <div class="col-auto">
-                  <button type="button" id="favorite{{soc_code}}" class="btn btn-warning active"
-                          onclick="deleteFavorite('{{soc_code}}')">
+                  <button type="button" class="btn btn-warning active"
+                          onclick="deleteFavorite('{{.}}')">
                     ⭐️
                   </button>
                 </div>
+                {{/.}}
               </div>
             </div>
             <br>
           {{/jobs}}
         `;
-        let map = {jobs: jobs};
+        let map = {'jobs': jobs};
+        console.log(map)
         let html = Mustache.render(template, map);
         return html;
       }
@@ -161,7 +164,7 @@
       }
 
       function deleteFavorite(soc_code) {
-        let url = '/delete?soc_code=' + soc_code;
+        let url = '/delete?soc_code=' + soc_code + '&status=True';
         if (request !== null)
           request.abort();
         request = new XMLHttpRequest();

@@ -239,12 +239,13 @@
       }
 
       let request = null;
+      let algo='alphabetical'
 
       function getSearchResults() {
         let majorInput = document.getElementById('majorInput');
         let major = majorInput.value;
         let encodedMajor = encodeURIComponent(major);
-        let url = '/results?major=' + encodedMajor;
+        let url = '/results?major=' + encodedMajor + '&algo=' + algo;
 
         let view = {"input": major}
         let html = Mustache.render("Results for {{input}}", view);
@@ -261,7 +262,7 @@
       }
 
       function getAllSearchResults() {
-        let url = '/results?major=all';
+        let url = '/results?major=all&algo=' + algo;
 
         repeat.innerHTML = 'All jobs';
 
