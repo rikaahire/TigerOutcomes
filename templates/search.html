@@ -244,28 +244,19 @@
       function getSearchResults() {
         let majorInput = document.getElementById('majorInput');
         let major = majorInput.value;
+        if (major == null || major == '')
+          major = 'all'
         let encodedMajor = encodeURIComponent(major);
         let url = '/results?major=' + encodedMajor + '&algo=' + algo;
 
-        let view = {"input": major}
-        let html = Mustache.render("Results for {{input}}", view);
-        let repeat = document.getElementById('repeat');
-        repeat.innerHTML = html;
-
-        if (request !== null)
-          request.abort();
-        request = new XMLHttpRequest();
-        request.onload = handleSearchResponse;
-        request.onerror = handleError;
-        request.open('GET', url);
-        request.send();
-      }
-
-      function getAllSearchResults() {
-        let url = '/results?major=all&algo=' + algo;
-
-        repeat.innerHTML = 'All jobs';
-
+        if (major == 'all')
+          repeat.innerHTML = 'All results'
+        else {
+          let view = {"input": major}
+          let html = Mustache.render("Results for {{input}}", view);
+          let repeat = document.getElementById('repeat');
+          repeat.innerHTML = html;
+        }
         if (request !== null)
           request.abort();
         request = new XMLHttpRequest();
@@ -315,7 +306,7 @@
       }
 
       document.addEventListener('DOMContentLoaded', setup);
-      document.addEventListener('DOMContentLoaded', getAllSearchResults);
+      document.addEventListener('DOMContentLoaded', getSearchResults);
 
    </script>
   </body>
