@@ -17,12 +17,12 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 #-----------------------------------------------------------------------
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
-@app.route('/home', methods=['GET'])
-def home():
+@app.route('/landing', methods=['GET'])
+def landing():
 
-    username = auth.authenticate()
+    # auth.authenticate()
     try:
-        html_code = flask.render_template('homepage.html')
+        html_code = flask.render_template('landingpage.html')
     except Exception as ex:
         print(ex)
         html_code = flask.render_template('servererror.html')
@@ -32,12 +32,11 @@ def home():
 
 #-----------------------------------------------------------------------
 
-@app.route('/landing', methods=['GET'])
-def landing():
-
-    # auth.authenticate()
+@app.route('/home', methods=['GET'])
+def home():
+    auth.authenticate()
     try:
-        html_code = flask.render_template('landingpage.html')
+        html_code = flask.render_template('homepage.html')
     except Exception as ex:
         print(ex)
         html_code = flask.render_template('servererror.html')
