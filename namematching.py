@@ -8,11 +8,19 @@ import sqlalchemy
 import sqlalchemy.orm
 from sqlalchemy import select, distinct, func, and_
 from sqlalchemy.exc import SQLAlchemyError
-# import dotenv
+import dotenv
+
+
+from sklearn.feature_extraction.text import CountVectorizer
+import pandas as pd
+import numpy as np
+from gensim.models import KeyedVectors
+from sklearn.metrics.pairwise import cosine_similarity
+from gensim.scripts.glove2word2vec import glove2word2vec
 
 #-----------------------------------------------------------------------
 
-# dotenv.load_dotenv()
+dotenv.load_dotenv()
 DATABASE_URL = 'postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKVjV@dpg-cspdgmrtq21c739rtrrg-a.ohio-postgres.render.com/tigeroutcomesdb'
 #DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
 engine = sqlalchemy.create_engine(DATABASE_URL)
@@ -380,7 +388,6 @@ def mapping_cosine(targets, job_titles):
 
     return df
 
-from sklearn.feature_extraction.text import CountVectorizer
 
 def mapping_bow(targets, job_titles):
     # Filter out None values
@@ -415,10 +422,7 @@ def mapping_bow(targets, job_titles):
     return df
 
 
-import pandas as pd
-import numpy as np
-from gensim.models import KeyedVectors
-from sklearn.metrics.pairwise import cosine_similarity
+
 
 def average_word_embeddings(text, model, vector_size=100):
     # Generate average word embeddings for the input text
@@ -457,8 +461,6 @@ def mapping_embeddings(targets, job_titles, model, vector_size=100):
         "similarity_score": most_similar_scores
     })
 
-    df.to_csv("embeddings.txt")
-
     return df
 
 
@@ -493,7 +495,12 @@ def name_matching():
 
     out_cos = mapping_cosine(princeton_positions, o_net_titles)
     out_bow = mapping_bow(princeton_positions, o_net_titles)
-    out_embeddings = mapping_embeddings(princeton_positions, o_net_titles)
+
+
+
+    glove_input_file = 'resources/glove.6B.100d.word2vec.txt'
+    word_vectors = KeyedVectors.load_word2vec_format(glove_input_file, binary=False)
+    out_embeddings = mapping_embeddings(princeton_positions, o_net_titles, word_vectors, 100)
 
     try:
 
