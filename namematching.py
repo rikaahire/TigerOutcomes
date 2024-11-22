@@ -241,7 +241,7 @@ def get_all_instances(table_name, col_name):
     with engine.connect() as conn:
         rows = conn.execute(stmt).fetchall()
 
-    return rows
+    return [row[0] for row in rows]
 
 #-----------------------------------------------------------------------
 
@@ -345,14 +345,12 @@ def get_positions_by_acadplandesc(acad_plan_descr):
 
 # ##################################
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-
-
+import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 def mapping_cosine(targets, job_titles):
+
     # Combine all targets and job titles for vectorization
     all_texts = targets + job_titles
     vectorizer = TfidfVectorizer()
@@ -366,19 +364,18 @@ def mapping_cosine(targets, job_titles):
     similarity_matrix = cosine_similarity(target_vectors, job_title_vectors)
 
     # Find the most similar job title for each target
-    # Get the index of the maximum similarity score for each target
     most_similar_indices = similarity_matrix.argmax(axis=1)
     most_similar_scores = similarity_matrix.max(axis=1)
 
-    df = pd.DataFrame()
+    # Create a DataFrame
+    df = pd.DataFrame({
+        "princeton_positions": targets,
+        "o_net_titles": [job_titles[i] for i in most_similar_indices],
+        "similarity_score": most_similar_scores
+    })
 
-    # Map each target to its most similar job title and similarity score
-    result = [
-        {"target": targets[i], "most_similar_job_title": job_titles[most_similar_indices[i]], "similarity_score": most_similar_scores[i]}
-        for i in range(len(targets))
-    ]
+    return df
 
-    return result
 
 
 
@@ -407,17 +404,19 @@ def name_matching():
     princeton_positions = get_all_instances("pton_student_outcomes", "Position")
     o_net_titles = get_all_instances("onet_occupation_data", "Title")
 
+
+
+    out = mapping_cosine(princeton_positions, o_net_titles)
+
     try:
-        table_name = "matching"
+        table_name = "matching_cosine"
         # Read Excel file
-        df = pd.read_excel(file_path)
 
         # Load DataFrame into PostgreSQL table, replacing if it exists
-        df.to_sql(table_name, engine, if_exists='replace', index=False)
+        out.to_sql(table_name, engine, if_exists='replace', index=False)
         print(f"Data loaded into {table_name} successfully.")
     except Exception as e:
         print(f"Error loading data into {table_name}: {e}")
-
 
 
 def main():
@@ -452,4 +451,4 @@ def main():
     #     print(row)
 
 if __name__ == '__main__':
-    main()
+    name_matching()
