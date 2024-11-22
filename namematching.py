@@ -415,6 +415,54 @@ def mapping_bow(targets, job_titles):
     return df
 
 
+import pandas as pd
+import numpy as np
+from gensim.models import KeyedVectors
+from sklearn.metrics.pairwise import cosine_similarity
+
+def average_word_embeddings(text, model, vector_size=100):
+    # Generate average word embeddings for the input text
+    if text is None or not isinstance(text, str):
+        return np.zeros(vector_size)
+    
+    words = text.lower().split()
+    embeddings = [model[word] for word in words if word in model]
+    if embeddings:
+        return np.mean(embeddings, axis=0)
+    else:
+        return np.zeros(vector_size)
+
+def mapping_embeddings(targets, job_titles, model, vector_size=100):
+    # Filter out None values
+    targets = [target for target in targets if target is not None]
+    job_titles = [job_title for job_title in job_titles if job_title is not None]
+
+    # Calculate the embeddings for all targets
+    target_vectors = np.array([average_word_embeddings(target, model, vector_size) for target in targets])
+    
+    # Calculate the embeddings for all job titles
+    job_title_vectors = np.array([average_word_embeddings(job_title, model, vector_size) for job_title in job_titles])
+
+    # Compute pairwise cosine similarity
+    similarity_matrix = cosine_similarity(target_vectors, job_title_vectors)
+
+    # Find the most similar job title for each target
+    most_similar_indices = similarity_matrix.argmax(axis=1)
+    most_similar_scores = similarity_matrix.max(axis=1)
+
+    # Create a DataFrame
+    df = pd.DataFrame({
+        "princeton_positions": targets,
+        "o_net_titles": [job_titles[i] for i in most_similar_indices],
+        "similarity_score": most_similar_scores
+    })
+
+    df.to_csv("embeddings.txt")
+
+    return df
+
+
+
 
 def name_matching():
     parser = argparse.ArgumentParser(
@@ -445,12 +493,15 @@ def name_matching():
 
     out_cos = mapping_cosine(princeton_positions, o_net_titles)
     out_bow = mapping_bow(princeton_positions, o_net_titles)
+    out_embeddings = mapping_embeddings(princeton_positions, o_net_titles)
 
     try:
 
         # Load DataFrame into PostgreSQL table, replacing if it exists
         out_cos.to_sql("matching_cosine", engine, if_exists='replace', index=False)
         out_bow.to_sql("matching_bow", engine, if_exists='replace', index=False)
+        out_embeddings.to_sql("matching_embeddings", engine, if_exists='replace', index=False)
+        
         print(f"Data loaded successfully.")
     except Exception as e:
         print(f"Error loading data into tables: {e}")
