@@ -351,6 +351,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 def mapping_cosine(targets, job_titles):
 
+    # filter out not none types
+    targets = [target for target in targets if target is not None]
+    job_titles = [job_title for job_title in job_titles if job_title is not None]
+
     # Combine all targets and job titles for vectorization
     all_texts = targets + job_titles
     vectorizer = TfidfVectorizer()
