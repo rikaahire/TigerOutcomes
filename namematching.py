@@ -380,6 +380,39 @@ def mapping_cosine(targets, job_titles):
 
     return df
 
+from sklearn.feature_extraction.text import CountVectorizer
+
+def mapping_bow(targets, job_titles):
+    # Filter out None values
+    targets = [target for target in targets if target is not None]
+    job_titles = [job_title for job_title in job_titles if job_title is not None]
+
+    # Combine all targets and job titles for vectorization
+    all_texts = targets + job_titles
+    vectorizer = CountVectorizer()
+    vectors = vectorizer.fit_transform(all_texts)
+    
+    # Separate the target and job title vectors
+    target_vectors = vectors[:len(targets)]  # First `len(targets)` rows
+    job_title_vectors = vectors[len(targets):]  # Remaining rows
+
+    # Calculate pairwise cosine similarity between all targets and job titles
+    similarity_matrix = cosine_similarity(target_vectors, job_title_vectors)
+
+    # Find the most similar job title for each target
+    most_similar_indices = similarity_matrix.argmax(axis=1)
+    most_similar_scores = similarity_matrix.max(axis=1)
+
+    # Create a DataFrame
+    df = pd.DataFrame({
+        "princeton_positions": targets,
+        "o_net_titles": [job_titles[i] for i in most_similar_indices],
+        "similarity_score": most_similar_scores
+    })
+
+    df.to_csv("bow.txt")
+
+    return df
 
 
 
@@ -410,17 +443,17 @@ def name_matching():
 
 
 
-    out = mapping_cosine(princeton_positions, o_net_titles)
+    out_cos = mapping_cosine(princeton_positions, o_net_titles)
+    out_bow = mapping_bow(princeton_positions, o_net_titles)
 
     try:
-        table_name = "matching_cosine"
-        # Read Excel file
 
         # Load DataFrame into PostgreSQL table, replacing if it exists
-        out.to_sql(table_name, engine, if_exists='replace', index=False)
-        print(f"Data loaded into {table_name} successfully.")
+        out_cos.to_sql("matching_cosine", engine, if_exists='replace', index=False)
+        out_bow.to_sql("matching_bow", engine, if_exists='replace', index=False)
+        print(f"Data loaded successfully.")
     except Exception as e:
-        print(f"Error loading data into {table_name}: {e}")
+        print(f"Error loading data into tables: {e}")
 
 
 def main():
