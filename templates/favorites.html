@@ -109,7 +109,8 @@
                 </div>
                 <!-- Column for Button -->
                 <div class="col-auto">
-                  <button type="button" id="favorite{{soc_code}}" class="btn btn-outline-warning" data-bs-toggle="button">
+                  <button type="button" id="favorite{{soc_code}}" class="btn btn-warning active"
+                          onclick="deleteFavorite('{{soc_code}}')">
                     ⭐️
                   </button>
                 </div>
@@ -143,6 +144,28 @@
           request.abort();
         request = new XMLHttpRequest();
         request.onload = handleSearchResponse;
+        request.onerror = handleError;
+        request.open('GET', url);
+        request.send();
+      }
+
+      function handleDeleteFavorite() {
+        if (this.status !== 200) {
+          alert('Error: Failed to fetch data from server');
+          return;
+        }
+        let info = JSON.parse(this.response);
+        alert(info[1])
+        let favorite = document.getElementById(`favorite${response.soc_code}`).closest('.list-group-item');
+        if (favorite) favorite.remove();
+      }
+
+      function deleteFavorite(soc_code) {
+        let url = '/delete';
+        if (request !== null)
+          request.abort();
+        request = new XMLHttpRequest();
+        request.onload = handleDeleteFavorite;
         request.onerror = handleError;
         request.open('GET', url);
         request.send();
