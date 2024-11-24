@@ -6,17 +6,48 @@
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
+        <style>
+            .gradient-title {
+                font-size: 5rem;
+                font-weight: bold;
+                background-image: linear-gradient(black, orange);
+                color: transparent;
+                background-clip: text;
+                text-align: center;
+                margin: 2rem 0;
+            }
+            .subtitle {
+                font-size: 2rem;
+                color: black;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+            .gradient-btn {
+                border: 2px solid black;
+                color: black;
+                font-size: 1.5rem;
+                font-weight: bold;
+                background-color: white;
+                border-radius: 30px;
+                padding: 10px 30px;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease-in-out;
+            }
+            .gradient-btn:hover {
+                background-color: black;
+                color: white;
+            }
+        </style>
+
         <title>TigerOutcomes</title>
     </head>
     <body>
 
         <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
-            <figure class="text-center">
-                <h1 class="display-1">TigerOutcomes</h1>
-            </figure>
-            <figure class="text-center mt-3">
-                <button type="button" class="btn btn-success btn-lg"><a style="text-decoration: none; color: azure;" href="/home">Please sign in</a></button>
-            </figure>
+            <h1 class="gradient-title">TigerOutcomes</h1>
+            <p class="subtitle">Explore alumni career trends and skill sets for your major</p>
+            <a href="/home" class="gradient-btn">Get Started</a>
         </div>
 
 
