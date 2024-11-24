@@ -282,7 +282,7 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
     # Get tables
     pton_demographics = sqlalchemy.Table('pton_demographics', metadata, autoload_with=engine)
     pton_student_outcomes = sqlalchemy.Table('pton_student_outcomes', metadata, autoload_with=engine)
-    matching_embeddings = sqlalchemy.Table('matching_embeddings', metadata, autoload_with=engine)
+    matching_sbert = sqlalchemy.Table('matching_sbert', metadata, autoload_with=engine)
     onet_occupation_data = sqlalchemy.Table('onet_occupation_data', metadata, autoload_with=engine)
     
     # Build the query with intermediary mapping
@@ -295,12 +295,12 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
                 pton_demographics.c["StudyID"] == pton_student_outcomes.c["StudyID"]
             )
             .join(
-                matching_embeddings,
-                func.lower(pton_student_outcomes.c["Position"]) == func.lower(matching_embeddings.c["princeton_positions"])
+                matching_sbert,
+                func.lower(pton_student_outcomes.c["Position"]) == func.lower(matching_sbert.c["princeton_positions"])
             )
             .join(
                 onet_occupation_data,
-                func.lower(matching_embeddings.c["o_net_titles"]) == func.lower(onet_occupation_data.c["Title"])
+                func.lower(matching_sbert.c["o_net_titles"]) == func.lower(onet_occupation_data.c["Title"])
             )
         )
         .where(func.lower(pton_demographics.c["AcadPlanDescr"]) == func.lower(acad_plan_descr))
