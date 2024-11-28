@@ -69,7 +69,11 @@ def results():
     if major is None:
         major = ''
         major = major.strip()
-    results = db.get_onet_soc_codes_by_acadplandesc(major)
+    algo = flask.request.args.get('algo')
+    if algo is None:
+        algo = ''
+        algo = major.strip()
+    results = db.get_onet_soc_codes_by_acadplandesc(major, algo)
     results = [{'row': row, 'soc_code': code} for (code, row) in results]
     # results = db.get_rows("pton_demographics", "AcadPlanDescr", major)
     # results = [{'row':tuple(row), 'soc_code': '11-1011.00'} for row in results]

@@ -91,6 +91,14 @@
               <option value="Spanish and Portuguese">
             </datalist>
           </div>  
+          <div id="filters">
+            <button id="alphabetical" onclick="setAlgo('alphabetical')">
+              Alphabetical
+            </button>
+            <button id="common" onclick="setAlgo('common')">
+              Most common
+            </button>
+          </div>
           <div class="list-group list-group-flush border-bottom scrollarea">
             <div class="border" id="resultsDiv"></div>
           </div>
@@ -240,6 +248,11 @@
 
       let request = null;
       let algo='alphabetical'
+
+      function setAlgo(algorithm) {
+        algo = algorithm;
+        getSearchResults();
+      }
 
       function getSearchResults() {
         let majorInput = document.getElementById('majorInput');

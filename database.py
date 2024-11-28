@@ -278,7 +278,7 @@ def get_occupational_data_full(soc_code):
 #-----------------------------------------------------------------------
 
 # replacement for results from search (soc_codes from major)
-def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
+def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical"):
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
     
@@ -306,13 +306,19 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
                 func.lower(matching_sbert.c["Matched Job Title"]) == func.lower(onet_occupation_data.c["Title"])
             )
         )
-        .where(func.lower(pton_demographics.c["AcadPlanDescr"]) == func.lower(acad_plan_descr))
     )
+
+    if acad_plan_descr != 'all':
+        stmt = stmt.where(
+            func.lower(pton_demographics.c["AcadPlanDescr"]) == func.lower(acad_plan_descr)
+        )
+    if algo == "alphabetical":
+        stmt = stmt.order_by(onet_occupation_data.c["Title"])
     
     # Execute the query and fetch the results
     with engine.connect() as conn:
         results = conn.execute(stmt).fetchall()
-        
+
     # Extract O*NET-SOC Codes from the results
     onet_soc_codes = [(row[0], row[1]) for row in results]
 
