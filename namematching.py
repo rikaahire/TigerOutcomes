@@ -389,7 +389,6 @@ def mapping_cosine(targets, job_titles):
 
     return df
 
-
 def mapping_bow(targets, job_titles):
     # Filter out None values
     targets = [target for target in targets if target is not None]
@@ -421,9 +420,6 @@ def mapping_bow(targets, job_titles):
     df.to_csv("bow.txt")
 
     return df
-
-
-
 
 def average_word_embeddings(text, model, vector_size=100):
     # Generate average word embeddings for the input text
@@ -463,7 +459,6 @@ def mapping_embeddings(targets, job_titles, model, vector_size=100):
     })
 
     return df
-
 
 def mapping_embeddings_weighted(targets, job_titles, model, vector_size=100):
     """
@@ -528,7 +523,6 @@ def mapping_embeddings_weighted(targets, job_titles, model, vector_size=100):
 
     return df
 
-
 def mapping_embeddings_sbert(targets, job_titles):
 
     # Filter out None values
@@ -566,8 +560,6 @@ def mapping_embeddings_sbert(targets, job_titles):
     df.to_csv("sentence_bert.txt")
     return df
 
-
-
 def name_matching():
     parser = argparse.ArgumentParser(
         prog=sys.argv[0],
@@ -592,8 +584,6 @@ def name_matching():
 
     princeton_positions = get_all_instances("pton_student_outcomes", "Position")
     o_net_titles = get_all_instances("onet_occupation_data", "Title")
-
-
 
     out_cos = mapping_cosine(princeton_positions, o_net_titles)
     out_bow = mapping_bow(princeton_positions, o_net_titles)

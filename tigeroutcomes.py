@@ -69,8 +69,8 @@ def results():
     if major is None:
         major = ''
         major = major.strip()
-    results = db.get_positions_by_acadplandesc(major)
-    results = [{'row': row, 'soc_code': '11-1011.00'} for row in results]
+    results = db.get_onet_soc_codes_by_acadplandesc(major)
+    results = [{'row': row, 'soc_code': code} for (code, row) in results]
     # results = db.get_rows("pton_demographics", "AcadPlanDescr", major)
     # results = [{'row':tuple(row), 'soc_code': '11-1011.00'} for row in results]
     # will want to change results to a major -> job call

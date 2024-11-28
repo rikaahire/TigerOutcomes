@@ -189,6 +189,9 @@ def get_cols():
     table = sqlalchemy.Table('bls_wage_data', metadata, autoload_with=engine)
     cols['bls_wage_data'] = [column.name for column in table.columns]
 
+    table = sqlalchemy.Table('matching_sbert', metadata, autoload_with=engine)
+    cols['matching_sbert'] = [column.name for column in table.columns]
+
     return cols
 
 #-----------------------------------------------------------------------
@@ -287,7 +290,7 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
     
     # Build the query with intermediary mapping
     stmt = (
-        sqlalchemy.select(distinct(onet_occupation_data.c["O*NET-SOC Code"]))
+        sqlalchemy.select(onet_occupation_data.c["O*NET-SOC Code"], onet_occupation_data.c["Title"]).distinct()
         .select_from(
             pton_demographics
             .join(
@@ -296,11 +299,11 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
             )
             .join(
                 matching_sbert,
-                func.lower(pton_student_outcomes.c["Position"]) == func.lower(matching_sbert.c["princeton_positions"])
+                func.lower(pton_student_outcomes.c["Position"]) == func.lower(matching_sbert.c["Target Job Title"])
             )
             .join(
                 onet_occupation_data,
-                func.lower(matching_sbert.c["o_net_titles"]) == func.lower(onet_occupation_data.c["Title"])
+                func.lower(matching_sbert.c["Matched Job Title"]) == func.lower(onet_occupation_data.c["Title"])
             )
         )
         .where(func.lower(pton_demographics.c["AcadPlanDescr"]) == func.lower(acad_plan_descr))
@@ -309,10 +312,10 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr):
     # Execute the query and fetch the results
     with engine.connect() as conn:
         results = conn.execute(stmt).fetchall()
-    
+        
     # Extract O*NET-SOC Codes from the results
-    onet_soc_codes = [row[0] for row in results]
-    
+    onet_soc_codes = [(row[0], row[1]) for row in results]
+
     return onet_soc_codes
 
 # gets job titles from major
