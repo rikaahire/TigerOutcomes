@@ -76,14 +76,6 @@ def search():
 def favorite():
     return flask.send_file('templates/favorites.html')
 
-@app.route('/about', methods=['GET'])
-def about():
-    return flask.send_file('templates/about.html')
-
-@app.route('/help', methods=['GET'])
-def help():
-    return flask.send_file('templates/help.html')
-
 #-----------------------------------------------------------------------
 
 # get results from a major search
