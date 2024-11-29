@@ -95,14 +95,12 @@
           <hr>
           <div id="sort">
             Sort by:
-            <form>
-              <button id="alphabetical" onclick="setAlgo('alphabetical')">
-                Alphabetical
-              </button>
-              <button id="common" onclick="setAlgo('common')">
-                Most common
-              </button>
-            </form>
+            <button id="alphabetical" onclick="setAlgo('alphabetical')">
+              Alphabetical
+            </button>
+            <button id="common" onclick="setAlgo('common')">
+              Most common
+            </button>
           </div>
           <hr>
           <div id="filters">
@@ -119,7 +117,49 @@
             <div class="border" id="resultsDiv"></div>
           </div>
         </div>
-        <div class="col-9"> Hello </div>
+        <div class="col-9">
+          <div class="col-md-9 d-flex flex-column align-items-stretch flex-shrink-0 position=fixed">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+              <!-- Card Description -->
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Description</h5>
+                    <div class="card-text" id="descriptionDiv"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Card for Tasks & Skills -->
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Tasks and Skills</h5>
+                    <div class="card-text" id="taskDiv"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Card for Salary -->
+              <!-- Might need to do some more here with data graphics -->
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Salary Range</h5>
+                    <div class="card-text" id="salaryDiv"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Card for Common Employers -->
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Common Employers</h5>
+                    <div class="card-text" id="employerDiv"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <footer class="py-3 bg-light sticky-bottom">
@@ -222,7 +262,15 @@
         wage = Mustache.render("{{.}}", wage)
         knowledge = Mustache.render("{{.}}", knowledge)
         let template = "Default"
-        return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
+        let descriptionDiv = document.getElementById('descriptionDiv');
+        descriptionDiv.innerHTML = description;
+        let skillsDiv = document.getElementById('taskDiv');
+        skillsDiv.innerHTML = skills;
+        let wageDiv = document.getElementById('salaryDiv');
+        wageDiv.innerHTML = wage;
+        let employerDiv = document.getElementById('employerDiv');
+        employerDiv.innerHTML = template;
+        // return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
       }
 
       function handleSearchResponse() {
@@ -242,12 +290,13 @@
           return;
         }
         let info = JSON.parse(this.response);
-        let html = getCardHtml(info);
-        let modal = document.getElementById('classModalBody');
-        modal.innerHTML = html;
-        let classModalNode = document.getElementById('classModal');
-        let classModal = new bootstrap.Modal(classModalNode);
-        classModal.show();
+        getJobHtml(info);
+        // let html = getCardHtml(info);
+        // let modal = document.getElementById('classModalBody');
+        // modal.innerHTML = html;
+        // let classModalNode = document.getElementById('classModal');
+        // let classModal = new bootstrap.Modal(classModalNode);
+        // classModal.show();
       }
 
       function handleFavorite() {
