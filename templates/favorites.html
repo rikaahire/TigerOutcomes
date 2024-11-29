@@ -25,50 +25,53 @@
       </nav>
     </header>
     <div class="container-fluid">
+      <hr>
       <div class="row">
-        <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;"> 
+        <div class="col-3 d-flex flex-column align-items-stretch flex-shrink-0"> 
           <div class="list-group list-group-flush border-bottom scrollarea">
             <span class="fs-5 fw-semibold"> Favorites </span>
             <div class="border" id="resultsDiv"></div>
           </div>
         </div>
         <!-- Cards -->
-        <div class="col-md-9 d-flex flex-column align-items-stretch flex-shrink-0 position=fixed" style="width:max-content;">
-          <div class="row row-cols-1 row-cols-md-2 g-4">
-            <!-- Card Description -->
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Description</h5>
-                  <div class="card-text" id="descriptionDiv"></div>
+        <div class="col-9">
+          <div class="col-md-9 d-flex flex-column align-items-stretch flex-shrink-0 position=fixed">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+              <!-- Card Description -->
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Description</h5>
+                    <div class="card-text" id="descriptionDiv"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- Card for Tasks & Skills -->
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Tasks and Skills</h5>
-                  <div class="card-text" id="taskDiv"></div>
+              <!-- Card for Tasks & Skills -->
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Tasks and Skills</h5>
+                    <div class="card-text" id="taskDiv"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- Card for Salary -->
-            <!-- Might need to do some more here with data graphics -->
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Salary Range</h5>
-                  <div class="card-text" id="salaryDiv"></div>
+              <!-- Card for Salary -->
+              <!-- Might need to do some more here with data graphics -->
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Salary Range</h5>
+                    <div class="card-text" id="salaryDiv"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- Card for Common Employers -->
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Common Employers</h5>
-                  <div class="card-text" id="employerDiv"></div>
+              <!-- Card for Common Employers -->
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Common Employers</h5>
+                    <div class="card-text" id="employerDiv"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -101,30 +104,49 @@
           {{#jobs}}
             <div class="list-group-item list-group-item-action py-3 lh-tight">
               <div class="row align-items-center">
-                {{#.}}
                 <!-- Column for Jobs -->
-                <div class="col">
-                  <a onclick="getJobResults('11-1011.00')" class="text-decoration-none text-dark">
-                    <strong class="mt-1 mb-1">{{.}}</strong>
-                  </a>
-                </div>
+                <a onclick="getJobResults('{{soc_code}}')" class="col text-decoration-none text-dark">
+                  <div>
+                    <strong class="mt-1 mb-1">{{ name }}</strong>
+                  </div>
+                </a>
                 <!-- Column for Button -->
                 <div class="col-auto">
                   <button type="button" class="btn btn-warning active"
-                          onclick="deleteFavorite('{{.}}')">
+                          onclick="deleteFavorite('{{soc_code}}')">
                     ⭐️
                   </button>
                 </div>
-                {{/.}}
               </div>
             </div>
             <br>
           {{/jobs}}
         `;
-        let map = {'jobs': jobs};
-        console.log(map)
+        let map = {jobs: jobs};
+        console.log(map);
         let html = Mustache.render(template, map);
         return html;
+      }
+
+      function getJobHtml(info) {
+        let description = info['description']
+        let skills = info['skills']
+        let knowledge = info['knowledge']
+        let wage = info['wage']
+        description = Mustache.render("{{.}}", description)
+        skills = Mustache.render("{{.}}", skills)
+        wage = Mustache.render("{{.}}", wage)
+        knowledge = Mustache.render("{{.}}", knowledge)
+        let template = "Default"
+        let descriptionDiv = document.getElementById('descriptionDiv');
+        descriptionDiv.innerHTML = description;
+        let skillsDiv = document.getElementById('taskDiv');
+        skillsDiv.innerHTML = skills;
+        let wageDiv = document.getElementById('salaryDiv');
+        wageDiv.innerHTML = wage;
+        let employerDiv = document.getElementById('employerDiv');
+        employerDiv.innerHTML = template;
+        // return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
       }
 
       function handleSearchResponse() {
@@ -136,6 +158,21 @@
         let html = convertToHtml(jobs);
         let resultsDiv = document.getElementById('resultsDiv');
         resultsDiv.innerHTML = html;
+      }
+
+      function handleJobResponse() {
+        if (this.status !== 200) {
+          alert('Error: Failed to fetch data from server');
+          return;
+        }
+        let info = JSON.parse(this.response);
+        getJobHtml(info);
+        // let html = getCardHtml(info);
+        // let modal = document.getElementById('classModalBody');
+        // modal.innerHTML = html;
+        // let classModalNode = document.getElementById('classModal');
+        // let classModal = new bootstrap.Modal(classModalNode);
+        // classModal.show();
       }
 
       let request = null;
@@ -161,6 +198,7 @@
         alert(info[1])
         let favorite = document.getElementById(`favorite${response.soc_code}`).closest('.list-group-item');
         if (favorite) favorite.remove();
+        getFavorites();
       }
 
       function deleteFavorite(soc_code) {
@@ -172,35 +210,6 @@
         request.onerror = handleError;
         request.open('GET', url);
         request.send();
-      }
-
-      // job card specifics
-
-      function getJobHtml(info) {
-        description = info[0][0]
-        skills = info[1]['skills']
-        knowledge = info[1]['knowledge']
-        description = Mustache.render("{{info}}", description)
-        skills = Mustache.render("{{info}}", skills)
-        template = "Default"
-        return (description, skills, template, template);
-      }
-
-      function handleJobResponse() {
-        if (this.status !== 200) {
-          alert('Error: Failed to fetch data from server');
-          return;
-        }
-        let info = JSON.parse(this.response);
-        let descript_html, task_html, salary_html, employer_html = getJobHtml(info);
-        let descriptionDiv = document.getElementById('descriptionDiv');
-        let taskDiv = document.getElementById('taskDiv');
-        let salaryDiv = document.getElementById('salaryDiv');
-        let employerDiv = document.getElementById('employerDiv');
-        descriptionDiv.innerHTML = descript_html;
-        taskDiv.innerHTML = task_html;
-        salaryDiv.innerHTML = salary_html;
-        employerDiv.innerHTML = employer_html;
       }
 
       function handleError() {
