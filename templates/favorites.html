@@ -1,236 +1,222 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>TigerOutcomes</title>
-  </head>
-  <body>
-    <header class="sticky-top">
-      <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <title>TigerOutcomes</title>
+    </head>
+    <body>
+        <header class="sticky-top">
+            <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
+                <div class="container-fluid">
+                <!-- replace link when hosted -->
+                <a class="navbar-brand" href="tigeroutcomes.com">TigerOutcomes</a>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/help">Help</a>
+                    </li>
+                    </ul>
+                    <button class="btn btn-outline" type="credentials"><a style="text-decoration: none; color: azure;" href="logoutcas">Logout</a></button>
+                </div>
+                </div>
+            </nav>
+        </header>
         <div class="container-fluid">
-          <!-- replace link when hosted -->
-          <a class="navbar-brand" href="https://tigeroutcomes.onrender.com/">TigerOutcomes</a>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/home">Home</a>
-              </li>
-            </ul>
-            <button class="btn btn-outline" type="credentials"><a href="logoutcas">Logout</a></button>
-          </form>
-          </div>
-        </div>
-      </nav>
-    </header>
-    <div class="container-fluid">
-      <hr>
-      <div class="row">
-        <div class="col-3 d-flex flex-column align-items-stretch flex-shrink-0"> 
-          <div class="list-group list-group-flush border-bottom scrollarea">
-            <span class="fs-5 fw-semibold"> Favorites </span>
-            <div class="border" id="resultsDiv"></div>
-          </div>
-        </div>
-        <!-- Cards -->
-        <div class="col-9">
-          <div class="col-md-9 d-flex flex-column align-items-stretch flex-shrink-0 position=fixed">
-            <div class="row row-cols-1 row-cols-md-2 g-4">
-              <!-- Card Description -->
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Description</h5>
-                    <div class="card-text" id="descriptionDiv"></div>
-                  </div>
+            <hr>
+            <div class="row">
+                <div class="col-3 d-flex flex-column align-items-stretch flex-shrink-0"> 
+                    <div class="list-group list-group-flush border-bottom scrollarea">
+                        <span class="fs-5 fw-semibold"> Favorites </span>
+                        <div class="border" id="resultsDiv"></div>
+                    </div>
                 </div>
-              </div>
-              <!-- Card for Tasks & Skills -->
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Tasks and Skills</h5>
-                    <div class="card-text" id="taskDiv"></div>
-                  </div>
-                </div>
-              </div>
-              <!-- Card for Salary -->
-              <!-- Might need to do some more here with data graphics -->
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Salary Range</h5>
-                    <div class="card-text" id="salaryDiv"></div>
-                  </div>
-                </div>
-              </div>
-              <!-- Card for Common Employers -->
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Common Employers</h5>
-                    <div class="card-text" id="employerDiv"></div>
-                  </div>
-                </div>
-              </div>
+                <!-- Cards -->
+                <div class="col-9">
+                <div class="col-md-9 d-flex flex-column align-items-stretch flex-shrink-0 position=fixed">
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <!-- Card Description -->
+                    <div class="col"> <div class="card"> <div class="card-body">
+                        <h5 class="card-title">Description</h5>
+                        <div class="card-text" id="descriptionDiv"></div>
+                    </div> </div> </div>
+                    <!-- Card for Tasks & Skills -->
+                    <div class="col"> <div class="card"> <div class="card-body">
+                        <h5 class="card-title">Tasks and Skills</h5>
+                        <div class="card-text" id="taskDiv"></div>
+                    </div> </div> </div>
+                    <!-- Card for Salary -->
+                    <!-- Might need to do some more here with data graphics -->
+                    <div class="col"> <div class="card"> <div class="card-body">
+                        <h5 class="card-title">Salary Range</h5>
+                        <div class="card-text" id="salaryDiv"></div>
+                    </div> </div> </div>
+                    <!-- Card for Common Employers -->
+                    <div class="col"> <div class="card"> <div class="card-body">
+                        <h5 class="card-title">Common Employers</h5>
+                        <div class="card-text" id="employerDiv"></div>
+                    </div> </div> </div>
+                </div> </div> </div> 
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-    <footer class="py-3 bg-light sticky-bottom">
-      <div class="container">
-        <span class="text-muted">Created by the TigerOutcomes team.</span>
-      </div>
-    </footer>
-
-    <script 
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
-      crossorigin="anonymous">
-    </script>
-
-    <script src=
-      "https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js">
-    </script>
-    
-    <script>
-      'use strict';
-
-      // results specifics
-      function convertToHtml(jobs) {
-        let template = `
-          {{#jobs}}
-            <div class="list-group-item list-group-item-action py-3 lh-tight">
-              <div class="row align-items-center">
-                <!-- Column for Jobs -->
-                <a onclick="getJobResults('{{soc_code}}')" class="col text-decoration-none text-dark">
-                  <div>
-                    <strong class="mt-1 mb-1">{{ name }}</strong>
-                  </div>
-                </a>
-                <!-- Column for Button -->
-                <div class="col-auto">
-                  <button type="button" class="btn btn-warning active"
-                          onclick="deleteFavorite('{{soc_code}}')">
-                    ⭐️
-                  </button>
-                </div>
-              </div>
+        <footer class="py-3 bg-light sticky-bottom">
+            <div class="container">
+                <span class="text-muted">Created by the TigerOutcomes team.</span>
             </div>
-            <br>
-          {{/jobs}}
-        `;
-        let map = {jobs: jobs};
-        console.log(map);
-        let html = Mustache.render(template, map);
-        return html;
-      }
+        </footer>
 
-      function getJobHtml(info) {
-        let description = info['description']
-        let skills = info['skills']
-        let knowledge = info['knowledge']
-        let wage = info['wage']
-        description = Mustache.render("{{.}}", description)
-        skills = Mustache.render("{{.}}", skills)
-        wage = Mustache.render("{{.}}", wage)
-        knowledge = Mustache.render("{{.}}", knowledge)
-        let template = "Default"
-        let descriptionDiv = document.getElementById('descriptionDiv');
-        descriptionDiv.innerHTML = description;
-        let skillsDiv = document.getElementById('taskDiv');
-        skillsDiv.innerHTML = skills;
-        let wageDiv = document.getElementById('salaryDiv');
-        wageDiv.innerHTML = wage;
-        let employerDiv = document.getElementById('employerDiv');
-        employerDiv.innerHTML = template;
-        // return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
-      }
+        <script 
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+            crossorigin="anonymous">
+        </script>
+        <script 
+            src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js">
+        </script>
 
-      function handleSearchResponse() {
-        if (this.status !== 200) {
-          alert('Error: Failed to fetch data from server');
-          return;
-        }
-        let jobs = JSON.parse(this.response);
-        let html = convertToHtml(jobs);
-        let resultsDiv = document.getElementById('resultsDiv');
-        resultsDiv.innerHTML = html;
-      }
+        <script>
+            'use strict';
 
-      function handleJobResponse() {
-        if (this.status !== 200) {
-          alert('Error: Failed to fetch data from server');
-          return;
-        }
-        let info = JSON.parse(this.response);
-        getJobHtml(info);
-        // let html = getCardHtml(info);
-        // let modal = document.getElementById('classModalBody');
-        // modal.innerHTML = html;
-        // let classModalNode = document.getElementById('classModal');
-        // let classModal = new bootstrap.Modal(classModalNode);
-        // classModal.show();
-      }
+            // results specifics
+            function convertToHtml(jobs) {
+                let template = `
+                {{#jobs}}
+                    <div class="list-group-item list-group-item-action py-3 lh-tight">
+                    <div class="row align-items-center">
+                        <!-- Column for Jobs -->
+                        <a onclick="getJobResults('{{soc_code}}')" class="col text-decoration-none text-dark">
+                        <div>
+                            <strong class="mt-1 mb-1">{{ name }}</strong>
+                        </div>
+                        </a>
+                        <!-- Column for Button -->
+                        <div class="col-auto">
+                        <button type="button" class="btn btn-warning active"
+                                onclick="deleteFavorite('{{soc_code}}')">
+                            ⭐️
+                        </button>
+                        </div>
+                    </div>
+                    </div>
+                    <br>
+                {{/jobs}}
+                `;
+                let map = {jobs: jobs};
+                console.log(map);
+                let html = Mustache.render(template, map);
+                return html;
+            }
 
-      let request = null;
+            function getJobHtml(info) {
+                let description = info['description']
+                let skills = info['skills']
+                let knowledge = info['knowledge']
+                let wage = info['wage']
+                description = Mustache.render("{{.}}", description)
+                skills = Mustache.render("{{.}}", skills)
+                wage = Mustache.render("{{.}}", wage)
+                knowledge = Mustache.render("{{.}}", knowledge)
+                let template = "Default"
+                let descriptionDiv = document.getElementById('descriptionDiv');
+                descriptionDiv.innerHTML = description;
+                let skillsDiv = document.getElementById('taskDiv');
+                skillsDiv.innerHTML = skills;
+                let wageDiv = document.getElementById('salaryDiv');
+                wageDiv.innerHTML = wage;
+                let employerDiv = document.getElementById('employerDiv');
+                employerDiv.innerHTML = template;
+                // return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
+            }
 
-      function getFavorites() {
-        let url = '/preferences';
+            function handleSearchResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let jobs = JSON.parse(this.response);
+                let html = convertToHtml(jobs);
+                let resultsDiv = document.getElementById('resultsDiv');
+                resultsDiv.innerHTML = html;
+            }
 
-        if (request !== null)
-          request.abort();
-        request = new XMLHttpRequest();
-        request.onload = handleSearchResponse;
-        request.onerror = handleError;
-        request.open('GET', url);
-        request.send();
-      }
+            function handleJobResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let info = JSON.parse(this.response);
+                getJobHtml(info);
+                // let html = getCardHtml(info);
+                // let modal = document.getElementById('classModalBody');
+                // modal.innerHTML = html;
+                // let classModalNode = document.getElementById('classModal');
+                // let classModal = new bootstrap.Modal(classModalNode);
+                // classModal.show();
+            }
 
-      function handleDeleteFavorite() {
-        if (this.status !== 200) {
-          alert('Error: Failed to fetch data from server');
-          return;
-        }
-        let info = JSON.parse(this.response);
-        alert(info[1])
-        let favorite = document.getElementById(`favorite${response.soc_code}`).closest('.list-group-item');
-        if (favorite) favorite.remove();
-        getFavorites();
-      }
+            let request = null;
 
-      function deleteFavorite(soc_code) {
-        let url = '/delete?soc_code=' + soc_code + '&status=True';
-        if (request !== null)
-          request.abort();
-        request = new XMLHttpRequest();
-        request.onload = handleDeleteFavorite;
-        request.onerror = handleError;
-        request.open('GET', url);
-        request.send();
-      }
+            function getFavorites() {
+                let url = '/preferences';
 
-      function handleError() {
-        alert('Error: Failed to fetch data from server');
-      }
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleSearchResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
 
-      function getJobResults(soc_code) {
-        let encodedSOC = encodeURIComponent(soc_code);
-        let url = '/job?soc_code=' + encodedSOC;
+            function handleDeleteFavorite() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let info = JSON.parse(this.response);
+                alert(info[1])
+                let favorite = document.getElementById(`favorite${response.soc_code}`).closest('.list-group-item');
+                if (favorite) favorite.remove();
+                getFavorites();
+            }
 
-        if (request !== null)
-          request.abort();
-        request = new XMLHttpRequest();
-        request.onload = handleJobResponse;
-        request.onerror = handleError;
-        request.open('GET', url);
-        request.send();
-      }
+            function deleteFavorite(soc_code) {
+                let url = '/delete?soc_code=' + soc_code + '&status=True';
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleDeleteFavorite;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
 
-      document.addEventListener('DOMContentLoaded', getFavorites);
+            function handleError() {
+                alert('Error: Failed to fetch data from server');
+            }
 
-   </script>
-  </body>
+            function getJobResults(soc_code) {
+                let encodedSOC = encodeURIComponent(soc_code);
+                let url = '/job?soc_code=' + encodedSOC;
+
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleJobResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            document.addEventListener('DOMContentLoaded', getFavorites);
+
+    </script>
+    </body>
 </html>

@@ -42,6 +42,30 @@ def home():
     response = flask.make_response(html_code)
     return response
 
+@app.route('/about', methods=['GET'])
+def about():
+    auth.authenticate()
+    try:
+        html_code = flask.render_template('about.html')
+    except Exception as ex:
+        print(ex)
+        html_code = flask.render_template('servererror.html')
+
+    response = flask.make_response(html_code)
+    return response
+
+@app.route('/help', methods=['GET'])
+def help():
+    auth.authenticate()
+    try:
+        html_code = flask.render_template('help.html')
+    except Exception as ex:
+        print(ex)
+        html_code = flask.render_template('servererror.html')
+
+    response = flask.make_response(html_code)
+    return response
+
 #-----------------------------------------------------------------------
 
 @app.route('/search', methods=['GET'])
