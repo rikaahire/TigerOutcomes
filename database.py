@@ -6,7 +6,7 @@ import sys
 import argparse
 import sqlalchemy
 import sqlalchemy.orm
-from sqlalchemy import select, distinct, func, and_
+from sqlalchemy import select, distinct, func, and_, desc
 from sqlalchemy.exc import SQLAlchemyError
 import dotenv
 
@@ -260,7 +260,11 @@ def get_occupational_data_full(soc_code):
     table_wage = sqlalchemy.Table("bls_wage_data", metadata, autoload_with=engine)
     # Create a select query
     stmt_descrip = sqlalchemy.select(table_descrip.c.Description).where(table_descrip.columns["O*NET-SOC Code"] == soc_code)
-    stmt_skills = sqlalchemy.select(distinct(table_skills.c['Element Name'])).where(table_skills.columns["O*NET-SOC Code"] == soc_code)
+    stmt_skills = (sqlalchemy.select(table_skills.c['Element Name'])
+                   .where(table_skills.columns["O*NET-SOC Code"] == soc_code)
+                   .where(table_skills.columns["Scale ID"] == "IM")
+                   .order_by(desc(table_skills.c["Data Value"]))
+                   .limit(5))
     stmt_knowledge = sqlalchemy.select(distinct(table_knowledge.c['Element Name'])).where(table_knowledge.columns["O*NET-SOC Code"] == soc_code)
     mod_soc_code = soc_code[:7]
     stmt_wage = sqlalchemy.select(table_wage).where(table_wage.c["OCC_CODE"] == mod_soc_code)
