@@ -1,234 +1,152 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <title>TigerOutcomes</title>
-
-        <style>
-          .button-fav {
-                border: 2px solid #FFD235;
-                color: #FFD235;
-                font-size: 1rem;
-                font-weight: normal;
-                background-color: white;
-                border-radius: 30px;
-                padding: 5px 9px;
-                text-decoration: none;
-                display: inline-block;
-                transition: all 0.3s ease-in-out;
-            }
-            .button-fav:hover {
-                background-color: #FFD235;
-                color: white;
-            }
-            
-            .cards-container {
-              position: sticky;
-              top: 75px; 
-              right: 0;
-              max-height: calc(100vh - 40px); 
-              overflow-y: auto; 
-              padding-right: 15px; 
-              width: 100%;
-            }
-
-            .cards-container .card {
-              overflow-y: auto;
-            }
-
-        </style>
-        <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
-    </head>
-    <body>
-        <!-- does this code need to exist anymore? -->
-      <div class="modal" id="classModal" style="min-width:90%">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Job Details</h4>
-                    <button class="btn-close" data-bs-dismiss="modal">
-                    </button>
-                </div>
-                <div class="modal-body" id="classModalBody">
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger"
-                        data-bs-dismiss="modal">
-                        Close
-                    </button>
-                </div>
-        </div> </div>
-        <br>
-        </div>
-        <header class="sticky-top">
-            <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
-                <div class="container-fluid">
-                <!-- replace link when hosted -->
-                    <a class="navbar-brand" href="tigeroutcomes.com">TigerOutcomes</a>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/home">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/about">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/help">Help</a>
-                        </li>
-                        </ul>
-                        <button class="btn btn-outline" type="credentials"><a style="text-decoration: none; color: azure;" href="logoutcas">Logout</a></button>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <div class="container-fluid pt-3">
-        <div class="row">
-            <div class="col-3 d-flex flex-column align-items-stretch flex-shrink-0">
-                <div class="container-fluid d-flex">
-                    <span class="fs-5 fw-semibold" id="repeat"> Results for Course </span>
-                    <input class="form-control" list="majorInputlist" type="text" id="majorInput" style="text-align: center" aria-label="majorsearch">
-                    <datalist id="majorInputlist">
-                    <option value="African American Studies">
-                    <option value="American Studies">
-                    <option value="Anthropology">
-                    <option value="Architecture">
-                    <option value="Art and Archaeology">
-                    <option value="Astrophysical Sciences">
-                    <option value="Chemical and Biological Engineering">
-                    <option value="Chemistry">
-                    <option value="Civil and Environmental Engineering">
-                    <option value="Classics">
-                    <option value="Comparative Literature">
-                    <option value="Computer Science">
-                    <option value="East Asian Studies">
-                    <option value="Ecology and Evolutionary Biology">
-                    <option value="Economics">
-                    <option value="Electrical and Computer Engineering">
-                    <option value="English">
-                    <option value="French and Italian">
-                    <option value="Geosciences">
-                    <option value="German">
-                    <option value="History">
-                    <option value="Mathematics">
-                    <option value="Mechanical and Aerospace Engineering">
-                    <option value="Molecular Biology">
-                    <option value="Music">
-                    <option value="Near Eastern Studies">
-                    <option value="Neuroscience">
-                    <option value="Operations Research and Financial Engineering">
-                    <option value="Philosophy">
-                    <option value="Physics">
-                    <option value="Politics">
-                    <option value="Psychology">
-                    <option value="Public Policy">
-                    <option value="Religion">
-                    <option value="Slavic Languages and Literatures">
-                    <option value="Sociology">
-                    <option value="Spanish and Portuguese">
-                    </datalist>
-                </div> 
-                <hr>
-                <!-- Is there a way to place the users selection next to the button -->
-                <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="sort" data-bs-toggle="dropdown">
-                    Sort by
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" onclick="setAlgo('alphabetical')">Alphabetical</a></li>
-                    <li><a class="dropdown-item" onclick="setAlgo('common')">Most Common</a></li>
-                  </ul>
-                </div>
-                <hr>
-                <div id="filters">
-                    Filters:
-                    <form>
-                        <label for="income">Minimum Average Income (0–1000000)</label>
-                        <input class="form-control" type="range" id="incomeInput" 
-                                style="text-align: center" name="income" 
-                                aria-label="incomeRange" min="0" max="1000000">
-                    </form>
-                </div>
-                <hr>
-                <div class="list-group list-group-flush scrollarea">
-                    <div class="border" id="resultsDiv"></div>
-                </div>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>TigerOutcomes</title>
+  </head>
+  <body>
+    <div class="modal" id="classModal" style="min-width:90%">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h4 class="modal-title">Job Details</h4>
+               <button class="btn-close" data-bs-dismiss="modal">
+               </button>
             </div>
-            <!-- Cards -->
-            <div class="col-9">
-              <div class="col-md-9 cards-container">
-                <!-- would like to add a title of what job we are currently working with -->
-                <div class="row row-cols-1 row-cols-md-2 g-4">
-                    <!-- Card Description -->
-                    <div class="col"> <div class="card"> <div class="card-body">
-                        <h5 class="card-title">Description</h5>
-                        <div class="card-text" id="descriptionDiv"></div>
-                    </div> </div> </div>
-                    <!-- Card for Tasks & Skills -->
-                    <div class="col"> <div class="card"> <div class="card-body">
-                        <h5 class="card-title">Tasks and Skills</h5>
-                        <div class="card-text" id="taskDiv"></div>
-                    </div> </div> </div>
-                    <!-- Card for Salary -->
-                    <!-- Might need to do some more here with data graphics -->
-                    <div class="col"> <div class="card"> <div class="card-body">
-                        <h5 class="card-title">Salary Range</h5>
-                        <div class="card-text" id="salaryDiv"></div>
-                    </div> </div> </div>
-                    <!-- Card for Common Employers -->
-                    <div class="col"> <div class="card"> <div class="card-body">
-                        <h5 class="card-title">Common Employers</h5>
-                        <div class="card-text" id="employerDiv"></div>
-                    </div> </div> </div>
-                </div> </div> </div>
+            <div class="modal-body" id="classModalBody">
+               
             </div>
+            <div class="modal-footer">
+               <button class="btn btn-danger"
+                  data-bs-dismiss="modal">
+                  Close
+               </button>
+            </div>
+         </div>
+      </div>
+      <br>
+   </div>
+    <header class="sticky-top">
+      <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
+        <div class="container-fluid">
+          <!-- replace link when hosted -->
+          <a class="navbar-brand" href="https://tigeroutcomes.onrender.com/">TigerOutcomes</a>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/home">Home</a>
+              </li>
+            </ul>
+              <button class="btn btn-outline" type="credentials"><a href="logoutcas">Logout</a></button>
+            </form>
           </div>
-        <footer class="py-3 bg-light sticky-bottom">
-            <div class="container">
-              <span class="text-muted">Created by the TigerOutcomes <a href="">team</a>.</span>
+        </div>
+      </nav>
+    </header>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+          <div class="container-fluid d-flex">
+            <span class="fs-5 fw-semibold" id="repeat"> Results for Course </span>
+            <input class="form-control" list="majorInputlist" type="text" id="majorInput" style="text-align: center" aria-label="majorsearch">
+            <datalist id="majorInputlist">
+              <option value="African American Studies">
+              <option value="American Studies">
+              <option value="Anthropology">
+              <option value="Architecture">
+              <option value="Art and Archaeology">
+              <option value="Astrophysical Sciences">
+              <option value="Chemical and Biological Engineering">
+              <option value="Chemistry">
+              <option value="Civil and Environmental Engineering">
+              <option value="Classics">
+              <option value="Comparative Literature">
+              <option value="Computer Science">
+              <option value="East Asian Studies">
+              <option value="Ecology and Evolutionary Biology">
+              <option value="Economics">
+              <option value="Electrical and Computer Engineering">
+              <option value="English">
+              <option value="French and Italian">
+              <option value="Geosciences">
+              <option value="German">
+              <option value="History">
+              <option value="Mathematics">
+              <option value="Mechanical and Aerospace Engineering">
+              <option value="Molecular Biology">
+              <option value="Music">
+              <option value="Near Eastern Studies">
+              <option value="Neuroscience">
+              <option value="Operations Research and Financial Engineering">
+              <option value="Philosophy">
+              <option value="Physics">
+              <option value="Politics">
+              <option value="Psychology">
+              <option value="Public Policy">
+              <option value="Religion">
+              <option value="Slavic Languages and Literatures">
+              <option value="Sociology">
+              <option value="Spanish and Portuguese">
+            </datalist>
+          </div>  
+          <div class="list-group list-group-flush border-bottom scrollarea">
+            <div class="border" id="resultsDiv"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="py-3 bg-light sticky-bottom">
+      <div class="container">
+        <span class="text-muted">Created by the TigerOutcomes team.</span>
+      </div>
+    </footer>
+
+    <script 
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+      crossorigin="anonymous">
+    </script>
+
+    <script src=
+      "https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js">
+    </script>
+    
+    <script>
+      'use strict';
+
+      function convertToHtml(jobs) {
+        let template = `
+          {{#jobs}}
+            <div class="list-group-item list-group-item-action py-3 lh-tight">
+              <div class="row align-items-center">
+                <!-- Column for Jobs -->
+                <a onclick="getJobResults('{{soc_code}}')" class="col text-decoration-none text-dark">
+                  <div>
+                    <strong class="mt-1 mb-1">{{ row }}</strong>
+                  </div>
+                </a>
+                <!-- Column for Button -->
+                <div class="col-auto">
+                  <button
+                    type="button"
+                    class="btn btn-outline-warning"
+                    id="favorite{{soc_code}}"
+                    onclick="toggleFavorite('{{soc_code}}')"
+                  >
+                    ⭐️
+                  </button>
+                </div>
+              </div>
             </div>
-        </footer>
-
-        <script 
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
-            crossorigin="anonymous">
-        </script>
-        <script 
-            src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js">
-        </script>
-      
-        <script>
-            'use strict';
-
-            function convertToHtml(jobs) {
-                let template = `
-                {{#jobs}}
-                    <div class="list-group-item list-group-item-action py-3 lh-tight">
-                    <div class="row align-items-center">
-                        <!-- Column for Jobs -->
-                        <a onclick="getJobResults('{{soc_code}}')" class="col text-decoration-none text-dark">
-                        <div>
-                            <strong class="mt-1 mb-1">{{ row }}</strong>
-                        </div>
-                        </a>
-                        <!-- Column for Button -->
-                        <div class="col-auto">
-                        <button type="button" onclick="favorite('{{soc_code}}')" id="favorite{{soc_code}}" class="button-fav" data-bs-toggle="button">
-                            ★
-                        </button>
-                        </div>
-                    </div>
-                    </div>
-                    <br>
-                {{/jobs}}
-                `;
-                let map = {jobs: jobs};
-                let html = Mustache.render(template, map);
-                return html;
-            }
+            <br>
+          {{/jobs}}
+        `;
+        let map = {jobs: jobs};
+        let html = Mustache.render(template, map);
+        return html;
+      }
 
             function getCardHtml(info) {
                 info=getJobHtml(info)
@@ -275,140 +193,277 @@
                 return html;
             }
 
+              function createSalaryBoxPlot(wage) {
+                // Create a chart container if it doesn't exist
+                let chartContainer = document.getElementById('salaryChart');
+                if (!chartContainer) {
+                    chartContainer = document.createElement('div');
+                    chartContainer.id = 'salaryChart';
+                    chartContainer.style.height = '300px';
+                    chartContainer.style.width = '100%';
+                    let wageDiv = document.getElementById('salaryDiv');
+                    wageDiv.appendChild(chartContainer);
+                }
+
+                let dataPoints = [
+                    { 
+                        label: "Salary Distribution", 
+                        y: [
+                            wage['10'],   // Minimum 
+                            wage['25'],   // First quartile
+                            wage['50'],   // Median
+                            wage['75'],   // Third quartile
+                            wage['90']    // Maximum 
+                        ] 
+                    }
+                ];
+
+                // Create the chart
+                var chart = new CanvasJS.Chart("salaryChart", {
+                    theme: "light2",
+                    axisY: {
+                        title: "Annual Salary ($)",
+                        valueFormatString: "$#,##0"
+                    },
+                    data: [{
+                        type: "boxAndWhisker",
+                        color: "#3498db",
+                        dataPoints: dataPoints
+                    }]
+                });
+
+                chart.render();
+
+                let meanText = document.createElement('p');
+                meanText.textContent = `Mean Salary: $${wage['mean'].toLocaleString()}`;
+                let wageDiv = document.getElementById('salaryDiv');
+                wageDiv.appendChild(meanText);
+            }
+
             function getJobHtml(info) {
                 let description = info['description'];
                 let skills = info['skills'];
                 let knowledge = info['knowledge'];
                 let wage = info['wage'];
+
                 description = Mustache.render("{{.}}", description);
                 skills = Mustache.render("{{.}}", skills);
+                
                 wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
-                knowledge = Mustache.render("{{.}}", knowledge);
-                let template = "Default";
+
                 let descriptionDiv = document.getElementById('descriptionDiv');
                 descriptionDiv.innerHTML = description;
+
                 let skillsDiv = document.getElementById('taskDiv');
                 skillsDiv.innerHTML = skills;
+
                 let wageDiv = document.getElementById('salaryDiv');
-                wageDiv.innerHTML = wage;
+                wageDiv.innerHTML = ''; 
+
+                createSalaryBoxPlot(info['wage']);
+
                 let employerDiv = document.getElementById('employerDiv');
-                employerDiv.innerHTML = template;
-                // return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
+                employerDiv.innerHTML = "Default";
             }
 
-            function handleSearchResponse() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let jobs = JSON.parse(this.response);
-                let html = convertToHtml(jobs);
-                let resultsDiv = document.getElementById('resultsDiv');
-                resultsDiv.innerHTML = html;
+
+            // function getJobHtml(info) {
+            //     let description = info['description'];
+            //     let skills = info['skills'];
+            //     let knowledge = info['knowledge'];
+            //     let wage = info['wage'];
+            //     description = Mustache.render("{{.}}", description);
+            //     skills = Mustache.render("{{.}}", skills);
+            //     wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
+            //     knowledge = Mustache.render("{{.}}", knowledge);
+            //     let template = "Default";
+            //     let descriptionDiv = document.getElementById('descriptionDiv');
+            //     descriptionDiv.innerHTML = description;
+            //     let skillsDiv = document.getElementById('taskDiv');
+            //     skillsDiv.innerHTML = skills;
+            //     let wageDiv = document.getElementById('salaryDiv');
+            //     wageDiv.innerHTML = wage;
+            //     let employerDiv = document.getElementById('employerDiv');
+            //     employerDiv.innerHTML = template;
+            //     // return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
+            // }
+
+      function handleSearchResponse() {
+        if (this.status !== 200) {
+          alert('Error: Failed to fetch data from server');
+          return;
+        }
+        let jobs = JSON.parse(this.response);
+        let html = convertToHtml(jobs);
+        let resultsDiv = document.getElementById('resultsDiv');
+        resultsDiv.innerHTML = html;
+      }
+
+      function handleJobResponse() {
+        if (this.status !== 200) {
+          alert('Error: Failed to fetch data from server');
+          return;
+        }
+        let info = JSON.parse(this.response);
+        let html = getCardHtml(info);
+        let modal = document.getElementById('classModalBody');
+        modal.innerHTML = html;
+        let classModalNode = document.getElementById('classModal');
+        let classModal = new bootstrap.Modal(classModalNode);
+        classModal.show();
+      }
+
+      // function handleFavorite() {
+      //   if (this.status !== 200) {
+      //     alert('Error: Failed to fetch data from server');
+      //     return;
+      //   }
+      //   let info = JSON.parse(this.response);
+      //   alert(info);
+      // }
+
+      function handleFavoriteResponse() {
+        if (this.status !== 200) {
+          alert('Error: Failed to fetch data from server');
+          return;
+        }
+        let info = JSON.parse(this.response);
+        alert(info);
+      }
+
+      function handleError() {
+        alert('Error: Failed to fetch data from server');
+      }
+
+      let request = null;
+      let algo='alphabetical'
+
+      function getSearchResults() {
+        let majorInput = document.getElementById('majorInput');
+        let major = majorInput.value;
+        if (major == null || major == '')
+          major = 'all'
+        let encodedMajor = encodeURIComponent(major);
+        let url = '/results?major=' + encodedMajor + '&algo=' + algo;
+
+        if (major == 'all')
+          repeat.innerHTML = 'All results'
+        else {
+          let view = {"input": major}
+          let html = Mustache.render("Results for {{input}}", view);
+          let repeat = document.getElementById('repeat');
+          repeat.innerHTML = html;
+        }
+        if (request !== null)
+          request.abort();
+        request = new XMLHttpRequest();
+        request.onload = handleSearchResponse;
+        request.onerror = handleError;
+        request.open('GET', url);
+        request.send();
+      }
+
+      function getJobResults(soc_code) {
+        let encodedSOC = encodeURIComponent(soc_code);
+        let url = '/job?soc_code=' + encodedSOC;
+
+        if (request !== null)
+          request.abort();
+        request = new XMLHttpRequest();
+        request.onload = handleJobResponse;
+        request.onerror = handleError;
+        request.open('GET', url);
+        request.send();
+      }
+
+      // function favorite(soc_code, status='True') {
+      //   let encodedSOC = encodeURIComponent(soc_code);
+      //   let encodedStatus = encodeURIComponent(status);
+      //   let url = '/update?soc_code=' + encodedSOC + 
+      //             '&status=' + encodedStatus;
+      //   if (request !== null)
+      //     request.abort();
+      //   request = new XMLHttpRequest();
+      //   request.onload = handleFavorite;
+      //   request.onerror = handleError;
+      //   request.open('GET', url);
+      //   request.send();
+      // }
+
+      function toggleFavorite(soc_code) {
+        let favoriteButton = document.getElementById(`favorite${soc_code}`);
+        let isFavorite = favoriteButton.classList.contains('btn-warning'); // Check current state
+
+        let url;
+        if (isFavorite) {
+          // Remove favorite
+          url = '/delete?soc_code=' + soc_code + '&status=True';
+        } else {
+          // Add favorite
+          url = '/update?soc_code=' + soc_code + '&status=True';
+        }
+
+        // Create a new XMLHttpRequest for this button
+        let individualRequest = new XMLHttpRequest();
+        individualRequest.onload = function () {
+          handleFavoriteResponse.call(this);
+
+          // Update button appearance based on action
+          if (isFavorite) {
+            favoriteButton.classList.remove('btn-warning');
+            favoriteButton.classList.add('btn-outline-warning');
+          } else {
+            favoriteButton.classList.remove('btn-outline-warning');
+            favoriteButton.classList.add('btn-warning');
+          }
+        };
+        individualRequest.onerror = function () {
+          alert('Error: Failed to fetch data from server');
+        };
+        individualRequest.open('GET', url, true);
+        individualRequest.send();
+      }
+
+      let timer = null;
+
+      function debouncedGetResults() {
+        clearTimeout(timer);
+        timer = setTimeout(getSearchResults, 500);
+      }
+
+      function setup() {
+        let majorInput = document.getElementById('majorInput');
+        majorInput.addEventListener('input', debouncedGetResults);
+      }
+
+      document.addEventListener('DOMContentLoaded', setup);
+      document.addEventListener('DOMContentLoaded', getSearchResults);
+
+      document.addEventListener('DOMContentLoaded', function () {
+        let initRequest = new XMLHttpRequest();
+        initRequest.onload = function () {
+          if (this.status !== 200) {
+            alert('Error loading favorites');
+            return;
+          }
+          let favorites = JSON.parse(this.response);
+          favorites.forEach(function (soc_code) {
+            let favoriteButton = document.getElementById(`favorite${soc_code}`);
+            if (favoriteButton) {
+              favoriteButton.classList.remove('btn-outline-warning');
+              favoriteButton.classList.add('btn-warning');
             }
+          });
+        };
+        initRequest.onerror = function () {
+          alert('Error: Could not fetch favorites');
+        };
+        initRequest.open('GET', '/preferences', true);
+        initRequest.send();
+      });
 
-            function handleJobResponse() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let info = JSON.parse(this.response);
-                getJobHtml(info);
-                // let html = getCardHtml(info);
-                // let modal = document.getElementById('classModalBody');
-                // modal.innerHTML = html;
-                // let classModalNode = document.getElementById('classModal');
-                // let classModal = new bootstrap.Modal(classModalNode);
-                // classModal.show();
-            }
 
-            function handleFavorite() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let info = JSON.parse(this.response);
-                alert(info);
-            }
 
-            function handleError() {
-                alert('Error: Failed to fetch data from server');
-            }
-
-            let request = null;
-            let algo='alphabetical'
-
-            function setAlgo(algorithm) {
-                algo = algorithm;
-                getSearchResults();
-            }
-
-            function getSearchResults() {
-                let majorInput = document.getElementById('majorInput');
-                let major = majorInput.value;
-                if (major == null || major == '')
-                    major = 'all'
-                let encodedMajor = encodeURIComponent(major);
-                let url = '/results?major=' + encodedMajor + '&algo=' + algo;
-
-                if (major == 'all')
-                    repeat.innerHTML = 'All results'
-                else {
-                    let view = {"input": major}
-                    let html = Mustache.render("Results for {{input}}", view);
-                    let repeat = document.getElementById('repeat');
-                    repeat.innerHTML = html;
-                }
-                if (request !== null)
-                    request.abort();
-                request = new XMLHttpRequest();
-                request.onload = handleSearchResponse;
-                request.onerror = handleError;
-                request.open('GET', url);
-                request.send();
-            }
-
-            function getJobResults(soc_code) {
-                let encodedSOC = encodeURIComponent(soc_code);
-                let url = '/job?soc_code=' + encodedSOC;
-
-                if (request !== null)
-                    request.abort();
-                request = new XMLHttpRequest();
-                request.onload = handleJobResponse;
-                request.onerror = handleError;
-                request.open('GET', url);
-                request.send();
-            }
-
-            function favorite(soc_code, status='True') {
-                let encodedSOC = encodeURIComponent(soc_code);
-                let encodedStatus = encodeURIComponent(status);
-                let url = '/update?soc_code=' + encodedSOC + 
-                        '&status=' + encodedStatus;
-                if (request !== null)
-                    request.abort();
-                request = new XMLHttpRequest();
-                request.onload = handleFavorite;
-                request.onerror = handleError;
-                request.open('GET', url);
-                request.send();
-            }
-
-            let timer = null;
-
-            function debouncedGetResults() {
-                clearTimeout(timer);
-                timer = setTimeout(getSearchResults, 500);
-            }
-
-            function setup() {
-                let majorInput = document.getElementById('majorInput');
-                majorInput.addEventListener('input', debouncedGetResults);
-            }
-
-            document.addEventListener('DOMContentLoaded', setup);
-            document.addEventListener('DOMContentLoaded', getSearchResults);
-        </script>
-    </body>
+   </script>
+  </body>
 </html>
