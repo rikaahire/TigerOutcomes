@@ -271,8 +271,7 @@ def get_occupational_data_full(soc_code):
         knowledge = conn.execute(stmt_knowledge).fetchall()
         wage = conn.execute(stmt_wage).fetchall()
 
-    print(wage)
-    wage = [[wage[0][18]], [wage[0][25]], [wage[0][26]], [wage[0][27]], [wage[0][28]], [wage[0][29]]]
+    wage = {"mean": wage[0][18], "10": wage[0][25], "25": wage[0][26], "50": wage[0][27], "75": wage[0][28], "90": wage[0][29]}
     return {'description': description, 'skills': skills, 'knowledge': knowledge, 'wage': wage}
 
 #-----------------------------------------------------------------------

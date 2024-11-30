@@ -265,25 +265,26 @@
                 </div>
                 `;
                 let map = {
-                description: info['descript'],
-                skills: info['skills'],
-                salary: info['salary'],
-                employer: info['employer']
+                    description: info['descript'],
+                    skills: info['skills'],
+                    salary: info['salary'],
+                    employer: info['employer']
                 }
+                console.log(salary);
                 let html = Mustache.render(template, map);
                 return html;
             }
 
             function getJobHtml(info) {
-                let description = info['description']
-                let skills = info['skills']
-                let knowledge = info['knowledge']
-                let wage = info['wage']
-                description = Mustache.render("{{.}}", description)
-                skills = Mustache.render("{{.}}", skills)
-                wage = Mustache.render("{{.}}", wage)
-                knowledge = Mustache.render("{{.}}", knowledge)
-                let template = "Default"
+                let description = info['description'];
+                let skills = info['skills'];
+                let knowledge = info['knowledge'];
+                let wage = info['wage'];
+                description = Mustache.render("{{.}}", description);
+                skills = Mustache.render("{{.}}", skills);
+                wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
+                knowledge = Mustache.render("{{.}}", knowledge);
+                let template = "Default";
                 let descriptionDiv = document.getElementById('descriptionDiv');
                 descriptionDiv.innerHTML = description;
                 let skillsDiv = document.getElementById('taskDiv');
