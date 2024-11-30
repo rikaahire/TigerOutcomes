@@ -148,145 +148,62 @@
         return html;
       }
 
-            function getCardHtml(info) {
-                info=getJobHtml(info)
-                let template = 
-                `
-                <!-- Card Description -->
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Description</h5>
-                        <p class="card-text"> {{description}} </p>
-                    </div>
-                    </div>
-                    <!-- Card for Tasks & Skills -->
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Tasks and Skills</h5>
-                        <p class="card-text"> {{skills}} </p>
-                    </div>
-                    </div>
-                    <!-- Card for Salary -->
-                    <!-- Might need to do some more here with data graphics -->
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Salary Range</h5>
-                        <p class="card-text"> {{salary}} </p>
-                    </div>
-                    </div>
-                    <!-- Card for Common Employers -->
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Common Employers</h5>
-                        <p class="card-text"> {{employer}} </p>
-                    </div>
-                </div>
-                `;
-                let map = {
-                    description: info['descript'],
-                    skills: info['skills'],
-                    salary: info['salary'],
-                    employer: info['employer']
-                }
-                console.log(salary);
-                let html = Mustache.render(template, map);
-                return html;
-            }
+      function getCardHtml(info) {
+        info=getJobHtml(info)
+        let template = 
+        `
+        <!-- Card Description -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Description</h5>
+            <p class="card-text"> {{description}} </p>
+          </div>
+        </div>
+        <!-- Card for Tasks & Skills -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Tasks and Skills</h5>
+            <p class="card-text"> {{skills}} </p>
+          </div>
+        </div>
+        <!-- Card for Salary -->
+        <!-- Might need to do some more here with data graphics -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Salary Range</h5>
+            <p class="card-text"> {{salary}} </p>
+          </div>
+        </div>
+        <!-- Card for Common Employers -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Common Employers</h5>
+            <p class="card-text"> {{employer}} </p>
+          </div>
+        </div>
+        `;
+        let map = {
+          description: info['descript'],
+          skills: info['skills'],
+          salary: info['salary'],
+          employer: info['employer']
+        }
+        let html = Mustache.render(template, map);
+        return html;
+      }
 
-              function createSalaryBoxPlot(wage) {
-                // Create a chart container if it doesn't exist
-                let chartContainer = document.getElementById('salaryChart');
-                if (!chartContainer) {
-                    chartContainer = document.createElement('div');
-                    chartContainer.id = 'salaryChart';
-                    chartContainer.style.height = '300px';
-                    chartContainer.style.width = '100%';
-                    let wageDiv = document.getElementById('salaryDiv');
-                    wageDiv.appendChild(chartContainer);
-                }
-
-                let dataPoints = [
-                    { 
-                        label: "Salary Distribution", 
-                        y: [
-                            wage['10'],   // Minimum 
-                            wage['25'],   // First quartile
-                            wage['50'],   // Median
-                            wage['75'],   // Third quartile
-                            wage['90']    // Maximum 
-                        ] 
-                    }
-                ];
-
-                // Create the chart
-                var chart = new CanvasJS.Chart("salaryChart", {
-                    theme: "light2",
-                    axisY: {
-                        title: "Annual Salary ($)",
-                        valueFormatString: "$#,##0"
-                    },
-                    data: [{
-                        type: "boxAndWhisker",
-                        color: "#3498db",
-                        dataPoints: dataPoints
-                    }]
-                });
-
-                chart.render();
-
-                let meanText = document.createElement('p');
-                meanText.textContent = `Mean Salary: $${wage['mean'].toLocaleString()}`;
-                let wageDiv = document.getElementById('salaryDiv');
-                wageDiv.appendChild(meanText);
-            }
-
-            function getJobHtml(info) {
-                let description = info['description'];
-                let skills = info['skills'];
-                let knowledge = info['knowledge'];
-                let wage = info['wage'];
-
-                description = Mustache.render("{{.}}", description);
-                skills = Mustache.render("{{.}}", skills);
-                
-                wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
-
-                let descriptionDiv = document.getElementById('descriptionDiv');
-                descriptionDiv.innerHTML = description;
-
-                let skillsDiv = document.getElementById('taskDiv');
-                skillsDiv.innerHTML = skills;
-
-                let wageDiv = document.getElementById('salaryDiv');
-                wageDiv.innerHTML = ''; 
-
-                createSalaryBoxPlot(info['wage']);
-
-                let employerDiv = document.getElementById('employerDiv');
-                employerDiv.innerHTML = "Default";
-            }
-
-
-            // function getJobHtml(info) {
-            //     let description = info['description'];
-            //     let skills = info['skills'];
-            //     let knowledge = info['knowledge'];
-            //     let wage = info['wage'];
-            //     description = Mustache.render("{{.}}", description);
-            //     skills = Mustache.render("{{.}}", skills);
-            //     wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
-            //     knowledge = Mustache.render("{{.}}", knowledge);
-            //     let template = "Default";
-            //     let descriptionDiv = document.getElementById('descriptionDiv');
-            //     descriptionDiv.innerHTML = description;
-            //     let skillsDiv = document.getElementById('taskDiv');
-            //     skillsDiv.innerHTML = skills;
-            //     let wageDiv = document.getElementById('salaryDiv');
-            //     wageDiv.innerHTML = wage;
-            //     let employerDiv = document.getElementById('employerDiv');
-            //     employerDiv.innerHTML = template;
-            //     // return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
-            // }
+      function getJobHtml(info) {
+        let description = info['description']
+        let skills = info['skills']
+        let knowledge = info['knowledge']
+        let wage = info['wage']
+        description = Mustache.render("{{.}}", description)
+        skills = Mustache.render("{{.}}", skills)
+        wage = Mustache.render("{{.}}", wage)
+        knowledge = Mustache.render("{{.}}", knowledge)
+        let template = "Default"
+        return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
+      }
 
       function handleSearchResponse() {
         if (this.status !== 200) {
