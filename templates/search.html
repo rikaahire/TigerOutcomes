@@ -5,9 +5,45 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <title>TigerOutcomes</title>
+
+        <style>
+          .button-fav {
+                border: 2px solid #FFD235;
+                color: #FFD235;
+                font-size: 1rem;
+                font-weight: normal;
+                background-color: white;
+                border-radius: 30px;
+                padding: 5px 9px;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease-in-out;
+            }
+            .button-fav:hover {
+                background-color: #FFD235;
+                color: white;
+            }
+            
+            .cards-container {
+              position: sticky;
+              top: 75px; 
+              right: 0;
+              max-height: calc(100vh - 40px); 
+              overflow-y: auto; 
+              padding-right: 15px; 
+              width: 100%;
+            }
+
+            .cards-container .card {
+              overflow-y: auto;
+            }
+
+        </style>
+        <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
     </head>
     <body>
-        <div class="modal" id="classModal" style="min-width:90%">
+        <!-- does this code need to exist anymore? -->
+      <div class="modal" id="classModal" style="min-width:90%">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -48,8 +84,7 @@
                 </div>
             </nav>
         </header>
-        <div class="container-fluid">
-        <hr>
+        <div class="container-fluid pt-3">
         <div class="row">
             <div class="col-3 d-flex flex-column align-items-stretch flex-shrink-0">
                 <div class="container-fluid d-flex">
@@ -96,14 +131,15 @@
                     </datalist>
                 </div> 
                 <hr>
-                <div id="sort">
-                    Sort by:
-                    <button id="alphabetical" onclick="setAlgo('alphabetical')">
-                        Alphabetical
-                    </button>
-                    <button id="common" onclick="setAlgo('common')">
-                        Most common
-                    </button>
+                <!-- Is there a way to place the users selection next to the button -->
+                <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="sort" data-bs-toggle="dropdown">
+                    Sort by
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="setAlgo('alphabetical')">Alphabetical</a></li>
+                    <li><a class="dropdown-item" onclick="setAlgo('common')">Most Common</a></li>
+                  </ul>
                 </div>
                 <hr>
                 <div id="filters">
@@ -122,35 +158,36 @@
             </div>
             <!-- Cards -->
             <div class="col-9">
-            <div class="col-md-9 d-flex flex-column align-items-stretch flex-shrink-0 position=fixed">
-            <div class="row row-cols-1 row-cols-md-2 g-4">
-                <!-- Card Description -->
-                <div class="col"> <div class="card"> <div class="card-body">
-                    <h5 class="card-title">Description</h5>
-                    <div class="card-text" id="descriptionDiv"></div>
+              <div class="col-md-9 cards-container">
+                <!-- would like to add a title of what job we are currently working with -->
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <!-- Card Description -->
+                    <div class="col"> <div class="card"> <div class="card-body">
+                        <h5 class="card-title">Description</h5>
+                        <div class="card-text" id="descriptionDiv"></div>
+                    </div> </div> </div>
+                    <!-- Card for Tasks & Skills -->
+                    <div class="col"> <div class="card"> <div class="card-body">
+                        <h5 class="card-title">Tasks and Skills</h5>
+                        <div class="card-text" id="taskDiv"></div>
+                    </div> </div> </div>
+                    <!-- Card for Salary -->
+                    <!-- Might need to do some more here with data graphics -->
+                    <div class="col"> <div class="card"> <div class="card-body">
+                        <h5 class="card-title">Salary Range</h5>
+                        <div class="card-text" id="salaryDiv"></div>
+                    </div> </div> </div>
+                    <!-- Card for Common Employers -->
+                    <div class="col"> <div class="card"> <div class="card-body">
+                        <h5 class="card-title">Common Employers</h5>
+                        <div class="card-text" id="employerDiv"></div>
+                    </div> </div> </div>
                 </div> </div> </div>
-                <!-- Card for Tasks & Skills -->
-                <div class="col"> <div class="card"> <div class="card-body">
-                    <h5 class="card-title">Tasks and Skills</h5>
-                    <div class="card-text" id="taskDiv"></div>
-                </div> </div> </div>
-                <!-- Card for Salary -->
-                <!-- Might need to do some more here with data graphics -->
-                <div class="col"> <div class="card"> <div class="card-body">
-                    <h5 class="card-title">Salary Range</h5>
-                    <div class="card-text" id="salaryDiv"></div>
-                </div> </div> </div>
-                <!-- Card for Common Employers -->
-                <div class="col"> <div class="card"> <div class="card-body">
-                    <h5 class="card-title">Common Employers</h5>
-                    <div class="card-text" id="employerDiv"></div>
-                </div> </div> </div>
-            </div> </div> </div>
-        </div>
-        </div>
+            </div>
+          </div>
         <footer class="py-3 bg-light sticky-bottom">
             <div class="container">
-                <span class="text-muted">Created by the TigerOutcomes team.</span>
+              <span class="text-muted">Created by the TigerOutcomes <a href="">team</a>.</span>
             </div>
         </footer>
 
@@ -179,8 +216,8 @@
                         </a>
                         <!-- Column for Button -->
                         <div class="col-auto">
-                        <button type="button" onclick="favorite('{{soc_code}}')" id="favorite{{soc_code}}" class="btn btn-outline-warning" data-bs-toggle="button">
-                            ⭐️
+                        <button type="button" onclick="favorite('{{soc_code}}')" id="favorite{{soc_code}}" class="button-fav" data-bs-toggle="button">
+                            ★
                         </button>
                         </div>
                     </div>
