@@ -121,6 +121,25 @@ def clear_favorites(name, status=None, soc_code=None):
 
 #-----------------------------------------------------------------------
 
+def save_comments(comments):
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
+    with engine.connect() as conn:
+        conn.execute(table.delete())  # Clear existing comments
+        for comment in comments:
+            conn.execute(table.insert().values(text=comment['text'], replies=comment['replies']))
+        conn.commit()
+
+def fetch_comments():
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
+    with engine.connect() as conn:
+        rows = conn.execute(select(table)).fetchall()
+    return [{"text": row.text, "replies": row.replies} for row in rows]
+
+
+#-----------------------------------------------------------------------
+
 # mount share for smb database
 def mount_smb_share():
     # Retrieve credentials from Keychain

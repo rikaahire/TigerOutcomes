@@ -188,3 +188,22 @@ def delete():
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
     return response
+
+@app.route('/comments', methods=['GET', 'POST'])
+def handle_comments():
+    if flask.request.method == 'POST':
+        try:
+            data = flask.request.json
+            comments = data.get('comments', [])
+            db.save_comments(comments)
+            return flask.jsonify({"status": "success"}), 200
+        except Exception as e:
+            print(f"Error saving comments: {e}")
+            return flask.jsonify({"status": "error"}), 500
+    elif flask.request.method == 'GET':
+        try:
+            comments = db.fetch_comments()
+            return flask.jsonify({"comments": comments}), 200
+        except Exception as e:
+            print(f"Error fetching comments: {e}")
+            return flask.jsonify({"status": "error"}), 500

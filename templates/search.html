@@ -183,6 +183,19 @@
                         <div class="card-text" id="employerDiv"></div>
                     </div> </div> </div>
                 </div> </div> </div>
+                <!-- Commenting Section -->
+                <div class="col">
+                    <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Comments</h5>
+                        <div id="commentsDiv" class="mb-3">
+                        <!-- Comments will be dynamically loaded here -->
+                        </div>
+                        <textarea class="form-control mb-2" id="newComment" placeholder="Add a comment"></textarea>
+                        <button class="btn btn-primary" onclick="addComment()">Post Comment</button>
+                    </div>
+                    </div>
+                </div>
             </div>
           </div>
         <footer class="py-3 bg-light sticky-bottom">
@@ -471,6 +484,66 @@
                 request.open('GET', url);
                 request.send();
             }
+
+            let comments = []; // Placeholder for comments
+
+            function loadComments() {
+                const commentsDiv = document.getElementById('commentsDiv');
+                commentsDiv.innerHTML = '';
+                comments.forEach((comment, index) => {
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'mb-2';
+                    commentDiv.innerHTML = `
+                        <strong>User ${index + 1}:</strong>
+                        <p>${comment.text}</p>
+                        <button class="btn btn-sm btn-link" onclick="replyToComment(${index})">Reply</button>
+                        <div id="replies-${index}" class="ms-3 mt-2">
+                            ${comment.replies.map(reply => `<p><strong>Reply:</strong> ${reply}</p>`).join('')}
+                        </div>
+                    `;
+                    commentsDiv.appendChild(commentDiv);
+                });
+            }
+
+            function addComment() {
+                const newComment = document.getElementById('newComment').value;
+                if (newComment.trim()) {
+                    comments.push({ text: newComment, replies: [] });
+                    document.getElementById('newComment').value = '';
+                    loadComments();
+                    saveCommentsToServer(comments);
+                }
+            }
+
+            function replyToComment(index) {
+                const reply = prompt('Enter your reply:');
+                if (reply) {
+                    comments[index].replies.push(reply);
+                    loadComments();
+                    saveCommentsToServer(comments);
+                }
+            }
+
+            function saveCommentsToServer(comments) {
+                fetch('/comments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ comments }),
+                }).catch(err => console.error('Failed to save comments', err));
+            }
+
+            function fetchCommentsFromServer() {
+                fetch('/comments')
+                    .then(response => response.json())
+                    .then(data => {
+                        comments = data.comments || [];
+                        loadComments();
+                    })
+                    .catch(err => console.error('Failed to fetch comments', err));
+            }
+
+            document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
+
 
             let timer = null;
 

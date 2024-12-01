@@ -120,7 +120,10 @@
                 let knowledge = info['knowledge']
                 let wage = info['wage']
                 description = Mustache.render("{{.}}", description)
-                skills = Mustache.render("{{.}}", skills)
+                if (skills && Array.isArray(skills)) {
+                    let numberedSkills = skills.map((skill, index) => `${index + 1}. ${skill[0]}`).join('<br>'); // Number each skill
+                    skills = Mustache.render("{{{skills}}}", { skills: numberedSkills });
+                } 
                 wage = Mustache.render("{{.}}", wage)
                 knowledge = Mustache.render("{{.}}", knowledge)
                 let template = "Default"
