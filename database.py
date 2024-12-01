@@ -112,7 +112,7 @@ def clear_favorites(name, status=None, soc_code=None):
         try:
             conn.execute(stmt)
             #ret = f"Deleted all entries for user {name} with {status if status else 'any'} status"
-            ret = f"Delete favorite for user {name} with SOC {soc_code}."
+            ret = f"Deleted favorite for user {name} with SOC {soc_code}."
             conn.commit()
         except SQLAlchemyError as e:
             ret = f"Error deleting favorites: {e}"

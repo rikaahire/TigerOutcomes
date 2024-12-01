@@ -182,9 +182,9 @@
                 }
                 let info = JSON.parse(this.response);
                 alert(info[1])
-                let favorite = document.getElementById(`favorite${response.soc_code}`).closest('.list-group-item');
-                if (favorite) favorite.remove();
-                getFavorites();
+                if (info[0]) {
+                    location.reload();
+                }
             }
 
             function deleteFavorite(soc_code) {
