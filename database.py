@@ -211,6 +211,12 @@ def get_cols():
     table = sqlalchemy.Table('matching_sbert', metadata, autoload_with=engine)
     cols['matching_sbert'] = [column.name for column in table.columns]
 
+    table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
+    cols['favorites'] = [column.name for column in table.columns]
+
+    table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
+    cols['comments'] = [column.name for column in table.columns]
+
     return cols
 
 #-----------------------------------------------------------------------

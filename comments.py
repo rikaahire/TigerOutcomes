@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sqlalchemy
-from sqlalchemy import Column, Integer, Text, JSON
+from sqlalchemy import Column, Integer, Text, JSON, Boolean
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -11,10 +11,11 @@ class Comments(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     text = Column(Text, nullable=False)
+    valid = Column(Boolean)
     replies = Column(JSON, default=[])
 
     def __repr__(self):
-        return f"<Comments(id={self.id}, text={self.text}, replies={self.replies})>"
+        return f"<Comments(id={self.id}, text={self.text}, valid={self.valid}, replies={self.replies})>"
 
 # Database connection
 DATABASE_URL = 'postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKVjV@dpg-cspdgmrtq21c739rtrrg-a.ohio-postgres.render.com/tigeroutcomesdb'
