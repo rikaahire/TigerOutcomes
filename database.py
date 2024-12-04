@@ -6,8 +6,7 @@ import sys
 import argparse
 import sqlalchemy
 import sqlalchemy.orm
-from sqlalchemy import select, distinct, func, and_, desc
-from sqlalchemy import func
+from sqlalchemy import select, distinct, and_, desc, func
 from sqlalchemy.exc import SQLAlchemyError
 import dotenv
 
@@ -309,6 +308,7 @@ def get_occupational_data_full(soc_code):
 # replacement for results from search (soc_codes from major)
 def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical"):
     algo = "most_common_job"
+
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
     
@@ -318,11 +318,16 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical"):
     matching_sbert = sqlalchemy.Table('matching_sbert', metadata, autoload_with=engine)
     onet_occupation_data = sqlalchemy.Table('onet_occupation_data', metadata, autoload_with=engine)
 
-    position_count = func.count().label('position_count')
-    
     # Build the query with intermediary mapping
+    # Define the count expression and label it
+    position_count = func.count().label('position_count')
+
     stmt = (
-        sqlalchemy.select(onet_occupation_data.c["O*NET-SOC Code"], onet_occupation_data.c["Title"]).distinct()
+        sqlalchemy.select(
+            onet_occupation_data.c["O*NET-SOC Code"],
+            onet_occupation_data.c["Title"],
+            position_count  # Include position_count in the SELECT clause
+        )
         .select_from(
             pton_demographics
             .join(
@@ -344,26 +349,34 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical"):
         stmt = stmt.where(
             func.lower(pton_demographics.c["AcadPlanDescr"]) == func.lower(acad_plan_descr)
         )
+
     if algo == "alphabetical":
-        stmt = stmt.order_by(onet_occupation_data.c["Title"])
-    elif algo == "most_common_job":
-        # Define the count expression and label it
         stmt = stmt.group_by(
-        matching_sbert.c["Target Job Title"],
-        onet_occupation_data.c["O*NET-SOC Code"],
-        onet_occupation_data.c["Title"]
-    ).order_by(
-        position_count.desc()
-    )
-    
+            onet_occupation_data.c["O*NET-SOC Code"],
+            onet_occupation_data.c["Title"]
+        ).order_by(
+            onet_occupation_data.c["Title"]
+        )
+    elif algo == "most_common_job":
+        stmt = stmt.group_by(
+            onet_occupation_data.c["O*NET-SOC Code"],
+            onet_occupation_data.c["Title"]
+        ).order_by(
+            position_count.desc()
+        )
+    else:
+        # Handle unexpected 'algo' values
+        raise ValueError(f"Unknown sorting algorithm: {algo}")
+        
     # Execute the query and fetch the results
     with engine.connect() as conn:
         results = conn.execute(stmt).fetchall()
 
-    # Extract O*NET-SOC Codes from the results
+    # Extract O*NET-SOC Codes and Titles from the results
     onet_soc_codes = [(row[0], row[1]) for row in results]
 
     return onet_soc_codes
+
 
 # gets job titles from major
 def get_positions_by_acadplandesc(acad_plan_descr):
