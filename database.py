@@ -305,10 +305,7 @@ def get_occupational_data_full(soc_code):
 
 #-----------------------------------------------------------------------
 
-# replacement for results from search (soc_codes from major)
-def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical"):
-    algo = "most_common_job"
-
+def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical", min_wage=None):
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)
     
@@ -317,64 +314,81 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical"):
     pton_student_outcomes = sqlalchemy.Table('pton_student_outcomes', metadata, autoload_with=engine)
     matching_sbert = sqlalchemy.Table('matching_sbert', metadata, autoload_with=engine)
     onet_occupation_data = sqlalchemy.Table('onet_occupation_data', metadata, autoload_with=engine)
-
+    table_wage = sqlalchemy.Table('bls_wage_data', metadata, autoload_with=engine)
+    
+    try:
+        # Define the count expression and label it
+        position_count = func.count().label('position_count')
+    except:
+        pass
+    
+    # from wage
+    wage_column = table_wage.c['A_MEDIAN']
+    
     # Build the query with intermediary mapping
-    # Define the count expression and label it
-    position_count = func.count().label('position_count')
-
     stmt = (
         sqlalchemy.select(
-            onet_occupation_data.c["O*NET-SOC Code"],
-            onet_occupation_data.c["Title"],
-            position_count  # Include position_count in the SELECT clause
+            onet_occupation_data.c['O*NET-SOC Code'],
+            onet_occupation_data.c['Title'],
+            position_count
         )
         .select_from(
             pton_demographics
             .join(
                 pton_student_outcomes,
-                pton_demographics.c["StudyID"] == pton_student_outcomes.c["StudyID"]
+                pton_demographics.c['StudyID'] == pton_student_outcomes.c['StudyID']
             )
             .join(
                 matching_sbert,
-                func.lower(pton_student_outcomes.c["Position"]) == func.lower(matching_sbert.c["Target Job Title"])
+                func.lower(pton_student_outcomes.c['Position']) == func.lower(matching_sbert.c['Target Job Title'])
             )
             .join(
                 onet_occupation_data,
-                func.lower(matching_sbert.c["Matched Job Title"]) == func.lower(onet_occupation_data.c["Title"])
+                func.lower(matching_sbert.c['Matched Job Title']) == func.lower(onet_occupation_data.c['Title'])
+            )
+            .join(
+                table_wage,
+                func.substr(onet_occupation_data.c['O*NET-SOC Code'], 1, 7) == table_wage.c['OCC_CODE'] # adjusted SOC code
             )
         )
     )
-
+    
+    # Apply filters based on parameters
     if acad_plan_descr != 'all':
         stmt = stmt.where(
-            func.lower(pton_demographics.c["AcadPlanDescr"]) == func.lower(acad_plan_descr)
+            func.lower(pton_demographics.c['AcadPlanDescr']) == func.lower(acad_plan_descr)
         )
-
-    if algo == "alphabetical":
-        stmt = stmt.group_by(
-            onet_occupation_data.c["O*NET-SOC Code"],
-            onet_occupation_data.c["Title"]
-        ).order_by(
-            onet_occupation_data.c["Title"]
+    
+    if min_wage is not None:
+        stmt = stmt.where(
+            wage_column >= min_wage
         )
-    elif algo == "most_common_job":
-        stmt = stmt.group_by(
-            onet_occupation_data.c["O*NET-SOC Code"],
-            onet_occupation_data.c["Title"]
-        ).order_by(
+    
+    # Group by the necessary columns
+    stmt = stmt.group_by(
+        onet_occupation_data.c['O*NET-SOC Code'],
+        onet_occupation_data.c['Title']
+    )
+    
+    # Apply sorting based on the 'algo' parameter
+    if algo == 'alphabetical':
+        stmt = stmt.order_by(
+            onet_occupation_data.c['Title']
+        )
+    elif algo == 'most_common_job':
+        stmt = stmt.order_by(
             position_count.desc()
         )
     else:
-        # Handle unexpected 'algo' values
         raise ValueError(f"Unknown sorting algorithm: {algo}")
-        
+    
     # Execute the query and fetch the results
     with engine.connect() as conn:
         results = conn.execute(stmt).fetchall()
-
+    
     # Extract O*NET-SOC Codes and Titles from the results
     onet_soc_codes = [(row[0], row[1]) for row in results]
-
+    
     return onet_soc_codes
 
 
