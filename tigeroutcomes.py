@@ -192,19 +192,21 @@ def delete():
 
 @app.route('/comments', methods=['GET', 'POST'])
 def handle_comments():
+    user = auth.authenticate()
+    soc_code = flask.request.args.get('soc_code')
     if flask.request.method == 'POST':
         try:
-            data = flask.request.json
-            comments = data.get('comments', [])
+            comments = flask.request.args.get('comments', [])
             db.save_comments(comments)
-            return flask.jsonify({"status": "success"}), 200
+            json_doc = json.dumps([True, 'success'])
         except Exception as e:
-            print(f"Error saving comments: {e}")
-            return flask.jsonify({"status": "error"}), 500
+            json_doc = [False, f"Error fetching comments: {e}"]
     elif flask.request.method == 'GET':
         try:
             comments = db.fetch_comments()
-            return flask.jsonify({"comments": comments}), 200
+            json_doc = json.dumps([True, comments])
         except Exception as e:
-            print(f"Error fetching comments: {e}")
-            return flask.jsonify({"status": "error"}), 500
+            json_doc = [False, f"Error fetching comments: {e}"]
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response
