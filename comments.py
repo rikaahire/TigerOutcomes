@@ -10,13 +10,14 @@ class Comments(Base):
     __tablename__ = 'comments'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    user = Column(String)
     soc_code = Column(String)
     text = Column(Text, nullable=False)
     valid = Column(Boolean, default=False)
     replies = Column(JSON, default=[])
 
     def __repr__(self):
-        return f"<Comments(id={self.id}, soc_code = {self.text}, text={self.text}, valid={self.valid}, replies={self.replies})>"
+        return f"<Comments(id={self.id}, user = {self.user}, soc_code = {self.text}, text={self.text}, valid={self.valid}, replies={self.replies})>"
 
 # Database connection
 DATABASE_URL = 'postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKVjV@dpg-cspdgmrtq21c739rtrrg-a.ohio-postgres.render.com/tigeroutcomesdb'
