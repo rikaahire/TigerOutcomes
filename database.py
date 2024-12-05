@@ -6,7 +6,7 @@ import sys
 import argparse
 import sqlalchemy
 import sqlalchemy.orm
-from sqlalchemy import select, distinct, and_, desc, func
+from sqlalchemy import select, distinct, and_, desc, func, cast, Integer, case
 from sqlalchemy.exc import SQLAlchemyError
 import dotenv
 
@@ -322,9 +322,6 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical", min
     except:
         pass
     
-    # from wage
-    wage_column = table_wage.c['A_MEDIAN']
-    
     # Build the query with intermediary mapping
     stmt = (
         sqlalchemy.select(
@@ -360,6 +357,13 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical", min
         )
     
     if min_wage is not None:
+        # from wage
+        wage_column = (
+            case(
+                (table_wage.c['A_MEAN'] == "*", 0),
+                else_=cast(table_wage.c['A_MEAN'], Integer),
+            )
+        )
         stmt = stmt.where(
             wage_column >= min_wage
         )
@@ -375,7 +379,7 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical", min
         stmt = stmt.order_by(
             onet_occupation_data.c['Title']
         )
-    elif algo == 'most_common_job':
+    elif algo == 'common':
         stmt = stmt.order_by(
             position_count.desc()
         )
