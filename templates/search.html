@@ -159,8 +159,13 @@
             <!-- Cards -->
             <div class="col-9">
               <div class="col-md-9 cards-container">
-                <!-- would like to add a title of what job we are currently working with -->
-                <div class="row row-cols-1 row-cols-md-2 g-4">
+                <!-- Title of Job -->
+                <h5 class="" id="titleDiv"></h5>
+                <button class="btn btn-primary" type="button" id="linkedin">
+                    See this career on LinkedIn
+                </button>
+
+                <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
                     <!-- Card Description -->
                     <div class="col"> <div class="card"> <div class="card-body">
                         <h5 class="card-title">Description</h5>
@@ -345,7 +350,11 @@
                 if (skills && Array.isArray(skills)) {
                     let numberedSkills = skills.map((skill, index) => `${index + 1}. ${skill[0]}`).join('<br>'); // Number each skill
                     skills = Mustache.render("{{{skills}}}", { skills: numberedSkills });
-                } 
+                }
+                else {
+                    errordata = {skills: "No skills or tasks availible for this job."}
+                    skills = Mustache.render("{{{skills}}}", errordata)
+                }
                 
                 wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
 
