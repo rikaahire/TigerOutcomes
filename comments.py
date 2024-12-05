@@ -12,7 +12,7 @@ class Comments(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     soc_code = Column(String)
     text = Column(Text, nullable=False)
-    valid = Column(Boolean)
+    valid = Column(Boolean, default=False)
     replies = Column(JSON, default=[])
 
     def __repr__(self):
