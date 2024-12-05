@@ -42,6 +42,16 @@ def add_admin(username):
             conn.rollback()
     return ret
 
+def check_admin(username):
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('admin', metadata, autoload_with=engine)
+    ret = False
+    with engine.connect() as conn:
+        rows = conn.execute(select(table).where(table.c.name == username)).fetchall()
+        if len(rows) > 0:
+            ret = True
+    return ret
+
 def approve(id):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
