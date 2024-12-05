@@ -70,7 +70,7 @@ def approve(id):
             conn.rollback()
     return ret
 
-def get_admin():
+def get_admins():
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('admin', metadata, autoload_with=engine)
     with engine.connect() as conn:
