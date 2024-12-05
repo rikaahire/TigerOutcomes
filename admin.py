@@ -6,7 +6,7 @@ from sqlalchemy.orm import declarative_base
 Base = declarative_base()
 
 # favorites table
-class Favorites(Base):
+class Admin(Base):
     __tablename__ = 'admin'
 
     name = Column(String, primary_key=True)
@@ -19,9 +19,9 @@ DATABASE_URL = 'postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKV
 engine = sqlalchemy.create_engine(DATABASE_URL)
 
 # Create favorites table
-def create_favorites_table():
+def create_admin_table():
     Base.metadata.create_all(engine)
-    print("Favorites table created successfully.")
+    print("Admin table created successfully.")
 
 if __name__ == "__main__":
-    create_favorites_table()
+    create_admin_table()

@@ -21,7 +21,7 @@ def check_admin():
 def admin():
     try:
         if check_admin():
-            html_code = flask.render_template('admin.html')
+            html_code = flask.render_template('admin.html', list=dba.get_admins())
         else:
             html_code = flask.render_template('homepage.html')
     except Exception as ex:
