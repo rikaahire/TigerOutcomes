@@ -394,6 +394,7 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical", min
     
     return onet_soc_codes
 
+# gets job title from soc code for card display
 def get_name_from_soc(soc):
     metadata = sqlalchemy.MetaData()
     metadata.reflect(engine)

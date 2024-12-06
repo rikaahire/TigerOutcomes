@@ -121,10 +121,12 @@ def job_details():
     skills = descript['skills']
     knowledge = descript['knowledge']
     wage = descript['wage']
+    title = db.get_name_from_soc(soc_code)
     descript= {'description': [tuple(row) for row in description], 
                'skills': [tuple(row) for row in skills], 
                'knowledge': [tuple(row) for row in knowledge], 
-               'wage': wage}
+               'wage': wage,
+               'title': [tuple(row) for row in title]}
     json_doc = json.dumps(descript)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
@@ -133,6 +135,7 @@ def job_details():
     # response = flask.make_response(html_code)
 
     return response
+
 
 # get all favorites for a user
 @app.route('/preferences', methods=['GET'])

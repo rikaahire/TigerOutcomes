@@ -151,8 +151,10 @@
                 
                 <div id="cardsContent" style="display: none;">
                     <!-- Title of Job -->
-                    <h5 class="" id="titleDiv"></h5>
-                    <button class="btn btn-primary" type="button" id="linkedin">
+                    <div class="d-flex">
+                        <h1 class="me-4" id="titleDiv"></h1>
+                    </div>
+                    <button class="btn btn-primary btn-small" type="button" id="linkedin">
                         See this career on LinkedIn
                     </button>
 
@@ -333,6 +335,10 @@
                 let skills = info['skills'];
                 let knowledge = info['knowledge'];
                 let wage = info['wage'];
+
+                // Job title dispaly
+                let titleDiv = document.getElementById('titleDiv');
+                titleDiv.textContent = info['title'];
 
                 description = Mustache.render("{{.}}", description);
                 if (skills && Array.isArray(skills) && skills.length > 0) {
