@@ -194,7 +194,7 @@
                             <div class="card-text" id="employerDiv"></div>
                         </div> </div> </div>
                         <!-- Commenting Section -->
-                        <div class="col"> <div class="card"> <div class="card-body">
+                        <div class="col-12"> <div class="card"> <div class="card-body">
                             <h5 class="card-title">Comments</h5>
                             <div id="commentsDiv" class="mb-3">
                             <!-- Comments will be dynamically loaded here -->
@@ -501,21 +501,17 @@
                 request.send();
             }
 
-            let comments = []; // Placeholder for comments
+            // let comments = []; // Placeholder for comments
 
-            function loadComments() {
+            function loadComments(comments) {
                 const commentsDiv = document.getElementById('commentsDiv');
                 commentsDiv.innerHTML = '';
                 comments.forEach((comment, index) => {
                     const commentDiv = document.createElement('div');
                     commentDiv.className = 'mb-2';
                     commentDiv.innerHTML = `
-                        <strong>User ${index + 1}:</strong>
+                        <strong>${comment.user}:</strong>
                         <p>${comment.text}</p>
-                        <button class="btn btn-sm btn-link" onclick="replyToComment(${index})">Reply</button>
-                        <div id="replies-${index}" class="ms-3 mt-2">
-                            ${comment.replies.map(reply => `<p><strong>Reply:</strong> ${reply}</p>`).join('')}
-                        </div>
                     `;
                     commentsDiv.appendChild(commentDiv);
                 });
@@ -526,7 +522,7 @@
                 if (newComment.trim()) {
                     comments.push({ text: newComment, replies: [] });
                     document.getElementById('newComment').value = '';
-                    loadComments();
+                    loadComments(comments);
                     saveCommentsToServer(comments);
                 }
             }
@@ -535,7 +531,7 @@
                 const reply = prompt('Enter your reply:');
                 if (reply) {
                     comments[index].replies.push(reply);
-                    loadComments();
+                    loadComments(comments);
                     saveCommentsToServer(comments);
                 }
             }
@@ -553,7 +549,7 @@
                     .then(response => response.json())
                     .then(data => {
                         comments = data.comments || [];
-                        loadComments();
+                        loadComments(comments);
                     })
                     .catch(err => console.error('Failed to fetch comments', err));
             }
