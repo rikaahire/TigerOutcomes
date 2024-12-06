@@ -5,7 +5,7 @@ import sys
 import argparse
 import sqlalchemy
 import sqlalchemy.orm
-from sqlalchemy import select, distinct
+from sqlalchemy import select, distinct, delete
 from sqlalchemy.exc import SQLAlchemyError
 import dotenv
 
@@ -34,6 +34,21 @@ def add_admin(username):
     with engine.connect() as conn:
         try:
             stmt = table.insert().values(name=username)
+            conn.execute(stmt)
+            ret = f"Added new admin: {username}."
+            conn.commit()
+        except SQLAlchemyError as e:
+            ret = f"Error adding admin: {e}"
+            conn.rollback()
+    return ret
+
+def remove_admin(username):
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('admin', metadata, autoload_with=engine)
+    ret = ''
+    with engine.connect() as conn:
+        try:
+            stmt = delete(table).where(table.c.name == username)
             conn.execute(stmt)
             ret = f"Added new admin: {username}."
             conn.commit()

@@ -550,7 +550,7 @@
                     return;
                 }
                 let info = JSON.parse(this.response);
-                alert(info);
+                // alert(info);
             }
 
             function addComment() {
@@ -565,7 +565,7 @@
                 // saveCommentsToServer(comments);
 
                 if (request !== null) {
-                    alert(newComment);
+                    // alert(newComment);
                     request.abort();
                 }
                 request = new XMLHttpRequest();
