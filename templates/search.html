@@ -161,6 +161,11 @@
                         Open LinkedIn Job Search
                     </button>
 
+                    <!-- New Handshake job search button -->
+                    <button class="btn btn-secondary btn-small" type="button" id="handshake-search" onclick="openHandshakeSearch()" style="margin-left: 10px;">
+                        Open Handshake Job Search
+                    </button>
+
                     <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
                         <!-- Card Description -->
                         <div class="col"> <div class="card"> <div class="card-body">
@@ -647,6 +652,20 @@
 
                 // Open the URL in a new browser tab
                 window.open(linkedInUrl, '_blank');
+            }
+
+            function openHandshakeSearch() {
+                // Grab the current job title from the page
+                const title = document.getElementById('titleDiv').textContent;
+                // Encode the title for URL
+                const encodedTitle = encodeURIComponent(title);
+                
+                // Handshake job search URL
+                // Example: https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=Software%20Engineer
+                const handshakeUrl = `https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=${encodedTitle}`;
+
+                // Open in new tab
+                window.open(handshakeUrl, '_blank');
             }
 
                 
