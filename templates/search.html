@@ -158,45 +158,52 @@
             </div>
             <!-- Cards -->
             <div class="col-9">
-              <div class="col-md-9 cards-container">
-                <!-- Title of Job -->
-                <h5 class="" id="titleDiv"></h5>
-                <button class="btn btn-primary" type="button" id="linkedin">
-                    See this career on LinkedIn
-                </button>
+              <div class="col-md-9 cards-container" id="cardsContainer">
+                <div id="welcomeMessage" class="text-center p-5">
+                    <h3>Welcome to TigerOutcomes!</h3>
+                    <p>Start by searching for your major to explore your career oppurtunities</p>
+                </div>
+                
+                <div id="cardsContent" style="display: none;">
+                    <!-- Title of Job -->
+                    <h5 class="" id="titleDiv"></h5>
+                    <button class="btn btn-primary" type="button" id="linkedin">
+                        See this career on LinkedIn
+                    </button>
 
-                <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
-                    <!-- Card Description -->
-                    <div class="col"> <div class="card"> <div class="card-body">
-                        <h5 class="card-title">Description</h5>
-                        <div class="card-text" id="descriptionDiv"></div>
+                    <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
+                        <!-- Card Description -->
+                        <div class="col"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Description</h5>
+                            <div class="card-text" id="descriptionDiv"></div>
+                        </div> </div> </div>
+                        <!-- Card for Tasks & Skills -->
+                        <div class="col"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Tasks and Skills</h5>
+                            <div class="card-text" id="taskDiv"></div>
+                        </div> </div> </div>
+                        <!-- Card for Salary -->
+                        <!-- Might need to do some more here with data graphics -->
+                        <div class="col"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Salary Range</h5>
+                            <div class="card-text" id="salaryDiv"></div>
+                        </div> </div> </div>
+                        <!-- Card for Common Employers -->
+                        <div class="col"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Common Employers</h5>
+                            <div class="card-text" id="employerDiv"></div>
+                        </div> </div> </div>
+                        <!-- Commenting Section -->
+                        <div class="col"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Comments</h5>
+                            <div id="commentsDiv" class="mb-3">
+                            <!-- Comments will be dynamically loaded here -->
+                            </div>
+                            <textarea class="form-control mb-2" id="newComment" placeholder="Add a comment"></textarea>
+                            <button class="btn btn-primary" onclick="addComment()">Post Comment</button>
+                        </div> </div> </div>
                     </div> </div> </div>
-                    <!-- Card for Tasks & Skills -->
-                    <div class="col"> <div class="card"> <div class="card-body">
-                        <h5 class="card-title">Tasks and Skills</h5>
-                        <div class="card-text" id="taskDiv"></div>
-                    </div> </div> </div>
-                    <!-- Card for Salary -->
-                    <!-- Might need to do some more here with data graphics -->
-                    <div class="col"> <div class="card"> <div class="card-body">
-                        <h5 class="card-title">Salary Range</h5>
-                        <div class="card-text" id="salaryDiv"></div>
-                    </div> </div> </div>
-                    <!-- Card for Common Employers -->
-                    <div class="col"> <div class="card"> <div class="card-body">
-                        <h5 class="card-title">Common Employers</h5>
-                        <div class="card-text" id="employerDiv"></div>
-                    </div> </div> </div>
-                    <!-- Commenting Section -->
-                    <div class="col"> <div class="card"> <div class="card-body">
-                        <h5 class="card-title">Comments</h5>
-                        <div id="commentsDiv" class="mb-3">
-                        <!-- Comments will be dynamically loaded here -->
-                        </div>
-                        <textarea class="form-control mb-2" id="newComment" placeholder="Add a comment"></textarea>
-                        <button class="btn btn-primary" onclick="addComment()">Post Comment</button>
-                    </div> </div> </div>
-                </div> </div> </div>
+                </div>
             </div>
           </div>
         <footer class="py-3 bg-light sticky-bottom">
@@ -408,6 +415,11 @@
                 }
                 let info = JSON.parse(this.response);
                 getJobHtml(info);
+
+                // Hide welcome msg, show cards
+                document.getElementById('welcomeMessage').style.display = 'none';
+                document.getElementById('cardsContent').style.display = 'block';
+
                 // let html = getCardHtml(info);
                 // let modal = document.getElementById('classModalBody');
                 // modal.innerHTML = html;
