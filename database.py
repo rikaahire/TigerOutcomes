@@ -121,21 +121,19 @@ def clear_favorites(name, status=None, soc_code=None):
 
 #-----------------------------------------------------------------------
 
-def save_comments(comments):
+def save_comments(user, soc_code, comment, valid=True):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
     with engine.connect() as conn:
-        conn.execute(table.delete())  # Clear existing comments
-        for comment in comments:
-            conn.execute(table.insert().values(text=comment['text'], replies=comment['replies']))
+        conn.execute(table.insert().values(user=user, soc_code=soc_code, comment=comment, valid=valid))
         conn.commit()
 
-def fetch_comments():
+def fetch_comments(soc_code):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
     with engine.connect() as conn:
-        rows = conn.execute(select(table)).fetchall()
-    return [{"text": row.text, "replies": row.replies} for row in rows]
+        rows = conn.execute(select(table).where(table.c.soc_code == soc_code)).fetchall()
+    return [{"user": row.user, "comment": row.comment, "valid": row.valid} for row in rows]
 
 
 #-----------------------------------------------------------------------

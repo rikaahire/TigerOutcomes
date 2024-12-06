@@ -194,19 +194,22 @@ def delete():
 def handle_comments():
     user = auth.authenticate()
     soc_code = flask.request.args.get('soc_code')
-    if flask.request.method == 'POST':
-        try:
-            comments = flask.request.args.get('comments', [])
-            db.save_comments(comments)
-            json_doc = json.dumps([True, 'success'])
-        except Exception as e:
-            json_doc = [False, f"Error fetching comments: {e}"]
-    elif flask.request.method == 'GET':
-        try:
-            comments = db.fetch_comments()
-            json_doc = json.dumps([True, comments])
-        except Exception as e:
-            json_doc = [False, f"Error fetching comments: {e}"]
+    if not soc_code:
+        json_doc = [False, "Missing soc_code"]
+    else:
+        if flask.request.method == 'POST':
+            try:
+                comments = flask.request.args.get('comments', [])
+                db.save_comments(user, soc_code, comments, valid=True)
+                json_doc = json.dumps([True, 'Comment added'])
+            except Exception as e:
+                json_doc = [False, f"Error posting comments: {e}"]
+        elif flask.request.method == 'GET':
+            try:
+                comments = db.fetch_comments(soc_code)
+                json_doc = json.dumps([True, comments])
+            except Exception as e:
+                json_doc = [False, f"Error getting comments: {e}"]
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
     return response
