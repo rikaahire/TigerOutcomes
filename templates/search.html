@@ -42,30 +42,9 @@
         <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
     </head>
     <body>
-        <!-- does this code need to exist anymore? -->
-      <div class="modal" id="classModal" style="min-width:90%">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Job Details</h4>
-                    <button class="btn-close" data-bs-dismiss="modal">
-                    </button>
-                </div>
-                <div class="modal-body" id="classModalBody">
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger"
-                        data-bs-dismiss="modal">
-                        Close
-                    </button>
-                </div>
-        </div> </div>
-        <br>
-        </div>
         <header class="sticky-top">
             <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
                 <div class="container-fluid">
-                <!-- replace link when hosted -->
                     <a class="navbar-brand" href="https://tigeroutcomes.onrender.com/">TigerOutcomes</a>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="navbar-nav me-auto mb-2 mb-md-0">
@@ -554,9 +533,6 @@
                     .catch(err => console.error('Failed to fetch comments', err));
             }
 
-            document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
-
-
             let timer = null;
 
             function debouncedGetResults() {
@@ -571,6 +547,7 @@
 
             document.addEventListener('DOMContentLoaded', setup);
             document.addEventListener('DOMContentLoaded', getSearchResults);
+            document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
         </script>
     </body>
 </html>

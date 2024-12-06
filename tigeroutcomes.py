@@ -80,6 +80,15 @@ def favorite():
 #-----------------------------------------------------------------------
 
 # get results from a major search
+@app.route('/header', methods=['GET'])
+def header():
+    results = 0
+    json_doc = json.dumps(results)
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+# get results from a major search
 @app.route('/results', methods=['GET'])
 def results():
     major = flask.request.args.get('major')
