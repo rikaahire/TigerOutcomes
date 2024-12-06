@@ -98,8 +98,11 @@ def results():
     algo = flask.request.args.get('algo')
     if algo is None:
         algo = ''
-        algo = major.strip()
-    results = db.get_onet_soc_codes_by_acadplandesc(major, algo, 0)
+        algo = algo.strip()
+    min_wage = flask.request.args.get('min_wage')
+    if min_wage is None:
+        min_wage = 0
+    results = db.get_onet_soc_codes_by_acadplandesc(major, algo, min_wage)
     results = [{'row': row, 'soc_code': code} for (code, row) in results]
     # results = db.get_rows("pton_demographics", "AcadPlanDescr", major)
     # results = [{'row':tuple(row), 'soc_code': '11-1011.00'} for row in results]
