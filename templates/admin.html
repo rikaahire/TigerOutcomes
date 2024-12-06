@@ -61,6 +61,10 @@
                 </div>
                 <div class="col-9 d-flex flex-column align-items-center">
                     <h3>Unapproved Comments:</h3>
+                    <div class="d-flex flex-row">
+                        <div class="col-8"> Text </div>
+                        <div> Approve? </div>
+                    </div>
                     <div id="commentsDiv"></div>
                 </div>
             </div>
@@ -95,10 +99,11 @@
             function commentHTML(comments) {
                 let template = `
                 {{#comments}}
-                    <div>
-                        {{id}}
-                        <br>
-                        {{text}}
+                    <div class="d-flex flex-row">
+                        <div class="col-8">
+                            {{text}}
+                        </div>
+                        <button type="button" onclick="approveComment({{id}})"> Approve </button>
                     </div>
                     <br>
                 {{/comments}}
@@ -139,6 +144,16 @@
                 let responseDiv = document.getElementById('responseDiv');
                 responseDiv.innerHTML = response;
                 getAdmins()
+            }
+
+            function handleApproveCommentResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let response = JSON.parse(this.response);
+                alert(response);
+                getComments()
             }
 
             function handleCommentResponse() {
@@ -193,6 +208,18 @@
                     request.abort();
                 request = new XMLHttpRequest();
                 request.onload = handleRemoveAdminResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            function approveComment(id) {
+                let encodedId = encodeURIComponent(id);
+                let url = '/approve_comment?id=' + encodedId;
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleApproveCommentResponse;
                 request.onerror = handleError;
                 request.open('GET', url);
                 request.send();
