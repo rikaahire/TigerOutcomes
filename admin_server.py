@@ -45,11 +45,26 @@ def list_admin():
 @app.route('/add_admin', methods=['GET'])
 def add_admin():
     user = flask.request.args.get('user')
-    if user is None:
-        html_code = "Bad user"
+    if user is None or len(user) == 0:
+        html_code = "No input"
     if check_admin():
         dba.add_admin(user)
-        html_code = "Success"
+        html_code = "Added admin: " + user;
+    else:
+        html_code = "Bad user"
+    json_doc = json.dumps(html_code)
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+@app.route('/remove_admin', methods=['GET'])
+def remove_admin():
+    user = flask.request.args.get('user')
+    if user is None or len(user) == 0:
+        html_code = "No input"
+    if check_admin():
+        dba.remove_admin(user)
+        html_code = "Removed admin: " + user;
     else:
         html_code = "Bad user"
     json_doc = json.dumps(html_code)

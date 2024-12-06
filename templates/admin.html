@@ -44,17 +44,176 @@
     </head>
     <body>
 
-        <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
-            <h1 class="gradient-title">Admin Page</h1>
+        <div class="align-items-center justify-content-center" style="height: 100vh;">
             <p class="subtitle">Add admins, list admins, and approve comments</p>
-            {{ list }}
+            <div class="d-flex flex-row">
+                <div class="col-3 d-flex flex-column align-items-center justify-content-center">
+                    <div class="align-items-left">
+                        <h3>List of Admins:</h3>
+                        <div id="adminsDiv"></div>
+                        <input class="form-control" type="text" id="adminInput">
+                        <div class="d-flex flex-row">
+                            <button type="button" onclick="addAdmin()"> Add </button>
+                            <button type="button" onclick="removeAdmin()"> Remove </button>
+                        </div>
+                        <div id="responseDiv"></div>
+                    </div>
+                </div>
+                <div class="col-9 d-flex flex-column align-items-center">
+                    <h3>Unapproved Comments:</h3>
+                    <div id="commentsDiv"></div>
+                </div>
+            </div>
         </div>
 
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-        {% include 'footer.html' %}
+        <script 
+            src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js">
+        </script>
+        
+        <script>
+            'use strict';
+            let request = null;
 
+            function convertToHtml(names) {
+                let template = `
+                {{#admins}}
+                    <div>
+                        {{Admin}}
+                    </div>
+                    <br>
+                {{/admins}}
+                `;
+                let map = {admins: names};
+                let html = Mustache.render(template, map);
+                return html;
+            }
+
+            function commentHTML(comments) {
+                let template = `
+                {{#comments}}
+                    <div>
+                        {{id}}
+                        <br>
+                        {{text}}
+                    </div>
+                    <br>
+                {{/comments}}
+                `;
+                let map = {comments: comments};
+                let html = Mustache.render(template, map);
+                return html;
+            }
+            
+            function handleAdminResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let admins = JSON.parse(this.response);
+                let html = convertToHtml(admins);
+                let adminsDiv = document.getElementById('adminsDiv');
+                adminsDiv.innerHTML = html;
+            }
+
+            function handleAddAdminResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let response = JSON.parse(this.response);
+                let responseDiv = document.getElementById('responseDiv');
+                responseDiv.innerHTML = response;
+                getAdmins()
+            }
+
+            function handleRemoveAdminResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let response = JSON.parse(this.response);
+                let responseDiv = document.getElementById('responseDiv');
+                responseDiv.innerHTML = response;
+                getAdmins()
+            }
+
+            function handleCommentResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let comments = JSON.parse(this.response);
+                console.log(comments)
+                let html = commentHTML(comments);
+                let commentsDiv = document.getElementById('commentsDiv');
+                commentsDiv.innerHTML = html;
+            }
+
+            function handleError() {
+                alert('Error: Failed to fetch data from server');
+            }
+
+            function getAdmins() {
+                let url = '/list_admin';
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleAdminResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            function addAdmin() {
+                let adminInput = document.getElementById('adminInput');
+                let admin = adminInput.value;
+                if (admin == null) admin = ""
+                let encodedadmin = encodeURIComponent(admin);
+                let url = '/add_admin?user=' + encodedadmin;
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleAddAdminResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            function removeAdmin() {
+                let adminInput = document.getElementById('adminInput');
+                let admin = adminInput.value;
+                if (admin == null) admin = ""
+                let encodedadmin = encodeURIComponent(admin);
+                let url = '/remove_admin?user=' + encodedadmin;
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleRemoveAdminResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            function getComments() {
+                let url = '/list_unapproved_comments';
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleCommentResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            setInterval(getComments, 30000)
+
+            document.addEventListener('DOMContentLoaded', getAdmins);
+        </script>
+
+        {% include 'footer.html' %}
     </body>
 </html>
