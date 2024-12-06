@@ -343,13 +343,12 @@
                 let wage = info['wage'];
 
                 description = Mustache.render("{{.}}", description);
-                if (skills && Array.isArray(skills)) {
+                if (skills && Array.isArray(skills) && skills.length > 0) {
                     let numberedSkills = skills.map((skill, index) => `${index + 1}. ${skill[0]}`).join('<br>'); // Number each skill
                     skills = Mustache.render("{{{skills}}}", { skills: numberedSkills });
                 }
                 else {
-                    errordata = {skills: "No skills or tasks availible for this job."}
-                    skills = Mustache.render("{{{skills}}}", errordata)
+                    skills = "No tasks or skills available for this job.";
                 }
                 
                 wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
