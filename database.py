@@ -393,6 +393,20 @@ def get_onet_soc_codes_by_acadplandesc(acad_plan_descr, algo="alphabetical", min
     
     return onet_soc_codes
 
+def get_name_from_soc(soc):
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(engine)
+    
+    onet_occupation_data = sqlalchemy.Table('onet_occupation_data', metadata, autoload_with=engine)
+    
+    # Build the query with intermediary mapping
+    stmt = (
+        sqlalchemy.select(onet_occupation_data.c['Title'])
+        .where (onet_occupation_data.c['O*NET-SOC Code'] == soc)
+    )
+    with engine.connect() as conn:
+        results = conn.execute(stmt).fetchall()
+    return results
 
 # gets job titles from major
 def get_positions_by_acadplandesc(acad_plan_descr):
