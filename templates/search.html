@@ -42,7 +42,7 @@
         <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
     </head>
     <body>
-        <header class="sticky-top">
+        <header class="sticky-top" id="header">
             <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="https://tigeroutcomes.onrender.com/">TigerOutcomes</a>
@@ -56,6 +56,12 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/help">Help</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/favorites">Favorites</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/admin">Admin</a>
                         </li>
                         </ul>
                         <button class="btn btn-outline" type="credentials"><a style="text-decoration: none; color: azure;" href="logoutcas">Logout</a></button>
@@ -453,6 +459,27 @@
                 request.send();
             }
 
+            function handleHeaderResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let html = this.response;
+                let headerDiv = document.getElementById('header');
+                headerDiv.innerHTML = html;
+            }
+
+            function getHeader() {
+                let url = '/header';
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleHeaderResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
             function getJobResults(soc_code) {
                 let encodedSOC = encodeURIComponent(soc_code);
                 let url = '/job?soc_code=' + encodedSOC;
@@ -547,6 +574,7 @@
 
             document.addEventListener('DOMContentLoaded', setup);
             document.addEventListener('DOMContentLoaded', getSearchResults);
+            // document.addEventListener('DOMContentLoaded', getHeader);
             document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
         </script>
     </body>

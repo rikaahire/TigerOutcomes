@@ -82,7 +82,7 @@ def favorite():
 # get results from a major search
 @app.route('/header', methods=['GET'])
 def header():
-    results = 0
+    results = flask.render_template('header.html')
     json_doc = json.dumps(results)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
