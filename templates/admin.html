@@ -43,7 +43,36 @@
         <title>TigerOutcomes</title>
     </head>
     <body>
-
+        <header class="sticky-top" id="header">
+            <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="https://tigeroutcomes.onrender.com/">TigerOutcomes</a>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/about">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/help">Help</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/favorites">Favorites</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/admin">Admin</a>
+                        </li>
+                        </ul>
+                        <div id="user">
+                            <a><span id="username"></span></a>
+                        </div>
+                        <button class="btn btn-outline" type="credentials"><a style="text-decoration: none; color: azure;" href="logoutcas">Logout</a></button>
+                    </div>
+                </div>
+            </nav>
+        </header>
         <div class="align-items-center justify-content-center" style="height: 100vh;">
             <p class="subtitle">Add admins, list admins, and approve comments</p>
             <div class="d-flex flex-row">
@@ -70,7 +99,11 @@
             </div>
         </div>
 
-
+        <footer class="py-3 bg-light sticky-bottom">
+            <div class="container">
+              <span class="text-muted">Created by the TigerOutcomes <a href="">team</a>.</span>
+            </div>
+        </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
@@ -240,7 +273,5 @@
 
             document.addEventListener('DOMContentLoaded', getAdmins);
         </script>
-
-        {% include 'footer.html' %}
     </body>
 </html>
