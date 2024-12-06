@@ -121,12 +121,13 @@ def clear_favorites(name, status=None, soc_code=None):
 
 #-----------------------------------------------------------------------
 
-def save_comments(user, soc_code, comment, valid=True):
+def save_comments(name, soc_code, comment, valid=True):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
     with engine.connect() as conn:
-        conn.execute(table.insert().values(user=user, soc_code=soc_code, comment=comment, valid=valid))
+        conn.execute(table.insert().values(user=name, soc_code=soc_code, comment=comment, valid=valid))
         conn.commit()
+    return {"user": name, "soc_code": soc_code}
 
 def fetch_comments(soc_code):
     metadata = sqlalchemy.MetaData()
