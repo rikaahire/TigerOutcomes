@@ -157,8 +157,8 @@
                     <div class="d-flex">
                         <h1 class="me-4" id="titleDiv"></h1>
                     </div>
-                    <button class="btn btn-primary btn-small" type="button" id="linkedin">
-                        See this career on LinkedIn
+                    <button class="btn btn-secondary btn-small" type="button" id="linkedin-search" onclick="openLinkedInSearch()" style="margin-left: 10px;">
+                        Open LinkedIn Job Search
                     </button>
 
                     <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
@@ -635,6 +635,19 @@
             req.open("GET", "/get_user", true);
             req.onload = getUser;
             req.send();
+
+            function openLinkedInSearch() {
+                // Grab the current job title from the page
+                const title = document.getElementById('titleDiv').textContent;
+                // Encode the title so it can be safely used in the URL
+                const encodedTitle = encodeURIComponent(title);
+                
+                // Construct the LinkedIn job search URL
+                const linkedInUrl = `http://linkedin.com/jobs/search/?keywords=${encodedTitle}`;
+
+                // Open the URL in a new browser tab
+                window.open(linkedInUrl, '_blank');
+            }
 
                 
             
