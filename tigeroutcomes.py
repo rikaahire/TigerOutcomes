@@ -136,6 +136,7 @@ def job_details():
 
     return response
 
+#-----------------------------------------------------------------------
 
 # get all favorites for a user
 @app.route('/preferences', methods=['GET'])
@@ -202,27 +203,49 @@ def delete():
     response.headers['Content-Type'] = 'application/json'
     return response
 
+#-----------------------------------------------------------------------
 
-@app.route('/comments', methods=['GET', 'POST'])
-def handle_comments():
+@app.route('/comments', methods=['GET'])
+def comment():
     user = auth.authenticate()
-    print(user)
-    soc_code = flask.request.args.get('soc_code')
-    if not soc_code:
-        json_doc = [False, "Missing soc_code"]
-    else:
-        if flask.request.method == 'POST':
-            try:
-                comments = flask.request.args.get('comments', [])
-                json_doc = json.dumps([True, db.save_comments(user, soc_code, comments, valid=True)])
-            except Exception as e:
-                json_doc = [False, f"Error posting comments: {e}"]
-        elif flask.request.method == 'GET':
-            try:
-                comments = db.fetch_comments(soc_code)
-                json_doc = json.dumps([True, comments])
-            except Exception as e:
-                json_doc = [False, f"Error getting comments: {e}"]
+    # soc_code = flask.request.args.get('soc_code')
+    # if not soc_code:
+    #     json_doc = [False, "Missing soc_code"]
+    soc_code = '11-1011.00'
+    # else:
+    try:
+        comment = flask.request.args.get('comment')
+        ret = db.write_comment(user, soc_code, comment, valid=True)
+        json_doc = [True, json.dumps(ret)]
+    except Exception as e:
+        json_doc = [False, f"Error posting comments: {e}"]
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+# might not need
+@app.route('/seecomments', methods=['GET'])
+def see_comments():
+    soc_code = '11-1011.00'
+    try:
+        comments = db.fetch_comments(soc_code)
+        json_doc = [True, "hi", json.dumps(comments)]
+    except Exception as e:
+        json_doc = [False, f"Error getting comments: {e}"]
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+#-----------------------------------------------------------------------
+
+@app.route('/get_user', methods=['GET'])
+def get_user():
+    user = auth.authenticate()
+    try:
+        json_doc = json.dumps({"user": user})
+    except Exception as e:
+        json_doc = [False, f"Error retrieving user: {e}"]
+    
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
     return response

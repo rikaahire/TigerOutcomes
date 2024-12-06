@@ -121,19 +121,35 @@ def clear_favorites(name, status=None, soc_code=None):
 
 #-----------------------------------------------------------------------
 
-def save_comments(name, soc_code, comment, valid=True):
+def write_comment(name, soc_code, comment, valid=True):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
+    ret = []
     with engine.connect() as conn:
-        conn.execute(table.insert().values(user=name, soc_code=soc_code, comment=comment, valid=valid))
+        conn.execute(
+            table.insert().values({
+            'user': name,
+            'soc_code': soc_code,
+            'text': comment,
+            'valid': valid,
+            'replies': []
+        })
+        )
+        ret.append({
+            "user": name,
+            "soc_code": soc_code,
+            "text": comment
+        })
         conn.commit()
-    return {"user": name, "soc_code": soc_code}
+    return ret
+
 
 def fetch_comments(soc_code):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
     with engine.connect() as conn:
-        rows = conn.execute(select(table).where(table.c.soc_code == soc_code)).fetchall()
+        #rows = conn.execute(select(table).where(table.c.soc_code == soc_code)).fetchall()
+        rows = conn.execute(select(table).where('11-1011.00' == soc_code)).fetchall()
     return [{"user": row.user, "comment": row.comment, "valid": row.valid} for row in rows]
 
 

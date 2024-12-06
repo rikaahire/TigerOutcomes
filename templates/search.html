@@ -64,6 +64,9 @@
                             <a class="nav-link active" aria-current="page" href="/admin">Admin</a>
                         </li>
                         </ul>
+                        <li id="user">
+                            <a> <span id="username"> </span></a>
+                        </li>
                         <button class="btn btn-outline" type="credentials"><a style="text-decoration: none; color: azure;" href="logoutcas">Logout</a></button>
                     </div>
                 </div>
@@ -516,14 +519,17 @@
             let comments = []; // Placeholder for comments
 
             function loadComments() {
+                const usernameElement = document.getElementById('username');
+                const username = usernameElement.textContent.trim() || 'Guest';
+
                 const commentsDiv = document.getElementById('commentsDiv');
                 commentsDiv.innerHTML = '';
                 comments.forEach((comment, index) => {
                     const commentDiv = document.createElement('div');
                     commentDiv.className = 'mb-2';
                     commentDiv.innerHTML = `
-                        <strong>User ${index + 1}:</strong>
-                        <p>${comment.text}</p>
+                        <strong>User ${username}:</strong>
+                        <p>${comment.comment}</p>
                         <button class="btn btn-sm btn-link" onclick="replyToComment(${index})">Reply</button>
                         <div id="replies-${index}" class="ms-3 mt-2">
                             ${comment.replies.map(reply => `<p><strong>Reply:</strong> ${reply}</p>`).join('')}
@@ -533,14 +539,35 @@
                 });
             }
 
-            function addComment() {
-                const newComment = document.getElementById('newComment').value;
-                if (newComment.trim()) {
-                    comments.push({ text: newComment, replies: [] });
-                    document.getElementById('newComment').value = '';
-                    loadComments();
-                    saveCommentsToServer(comments);
+            function handleComment() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
                 }
+                let info = JSON.parse(this.response);
+                alert(info);
+            }
+
+            function addComment() {
+                let encodedSOC = encodeURIComponent('11-1011.00');
+                const newComment = document.getElementById('newComment').value.trim();
+                let encodedComment = encodeURIComponent(newComment);
+                let url = `/comments?soc_code=${encodedSOC}&comment=${encodedComment}`;
+
+                comments.push({ user: username, soc_code: '11-1011.00', comment: newComment, replies: [] });
+                document.getElementById('newComment').value = '';
+                loadComments();
+                // saveCommentsToServer(comments);
+
+                if (request !== null) {
+                    alert(newComment);
+                    request.abort();
+                }
+                request = new XMLHttpRequest();
+                request.onload = handleComment;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
             }
 
             function replyToComment(index) {
@@ -548,27 +575,27 @@
                 if (reply) {
                     comments[index].replies.push(reply);
                     loadComments();
-                    saveCommentsToServer(comments);
+                    // saveCommentsToServer(comments);
                 }
             }
 
-            function saveCommentsToServer(comments) {
-                fetch('/comments', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ comments }),
-                }).catch(err => console.error('Failed to save comments', err));
-            }
+            // function saveCommentsToServer(comments) {
+            //     fetch('/comments', {
+            //         method: 'GET',
+            //         headers: { 'Content-Type': 'application/json' },
+            //         body: JSON.stringify({ comments }),
+            //     }).catch(err => console.error('Failed to save comments', err));
+            // }
 
-            function fetchCommentsFromServer() {
-                fetch('/comments')
-                    .then(response => response.json())
-                    .then(data => {
-                        comments = data.comments || [];
-                        loadComments();
-                    })
-                    .catch(err => console.error('Failed to fetch comments', err));
-            }
+            // function fetchCommentsFromServer() {
+            //     fetch('/seecomments')
+            //         .then(response => response.json())
+            //         .then(data => {
+            //             comments = data.comments || [];
+            //             loadComments();
+            //         })
+            //         .catch(err => console.error('Failed to fetch comments', err));
+            // }
 
             let timer = null;
 
@@ -585,7 +612,32 @@
             document.addEventListener('DOMContentLoaded', setup);
             document.addEventListener('DOMContentLoaded', getSearchResults);
             // document.addEventListener('DOMContentLoaded', getHeader);
-            document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
+            // document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
+
+
+            // Get user
+            function getUser() {
+                if (req.status === 200) {
+                    let info = JSON.parse(this.response);
+                    const usernameElement = document.getElementById('username');
+                    if (info.user) {
+                        usernameElement.textContent = info.user;
+                    } else if (info.error) {
+                        usernameElement.textContent = "Guest";
+                    }
+                } else {
+                    console.error("Error fetching user:", req.status);
+                    const usernameElement = document.getElementById('username');
+                    usernameElement.textContent = "Guest";
+                }
+            }
+            let req = new XMLHttpRequest();
+            req.open("GET", "/get_user", true);
+            req.onload = getUser;
+            req.send();
+
+                
+            
         </script>
     </body>
 </html>
