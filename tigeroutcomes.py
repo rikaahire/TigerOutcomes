@@ -150,7 +150,7 @@ def preferences():
     #     return []
     fav = db.read_favorites(name=user, status=True)
     # gets soc_codes
-    fav = [{"name": row[0], "soc_code": row[1]} for row in fav]
+    fav = [{"name": row[1], "soc_code": row[1]} for row in fav]
     json_doc = json.dumps(fav)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
