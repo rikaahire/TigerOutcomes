@@ -81,7 +81,7 @@
             <div class="col-3 d-flex flex-column align-items-stretch flex-shrink-0">
                 <div class="container-fluid d-flex">
                     <span class="fs-5 fw-semibold" id="repeat"> Results for Course </span>
-                    <input class="form-control" list="majorInputlist" type="text" id="majorInput" style="text-align: center" aria-label="majorsearch">
+                    <input class="form-control" list="majorInputlist" type="text" id="majorInput" style="text-align: center; margin-left: 10px;" aria-label="majorsearch">
                     <datalist id="majorInputlist">
                     <option value="African American Studies">
                     <option value="American Studies">
@@ -468,7 +468,7 @@
                 let url = '/results?major=' + encodedMajor + '&algo=' + algo;
 
                 if (major == 'all')
-                    repeat.innerHTML = 'All results'
+                    repeat.innerHTML = 'All Results'
                 else {
                     let view = {"input": major}
                     let html = Mustache.render("Results for {{input}}", view);
