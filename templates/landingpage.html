@@ -38,16 +38,38 @@
                 background-color: black;
                 color: white;
             }
+            /* Reference: https://www.youtube.com/watch?v=YFgTZF9_BH4 */
+            .bg-container {
+                background-color: #fff;
+                height: 100%;
+                width: 100%;
+                background-image: linear-gradient(60deg, #f99ed3f8, #db9dfb, #a2d8f9);
+                background-size: 600% 600%;
+                animation: bgAnimatedGradient 15s infinite linear;
+            }
+
+            @keyframes bgAnimatedGradient{
+                0%{
+                    background-position: 0% 50%;
+                }
+                50%{
+                    background-position: 100% 50%;
+                }
+                100%{
+                    background-position: 0% 50%;
+                }
+            }
         </style>
 
         <title>TigerOutcomes</title>
     </head>
     <body>
-
-        <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
-            <h1 class="gradient-title">TigerOutcomes</h1>
-            <p class="subtitle">Explore alumni career trends and skill sets for your major</p>
-            <a href="/home" class="gradient-btn">Get Started</a>
+        <div class="bg-container">
+            <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
+                <h1 class="gradient-title">TigerOutcomes</h1>
+                <p class="subtitle">Explore alumni career trends and skill sets for your major</p>
+                <a href="/home" class="gradient-btn">Get Started</a>
+            </div>
         </div>
 
 
@@ -58,3 +80,4 @@
 
     </body>
 </html>
+
