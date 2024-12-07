@@ -469,9 +469,8 @@
             }
 
             document.addEventListener('DOMContentLoaded', setup);
-            document.addEventListener('DOMContentLoaded', getSearchResults);
             // document.addEventListener('DOMContentLoaded', getHeader);
-            document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
+            // document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
 
             // Get user
             function getUser() {
@@ -493,7 +492,6 @@
             req.open("GET", "/get_user", true);
             req.onload = getUser;
             req.send();
-            alert("What's happening")
 
             function openLinkedInSearch() {
                 // Grab the current job title from the page
