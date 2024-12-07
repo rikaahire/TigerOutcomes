@@ -474,24 +474,27 @@
 
             // Get user
             function getUser() {
-                if (req.status === 200) {
-                    let info = JSON.parse(this.response);
-                    const usernameElement = document.getElementById('username');
-                    if (info.user) {
-                        usernameElement.textContent = info.user;
-                    } else if (info.error) {
+                let req = new XMLHttpRequest();
+                req.open("GET", "/get_user", true);
+
+                req.onload = function () {
+                    const usernameElement = document.getElementById("username");
+                    if (req.status === 200) {
+                        const info = JSON.parse(req.response);
+                        if (info.user) {
+                            usernameElement.textContent = info.user;
+                        } else if (info.error) {
+                            usernameElement.textContent = "Guest";
+                        }
+                    } else {
+                        console.error("Error fetching user:", req.status);
                         usernameElement.textContent = "Guest";
                     }
-                } else {
-                    console.error("Error fetching user:", req.status);
-                    const usernameElement = document.getElementById('username');
-                    usernameElement.textContent = "Guest";
-                }
+                };
+                req.onerror = handleError;
+                req.send();
             }
-            let req = new XMLHttpRequest();
-            req.open("GET", "/get_user", true);
-            req.onload = getUser;
-            req.send();
+            document.addEventListener('DOMContentLoaded', getUser);
 
             function openLinkedInSearch() {
                 // Grab the current job title from the page
