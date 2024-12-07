@@ -23,6 +23,10 @@
                 background-color: #FFD235;
                 color: white;
             }
+            .button-fav.active {
+                background-color: #FFD235;
+                color: white;
+            }
             
             .cards-container {
               position: sticky;
@@ -232,7 +236,8 @@
                         </a>
                         <!-- Column for Button -->
                         <div class="col-auto">
-                        <button type="button" onclick="favorite('{{soc_code}}')" id="favorite{{soc_code}}" class="button-fav" data-bs-toggle="button">
+                        <button type="button" onclick="favorite('{{soc_code}}')" 
+                        id="favorite{{soc_code}}" class="button-fav" data-bs-toggle="button">
                             ★
                         </button>
                         </div>
@@ -405,6 +410,8 @@
                 let html = convertToHtml(jobs);
                 let resultsDiv = document.getElementById('resultsDiv');
                 resultsDiv.innerHTML = html;
+
+                loadFavorites();
             }
 
             function handleJobResponse() {
@@ -506,6 +513,31 @@
                 request.open('GET', url);
                 request.send();
             }
+
+            function handleLoadFavorites() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let favorites = JSON.parse(this.response);
+                for (var i = 0; i < favorites.length; i++) {
+                    if (!favorites[i].soc_code) continue;
+                    var button = document.getElementById('favorite' + favorites[i].soc_code);
+                    if (button) {
+                        button.classList.add('active');
+                    }
+                }
+            }
+
+            function loadFavorites() {
+                let url = '/preferences';
+                request = new XMLHttpRequest();
+                request.onload = handleLoadFavorites;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
 
             function favorite(soc_code, status='True') {
                 let encodedSOC = encodeURIComponent(soc_code);

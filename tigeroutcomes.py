@@ -148,11 +148,10 @@ def preferences():
     # user = flask.request.args.get('user')
     # if user is None:
     #     return []
-    descript = db.read_favorites(name=user, status=True)
+    fav = db.read_favorites(name=user, status=True)
     # gets soc_codes
-    print(descript)
-    descript = [{"soc_code": row[1], "name": row[1]} for row in descript]
-    json_doc = json.dumps(descript)
+    fav = [{"name": row[0], "soc_code": row[1]} for row in fav]
+    json_doc = json.dumps(fav)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
     # html_code = flask.render_template('job.html', description=descript[0], 

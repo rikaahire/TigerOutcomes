@@ -81,17 +81,12 @@ def write_favorite(name, soc_code, status):
         try:
             favorite = conn.execute(stmt).fetchall()
             if favorite:
-                new_stmt = table.update().where(
-                            table.c.name == name).where(
-                            table.c.soc_code == soc_code).where(
-                            table.c.status == status).values(
-                            status=status)
-                conn.execute(new_stmt)
-                ret = f"Updated favorite for {name} with SOC {soc_code}."
+                ret = clear_favorites(name, status, soc_code)
+                return ret
             else:
                 new_stmt = table.insert().values(name=name, soc_code=soc_code, status=status)
                 conn.execute(new_stmt)
-                ret = f"Added new favorite for {name} with SOC {soc_code}."
+                ret = f"Added favorite for {name}."
             conn.commit()
         except SQLAlchemyError as e:
             ret = f"Error writing favorite: {e}"
@@ -111,8 +106,7 @@ def clear_favorites(name, status=None, soc_code=None):
     with engine.connect() as conn:
         try:
             conn.execute(stmt)
-            #ret = f"Deleted all entries for user {name} with {status if status else 'any'} status"
-            ret = f"Deleted favorite for user {name} with SOC {soc_code}."
+            ret = f"Removed favorite for {name}."
             conn.commit()
         except SQLAlchemyError as e:
             ret = f"Error deleting favorites: {e}"
