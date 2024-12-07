@@ -8,21 +8,25 @@
 
         <style>
             .button-fav {
-                  border: 2px solid #FFD235;
-                  color: #FFD235;
-                  font-size: 1rem;
-                  font-weight: normal;
-                  background-color: white;
-                  border-radius: 30px;
-                  padding: 5px 9px;
-                  text-decoration: none;
-                  display: inline-block;
-                  transition: all 0.3s ease-in-out;
-              }
-              .button-fav:hover {
-                  background-color: #FFD235;
-                  color: white;
-              }
+                border: 2px solid #FFD235;
+                color: #FFD235;
+                font-size: 1rem;
+                font-weight: normal;
+                background-color: white;
+                border-radius: 30px;
+                padding: 5px 9px;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease-in-out;
+            }
+            .button-fav:hover {
+                background-color: #FFD235;
+                color: white;
+            }
+            .button-fav.active {
+                background-color: #FFD235;
+                color: white;
+            }
               
               .cards-container {
                 position: sticky;
@@ -184,9 +188,9 @@
                         </a>
                         <!-- Column for Button -->
                         <div class="col-auto">
-                        <button type="button" class="btn btn-warning active"
-                                onclick="deleteFavorite('{{soc_code}}')">
-                            ⭐️
+                        <button type="button" onclick="deleteFavorite('{{soc_code}}')" 
+                        id="favorite{{soc_code}}" class="button-fav" data-bs-toggle="button">
+                            ★
                         </button>
                         </div>
                     </div>
@@ -307,6 +311,30 @@
                 document.getElementById('cardsContent').style.display = 'block';
             }
 
+            function handleLoadFavorites() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let favorites = JSON.parse(this.response);
+                for (var i = 0; i < favorites.length; i++) {
+                    if (!favorites[i].soc_code) continue;
+                    var button = document.getElementById('favorite' + favorites[i].soc_code);
+                    if (button) {
+                        button.classList.add('active');
+                    }
+                }
+            }
+
+            function loadFavorites() {
+                let url = '/preferences';
+                request = new XMLHttpRequest();
+                request.onload = handleLoadFavorites;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
             let request = null;
 
 
@@ -359,6 +387,8 @@
                 request.onerror = handleError;
                 request.open('GET', url);
                 request.send();
+
+                loadFavorites();
             }
 
             function fetchFavoriteJobDetails(jobs) {
