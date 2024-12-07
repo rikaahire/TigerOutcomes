@@ -52,8 +52,18 @@ files_to_tables = {
 def read_favorites(name, soc_code=None, status=None, limit=default_limit):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
-    query = select(table)
+    onet_occupation_data = sqlalchemy.Table('onet_occupation_data', metadata, autoload_with=engine)
     
+    query = select(
+        table,
+        onet_occupation_data.c['Title']
+    ).select_from(
+        table.join(
+            onet_occupation_data, 
+            table.c.soc_code == onet_occupation_data.c['O*NET-SOC Code']
+        )
+    )
+
     # Apply filters if specified
     if name:
         query = query.where(table.c.name == name)
@@ -63,7 +73,7 @@ def read_favorites(name, soc_code=None, status=None, limit=default_limit):
         query = query.where(table.c.status == status)
     
     query = query.limit(limit)
-    with engine.connect() as conn:    
+    with engine.connect() as conn:
         # Execute the query and fetch results
         rows = conn.execute(query).fetchall()
     return rows
