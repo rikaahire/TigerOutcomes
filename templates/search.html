@@ -144,6 +144,10 @@
                     </form>
                 </div>
                 <hr>
+                <div id="favoritehelp">
+                    Click on ★ to favorite a job!
+                </div>
+                <hr>
                 <div class="list-group list-group-flush scrollarea">
                     <div class="border" id="resultsDiv"></div>
                 </div>
@@ -161,7 +165,7 @@
                     <div class="d-flex">
                         <h1 class="me-4" id="titleDiv"></h1>
                     </div>
-                    <button class="btn btn-secondary btn-small" type="button" id="linkedin-search" onclick="openLinkedInSearch()" style="margin-left: 10px;">
+                    <button class="btn btn-secondary btn-small" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
                         Open LinkedIn Job Search
                     </button>
 
@@ -440,7 +444,7 @@
                     return;
                 }
                 let info = JSON.parse(this.response);
-                alert(info);
+                //alert(info);
             }
 
             function handleError() {

@@ -108,7 +108,7 @@
                 <div class="col-md-9 cards-container" id="cardsContainer">
                   <div id="welcomeMessage" class="text-center p-5">
                       <h3>These are your favorite jobs!</h3>
-                      <p>Select one to view its details, or compare their salaries with the button.</p>
+                      <p>Select one to view its details, or compare their salaries with "View Salary Comparison".</p>
                   </div>
                   
                   <div id="cardsContent" style="display: none;">
@@ -116,8 +116,13 @@
                       <div class="d-flex">
                           <h1 class="me-4" id="titleDiv"></h1>
                       </div>
-                      <button class="btn btn-primary btn-small" type="button" id="linkedin">
-                          See this career on LinkedIn
+                      <button class="btn btn-secondary btn-small" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
+                            Open LinkedIn Job Search
+                      </button>
+
+                      <!-- New Handshake job search button -->
+                      <button class="btn btn-secondary btn-small" type="button" id="handshake-search" onclick="openHandshakeSearch()" style="margin-left: 10px;">
+                            Open Handshake Job Search
                       </button>
   
                       <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
@@ -415,7 +420,7 @@
                     return;
                 }
                 let info = JSON.parse(this.response);
-                alert(info[1])
+                // alert(info[1])
                 if (info[0]) {
                     location.reload();
                 }
@@ -451,63 +456,6 @@
 
             document.addEventListener('DOMContentLoaded', getFavorites);
 
-            let comments = []; // Placeholder for comments
-
-            function loadComments() {
-                const commentsDiv = document.getElementById('commentsDiv');
-                commentsDiv.innerHTML = '';
-                comments.forEach((comment, index) => {
-                    const commentDiv = document.createElement('div');
-                    commentDiv.className = 'mb-2';
-                    commentDiv.innerHTML = `
-                        <strong>User ${index + 1}:</strong>
-                        <p>${comment.text}</p>
-                        <button class="btn btn-sm btn-link" onclick="replyToComment(${index})">Reply</button>
-                        <div id="replies-${index}" class="ms-3 mt-2">
-                            ${comment.replies.map(reply => `<p><strong>Reply:</strong> ${reply}</p>`).join('')}
-                        </div>
-                    `;
-                    commentsDiv.appendChild(commentDiv);
-                });
-            }
-
-            function addComment() {
-                const newComment = document.getElementById('newComment').value;
-                if (newComment.trim()) {
-                    comments.push({ text: newComment, replies: [] });
-                    document.getElementById('newComment').value = '';
-                    loadComments();
-                    saveCommentsToServer(comments);
-                }
-            }
-
-            function replyToComment(index) {
-                const reply = prompt('Enter your reply:');
-                if (reply) {
-                    comments[index].replies.push(reply);
-                    loadComments();
-                    saveCommentsToServer(comments);
-                }
-            }
-
-            function saveCommentsToServer(comments) {
-                fetch('/comments', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ comments }),
-                }).catch(err => console.error('Failed to save comments', err));
-            }
-
-            function fetchCommentsFromServer() {
-                fetch('/comments')
-                    .then(response => response.json())
-                    .then(data => {
-                        comments = data.comments || [];
-                        loadComments();
-                    })
-                    .catch(err => console.error('Failed to fetch comments', err));
-            }
-
             let timer = null;
 
             function debouncedGetResults() {
@@ -525,7 +473,54 @@
             // document.addEventListener('DOMContentLoaded', getHeader);
             document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
 
+            // Get user
+            function getUser() {
+                if (req.status === 200) {
+                    let info = JSON.parse(this.response);
+                    const usernameElement = document.getElementById('username');
+                    if (info.user) {
+                        usernameElement.textContent = info.user;
+                    } else if (info.error) {
+                        usernameElement.textContent = "Guest";
+                    }
+                } else {
+                    console.error("Error fetching user:", req.status);
+                    const usernameElement = document.getElementById('username');
+                    usernameElement.textContent = "Guest";
+                }
+            }
+            let req = new XMLHttpRequest();
+            req.open("GET", "/get_user", true);
+            req.onload = getUser;
+            req.send();
+            alert("What's happening")
 
-    </script>
+            function openLinkedInSearch() {
+                // Grab the current job title from the page
+                const title = document.getElementById('titleDiv').textContent;
+                // Encode the title so it can be safely used in the URL
+                const encodedTitle = encodeURIComponent(title);
+                
+                // Construct the LinkedIn job search URL
+                const linkedInUrl = `http://linkedin.com/jobs/search/?keywords=${encodedTitle}`;
+
+                // Open the URL in a new browser tab
+                window.open(linkedInUrl, '_blank');
+            }
+
+            function openHandshakeSearch() {
+                // Grab the current job title from the page
+                const title = document.getElementById('titleDiv').textContent;
+                // Encode the title for URL
+                const encodedTitle = encodeURIComponent(title);
+                
+                // Handshake job search URL
+                // Example: https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=Software%20Engineer
+                const handshakeUrl = `https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=${encodedTitle}`;
+
+                // Open in new tab
+                window.open(handshakeUrl, '_blank');
+            }
+        </script>
     </body>
 </html>
