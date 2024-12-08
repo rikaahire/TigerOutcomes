@@ -15,7 +15,7 @@ class Admin(Base):
         return f"<Admin(name={self.name})>"
 
 # Database connection
-DATABASE_URL = 'postgresql://tigeroutcomesdb_user:CS1c7Vu0hFmPKvOLlSHymCpiHaAOKVjV@dpg-cspdgmrtq21c739rtrrg-a.ohio-postgres.render.com/tigeroutcomesdb'
+DATABASE_URL = 'postgresql://tigeroutcomesdb_bwj0_user:SRIUMH9M3bEZ4uC2y879IVc7DHPvX9Uj@dpg-ctb1npt2ng1s73dpcnqg-a.ohio-postgres.render.com/tigeroutcomesdb_bwj0'
 engine = sqlalchemy.create_engine(DATABASE_URL)
 
 # Create favorites table
