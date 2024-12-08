@@ -13,7 +13,7 @@ import dotenv
 #-----------------------------------------------------------------------
 
 dotenv.load_dotenv()
-DATABASE_URL = 'postgresql://tigeroutcomesdb_bwj0_user:SRIUMH9M3bEZ4uC2y879IVc7DHPvX9Uj@dpg-ctb1npt2ng1s73dpcnqg-a.ohio-postgres.render.com/tigeroutcomesdb_bwj0'
+DATABASE_URL = 'postgresql://tigeroutcomesdb_x9pf_user:Ewfihh7sXhDfzBS1JX51rem45ebypkqa@dpg-ctb2vm52ng1s73dphqqg-a.ohio-postgres.render.com/tigeroutcomesdb_x9pf'
 #DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
 engine = sqlalchemy.create_engine(DATABASE_URL)
 
