@@ -123,15 +123,18 @@
                     </datalist>
                 </div> 
                 <hr>
-                <!-- Is there a way to place the users selection next to the button -->
-                <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="sort" data-bs-toggle="dropdown">
-                    Sort by
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" onclick="setAlgo('alphabetical')">Alphabetical</a></li>
-                    <li><a class="dropdown-item" onclick="setAlgo('common')">Most Common</a></li>
-                  </ul>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="sort" data-bs-toggle="dropdown">
+                        Sort by
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" onclick="setAlgo('alphabetical')">Alphabetical</a></li>
+                        <li><a class="dropdown-item" onclick="setAlgo('common')">Most Common</a></li>
+                    </ul>
+                    </div>
+                    <!-- Display users selection -->
+                    <h5 id="algoDisplay"></h5>
                 </div>
                 <hr>
                 <div id="filters">
@@ -166,7 +169,7 @@
                         <h1 class="me-4" id="titleDiv"></h1>
                     </div>
 
-                    <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
+                    <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5">
                         <!-- Card Description -->
                         <div class="col"> <div class="card"> <div class="card-body">
                             <h5 class="card-title">Description</h5>
@@ -194,7 +197,7 @@
                                 Open Handshake Job Search
                             </button>
                         </div> </div> </div>
-                        <!-- Commenting Section -->
+                        <!-- Card for Commenting Section -->
                         <div class="col-12"> <div class="card"> <div class="card-body">
                             <h5 class="card-title">Comments</h5>
                             <div id="commentsDiv" class="mb-3">
@@ -341,6 +344,9 @@
 
                 let meanText = document.createElement('p');
                 meanText.textContent = `Mean Salary: $${wage['mean'].toLocaleString()}`;
+                // if (wage['mean'] == null){
+                //     meanText.textContent= "No salary data availible for this job."
+                // }
                 let wageDiv = document.getElementById('salaryDiv');
                 wageDiv.appendChild(meanText);
             }
@@ -454,6 +460,12 @@
             function setAlgo(algorithm) {
                 algo = algorithm;
                 getSearchResults();
+                if (algo == "common") {
+                    algoDisplay.textContent = "Most Common";
+                } else if (algo == "alphabetical") {
+                    algoDisplay.textContent = "Alphabetical";
+                }
+                
             }
 
             function getSearchResults() {
