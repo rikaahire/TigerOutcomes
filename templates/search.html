@@ -170,32 +170,36 @@
                     </div>
 
                     <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5">
-                        <!-- Card Description -->
-                        <div class="col"> <div class="card"> <div class="card-body">
-                            <h5 class="card-title">Description</h5>
-                            <div class="card-text" id="descriptionDiv"></div>
-                        </div> </div> </div>
-                        <!-- Card for Tasks & Skills -->
-                        <div class="col"> <div class="card"> <div class="card-body">
-                            <h5 class="card-title">Tasks and Skills</h5>
-                            <div class="card-text" id="taskDiv"></div>
-                        </div> </div> </div>
+                        <div class="col">
+                            <!-- Card Description -->
+                            <div class="col"> <div class="card"> <div class="card-body">
+                                <h5 class="card-title">Description</h5>
+                                <div class="card-text" id="descriptionDiv"></div>
+                            </div> </div> </div>
+                            <hr>
+                            <!-- Card for Tasks & Skills -->
+                            <div class="col"> <div class="card"> <div class="card-body">
+                                <h5 class="card-title">Tasks and Skills</h5>
+                                <div class="card-text" id="taskDiv"></div>
+                            </div> </div> </div>
+                            <hr>
+                            <!-- Card for Common Employers -->
+                            <div class="col"> <div class="card"> <div class="card-body">
+                                <h5 class="card-title">Search for Jobs in Field</h5>
+                                <!-- Buttons for querying job search websites -->
+                                <button class="btn btn-primary mt-1 mb-1 me-2" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
+                                    Open LinkedIn Job Search
+                                </button>
+                                <button class="btn btn-warning mt-1 mb-1 me-2" type="button" id="handshake-search" onclick="openHandshakeSearch()">
+                                    Open Handshake Job Search
+                                </button>
+                            </div> </div> </div>
+                        </div>
                         <!-- Card for Salary -->
                         <!-- Might need to do some more here with data graphics -->
                         <div class="col"> <div class="card"> <div class="card-body">
                             <h5 class="card-title">Salary Range</h5>
                             <div class="card-text" id="salaryDiv"></div>
-                        </div> </div> </div>
-                        <!-- Card for Common Employers -->
-                        <div class="col"> <div class="card"> <div class="card-body">
-                            <h5 class="card-title">Search for Jobs in Field</h5>
-                            <!-- Buttons for querying job search websites -->
-                            <button class="btn btn-primary mt-1 mb-1 me-2" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
-                                Open LinkedIn Job Search
-                            </button>
-                            <button class="btn btn-warning mt-1 mb-1 me-2" type="button" id="handshake-search" onclick="openHandshakeSearch()">
-                                Open Handshake Job Search
-                            </button>
                         </div> </div> </div>
                         <!-- Card for Commenting Section -->
                         <div class="col-12"> <div class="card"> <div class="card-body">
@@ -203,8 +207,6 @@
                             <div id="commentsDiv" class="mb-3">
                             <!-- Comments will be dynamically loaded here -->
                             </div>
-                            <textarea class="form-control mb-2" id="newComment" placeholder="Add a comment"></textarea>
-                            <button class="btn btn-primary" onclick="addComment()">Post Comment</button>
                         </div> </div> </div>
                     </div> </div> </div>
                 </div>
@@ -386,28 +388,6 @@
                 
             }
 
-
-            // function getJobHtml(info) {
-            //     let description = info['description'];
-            //     let skills = info['skills'];
-            //     let knowledge = info['knowledge'];
-            //     let wage = info['wage'];
-            //     description = Mustache.render("{{.}}", description);
-            //     skills = Mustache.render("{{.}}", skills);
-            //     wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
-            //     knowledge = Mustache.render("{{.}}", knowledge);
-            //     let template = "Default";
-            //     let descriptionDiv = document.getElementById('descriptionDiv');
-            //     descriptionDiv.innerHTML = description;
-            //     let skillsDiv = document.getElementById('taskDiv');
-            //     skillsDiv.innerHTML = skills;
-            //     let wageDiv = document.getElementById('salaryDiv');
-            //     wageDiv.innerHTML = wage;
-            //     let employerDiv = document.getElementById('employerDiv');
-            //     employerDiv.innerHTML = template;
-            //     // return {'descript': description, 'skills': skills, 'salary': wage, 'employer': template};
-            // }
-
             function handleSearchResponse() {
                 if (this.status !== 200) {
                     alert('Error: Failed to fetch data from server');
@@ -428,7 +408,7 @@
                 }
                 let info = JSON.parse(this.response);
                 getJobHtml(info);
-
+                loadComments();
                 // Hide welcome msg, show cards
                 document.getElementById('welcomeMessage').style.display = 'none';
                 document.getElementById('cardsContent').style.display = 'block';
@@ -576,19 +556,25 @@
 
                 const commentsDiv = document.getElementById('commentsDiv');
                 commentsDiv.innerHTML = '';
-                comments.forEach((comment, index) => {
-                    const commentDiv = document.createElement('div');
-                    commentDiv.className = 'mb-2';
-                    commentDiv.innerHTML = `
-                        <strong>User ${username}:</strong>
-                        <p>${comment.comment}</p>
-                        <button class="btn btn-sm btn-link" onclick="replyToComment(${index})">Reply</button>
-                        <div id="replies-${index}" class="ms-3 mt-2">
-                            ${comment.replies.map(reply => `<p><strong>Reply:</strong> ${reply}</p>`).join('')}
-                        </div>
-                    `;
-                    commentsDiv.appendChild(commentDiv);
-                });
+                // comments.forEach((comment, index) => {
+                //     const commentDiv = document.createElement('div');
+                //     commentDiv.className = 'mb-2';
+                //     commentDiv.innerHTML = `
+                //         <strong>User ${username}:</strong>
+                //         <p>${comment.comment}</p>
+                //         <button class="btn btn-sm btn-link" onclick="replyToComment(${index})">Reply</button>
+                //         <div id="replies-${index}" class="ms-3 mt-2">
+                //             ${comment.replies.map(reply => `<p><strong>Reply:</strong> ${reply}</p>`).join('')}
+                //         </div>
+                //     `;
+                //     commentsDiv.appendChild(commentDiv);
+                // });
+                const endDiv = document.createElement('div');
+                endDiv.innerHTML = `
+                <textarea class="form-control mb-2" id="newComment" placeholder="Add a comment"></textarea>
+                <button class="btn btn-primary" onclick="addComment()">Post Comment</button>
+                `
+                commentsDiv.appendChild(endDiv);
             }
 
             function handleComment() {
