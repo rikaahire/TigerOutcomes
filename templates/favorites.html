@@ -82,7 +82,7 @@
                     <div class="list-group list-group-flush border-bottom scrollarea">
                         <span class="fs-5 fw-semibold"> Favorites </span>
                         <hr>
-                        <button type="button" class="btn btn-primary modal-graph-btn" data-bs-toggle="modal" data-bs-target="#salaryComparisonModal">
+                        <button type="button" class="btn btn-primary modal-graph-btn me-2 mt-2 mb-4" data-bs-toggle="modal" data-bs-target="#salaryComparisonModal">
                             View Salary Comparison
                         </button>
                         <div class="border" id="resultsDiv"></div>
@@ -108,7 +108,7 @@
                 <div class="col-md-9 cards-container" id="cardsContainer">
                   <div id="welcomeMessage" class="text-center p-5">
                       <h3>These are your favorite jobs!</h3>
-                      <p>Select one to view its details, or compare their salaries with "View Salary Comparison".</p>
+                      <p>Select one to view its details, or compare their salaries with "View Salary Comparison."</p>
                   </div>
                   
                   <div id="cardsContent" style="display: none;">
@@ -345,13 +345,13 @@
 
             function createFavoriteSalaryComparison(favoriteJobs) {
                 let dataPoints = favoriteJobs.map(job => ({
-                    label: job.name,
+                    label: job.title,
                     y: [
-                        job.wage['10'],
-                        job.wage['25'],
-                        job.wage['50'],
-                        job.wage['75'],
-                        job.wage['90']
+                        Number(job.wage['10']),
+                        Number(job.wage['25']),
+                        Number(job.wage['75']),
+                        Number(job.wage['90']),
+                        Number(job.wage['50'])
                     ]
                 }));
 
