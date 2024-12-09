@@ -165,14 +165,6 @@
                     <div class="d-flex">
                         <h1 class="me-4" id="titleDiv"></h1>
                     </div>
-                    <button class="btn btn-secondary btn-small" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
-                        Open LinkedIn Job Search
-                    </button>
-
-                    <!-- New Handshake job search button -->
-                    <button class="btn btn-secondary btn-small" type="button" id="handshake-search" onclick="openHandshakeSearch()" style="margin-left: 10px;">
-                        Open Handshake Job Search
-                    </button>
 
                     <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
                         <!-- Card Description -->
@@ -193,8 +185,14 @@
                         </div> </div> </div>
                         <!-- Card for Common Employers -->
                         <div class="col"> <div class="card"> <div class="card-body">
-                            <h5 class="card-title">Common Employers</h5>
-                            <div class="card-text" id="employerDiv"></div>
+                            <h5 class="card-title">Search for Jobs in Field</h5>
+                            <!-- Buttons for querying job search websites -->
+                            <button class="btn btn-secondary btn-small" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
+                                Open LinkedIn Job Search
+                            </button>
+                            <button class="btn btn-secondary btn-small" type="button" id="handshake-search" onclick="openHandshakeSearch()" style="margin-left: 10px;">
+                                Open Handshake Job Search
+                            </button>
                         </div> </div> </div>
                         <!-- Commenting Section -->
                         <div class="col-12"> <div class="card"> <div class="card-body">
@@ -316,11 +314,11 @@
                     { 
                         label: "Salary Distribution", 
                         y: [
-                            wage['10'],   // Minimum 
-                            wage['25'],   // First quartile
-                            wage['50'],   // Median
-                            wage['75'],   // Third quartile
-                            wage['90']    // Maximum 
+                            Number(wage['10']),   // Minimum 
+                            Number(wage['25']),   // First quartile
+                            Number(wage['75']),   // Median
+                            Number(wage['90']),   // Third quartile
+                            Number(wage['50'])    // Maximum 
                         ] 
                     }
                 ];
@@ -379,8 +377,7 @@
 
                 createSalaryBoxPlot(info['wage']);
 
-                let employerDiv = document.getElementById('employerDiv');
-                employerDiv.innerHTML = "Default";
+                
             }
 
 
