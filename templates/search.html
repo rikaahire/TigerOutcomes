@@ -125,26 +125,45 @@
                 <hr>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="sort" data-bs-toggle="dropdown">
-                        Sort by
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" onclick="setAlgo('alphabetical')">Alphabetical</a></li>
-                        <li><a class="dropdown-item" onclick="setAlgo('common')">Most Common</a></li>
-                    </ul>
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="sort" data-bs-toggle="dropdown">
+                            Sort by
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" onclick="setAlgo('alphabetical')">Alphabetical</a></li>
+                            <li><a class="dropdown-item" onclick="setAlgo('common')">Most Common</a></li>
+                        </ul>
                     </div>
                     <!-- Display users selection -->
                     <h5 id="algoDisplay"></h5>
                 </div>
                 <hr>
                 <div id="filters">
-                    Filters:
-                    <form>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="sort" data-bs-toggle="dropdown">
+                            Minimum Income
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" onclick="">25,000</a></li>
+                            <li><a class="dropdown-item" onclick="">50,000</a></li>
+                            <li><a class="dropdown-item" onclick="">75,000</a></li>
+                            <li><a class="dropdown-item" onclick="">100,000</a></li>
+                            <li><a class="dropdown-item" onclick="">125,000</a></li>
+                            <li><a class="dropdown-item" onclick="">150,000</a></li>
+                            <li><a class="dropdown-item" onclick="">200,000</a></li>
+                            <li><a class="dropdown-item" onclick="">250,000</a></li>
+                            <li><a class="dropdown-item" onclick="">300,000</a></li>
+                            <li><a class="dropdown-item" onclick="">350,000</a></li>
+                            <li><a class="dropdown-item" onclick="">400,000</a></li>
+                        </ul>
+                    <!-- Display users selection -->
+                    <h5 id="filterDisplay"></h5>
+                    </div>
+                    <!-- <form>
                         <label for="income">Minimum Average Income (0–400,000)</label>
                         <input class="form-control" type="range" id="incomeInput" 
                                 style="text-align: center" name="income" 
                                 aria-label="incomeRange" min="0" max="400000">
-                    </form>
+                    </form> -->
                 </div>
                 <hr>
                 <div id="favoritehelp">
