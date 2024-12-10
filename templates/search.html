@@ -131,30 +131,29 @@
                         </ul>
                     </div>
                     <!-- Display users selection -->
-                    <h5 id="algoDisplay"></h5>
+                    <h5 id="algoDisplay">Alphabetical</h5>
                 </div>
                 <hr>
-                <div id="filters">
+                <div style="display: flex; align-items: center; gap: 10px;">
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="sort" data-bs-toggle="dropdown">
-                            Minimum Income
+                            Minimum Average Income
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" onclick="">25,000</a></li>
-                            <li><a class="dropdown-item" onclick="">50,000</a></li>
-                            <li><a class="dropdown-item" onclick="">75,000</a></li>
-                            <li><a class="dropdown-item" onclick="">100,000</a></li>
-                            <li><a class="dropdown-item" onclick="">125,000</a></li>
-                            <li><a class="dropdown-item" onclick="">150,000</a></li>
-                            <li><a class="dropdown-item" onclick="">200,000</a></li>
-                            <li><a class="dropdown-item" onclick="">250,000</a></li>
-                            <li><a class="dropdown-item" onclick="">300,000</a></li>
-                            <li><a class="dropdown-item" onclick="">350,000</a></li>
-                            <li><a class="dropdown-item" onclick="">400,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(0)">0</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(25000)">25,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(50000)">50,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(75000)">75,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(100000)">100,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(125000)">125,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(150000)">150,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(200000)">200,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(300000)">300,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(400000)">400,000</a></li>
                         </ul>
-                    <!-- Display users selection -->
-                    <h5 id="filterDisplay"></h5>
                     </div>
+                    <!-- Display users selection -->
+                    <h5 id="filterDisplay">0</h5>
                     <!-- <form>
                         <label for="income">Minimum Average Income (0–400,000)</label>
                         <input class="form-control" type="range" id="incomeInput" 
@@ -462,6 +461,7 @@
 
             let request = null;
             let algo='alphabetical'
+            let min_wage=0
 
             function setAlgo(algorithm) {
                 algo = algorithm;
@@ -474,13 +474,19 @@
                 
             }
 
+            function setWage(wage) {
+                min_wage = wage;
+                getSearchResults();
+                filterDisplay.textContent = wage;
+            }
+
             function getSearchResults() {
                 let majorInput = document.getElementById('majorInput');
                 let major = majorInput.value;
                 if (major == null || major == '')
                     major = 'all'
                 let encodedMajor = encodeURIComponent(major);
-                let url = '/results?major=' + encodedMajor + '&algo=' + algo;
+                let url = '/results?major=' + encodedMajor + '&algo=' + algo + '&min_wage=' + min_wage;
 
                 if (major == 'all')
                     repeat.innerHTML = 'All Results'
