@@ -113,47 +113,49 @@
                       <div class="d-flex">
                           <h1 class="me-4" id="titleDiv"></h1>
                       </div>
-                      <button class="btn btn-secondary btn-small" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
-                            Open LinkedIn Job Search
-                      </button>
-
-                      <!-- New Handshake job search button -->
-                      <button class="btn btn-secondary btn-small" type="button" id="handshake-search" onclick="openHandshakeSearch()" style="margin-left: 10px;">
-                            Open Handshake Job Search
-                      </button>
   
-                      <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
-                          <!-- Card Description -->
-                          <div class="col"> <div class="card"> <div class="card-body">
-                              <h5 class="card-title">Description</h5>
-                              <div class="card-text" id="descriptionDiv"></div>
-                          </div> </div> </div>
-                          <!-- Card for Tasks & Skills -->
-                          <div class="col"> <div class="card"> <div class="card-body">
-                              <h5 class="card-title">Tasks and Skills</h5>
-                              <div class="card-text" id="taskDiv"></div>
-                          </div> </div> </div>
-                          <!-- Card for Salary -->
-                          <!-- Might need to do some more here with data graphics -->
-                          <div class="col"> <div class="card"> <div class="card-body">
-                              <h5 class="card-title">Salary Range</h5>
-                              <div class="card-text" id="salaryDiv"></div>
-                          </div> </div> </div>
-                          <!-- Card for Common Employers -->
-                          <div class="col"> <div class="card"> <div class="card-body">
-                              <h5 class="card-title">Common Employers</h5>
-                              <div class="card-text" id="employerDiv"></div>
-                          </div> </div> </div>
-                          <!-- Commenting Section -->
-                          <div class="col-12"> <div class="card"> <div class="card-body">
-                              <h5 class="card-title">Comments</h5>
-                              <div id="commentsDiv" class="mb-3">
-                              <!-- Comments will be dynamically loaded here -->
-                              </div>
-                              <textarea class="form-control mb-2" id="newComment" placeholder="Add a comment"></textarea>
-                              <button class="btn btn-primary" onclick="addComment()">Post Comment</button>
-                          </div> </div> </div>
-                      </div> </div> </div>
+                      <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5">
+                        <div class="col">
+                            <!-- Card Description -->
+                            <div class="col"> <div class="card"> <div class="card-body">
+                                <h5 class="card-title">Description</h5>
+                                <div class="card-text" id="descriptionDiv"></div>
+                            </div> </div> </div>
+                            <hr>
+                            <!-- Card for Tasks & Skills -->
+                            <div class="col"> <div class="card"> <div class="card-body">
+                                <h5 class="card-title">Tasks and Skills</h5>
+                                <div class="card-text" id="taskDiv"></div>
+                            </div> </div> </div>
+                            <hr>
+                            <!-- Card for Finding Employment -->
+                            <div class="col"> <div class="card"> <div class="card-body">
+                                <h5 class="card-title">Search for Jobs in Field</h5>
+                                <p>(Requires Linkedin/Handshake account to be logged in)</p>
+                                <!-- Buttons for querying job search websites -->
+                                <button class="btn btn-primary mt-1 mb-1 me-2" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
+                                    Open Linkedin Job Search
+                                </button>
+                                <button class="btn btn-warning mt-1 mb-1 me-2" type="button" id="handshake-search" onclick="openHandshakeSearch()">
+                                    Open Handshake Job Search
+                                </button>
+                            </div> </div> </div>
+                        </div>
+                        <!-- Card for Salary -->
+                        <!-- Might need to do some more here with data graphics -->
+                        <div class="col"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Salary Range</h5>
+                            <div class="card-text" id="salaryDiv"></div>
+                        </div> </div> </div>
+                        <!-- Card for Commenting Section -->
+                        <div class="col-12"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Comments</h5>
+                            <div id="commentsDiv" class="mb-3">
+                            <!-- Comments will be dynamically loaded here -->
+                            </div>
+                        </div> </div> </div>
+                    </div> </div> </div>
+                    </div> </div> </div>
                   </div>
               </div>
             </div>                
@@ -209,7 +211,7 @@
             function createSalaryBoxPlot(wage) {
                 // Create a chart container if it doesn't exist
                 let chartContainer = document.getElementById('salaryChart');
-                if (!chartContainer) {
+                if (!chartContainer && (wage['10'] != "*" || wage['25'] != "*" || wage['50'] != "*" || wage['75'] != "*" || wage['90'] != "*")) {
                     chartContainer = document.createElement('div');
                     chartContainer.id = 'salaryChart';
                     chartContainer.style.height = '300px';
@@ -222,35 +224,48 @@
                     { 
                         label: "Salary Distribution", 
                         y: [
-                            wage['10'],   // Minimum 
-                            wage['25'],   // First quartile
-                            wage['50'],   // Median
-                            wage['75'],   // Third quartile
-                            wage['90']    // Maximum 
+                            Number(wage['10']),   // Minimum 
+                            Number(wage['25']),   // First quartile
+                            Number(wage['75']),   // Median
+                            Number(wage['90']),   // Third quartile
+                            Number(wage['50'])    // Maximum 
                         ] 
                     }
                 ];
 
-                // Create the chart
-                var chart = new CanvasJS.Chart("salaryChart", {
-                    theme: "light2",
-                    axisY: {
-                        title: "Annual Salary ($)",
-                        valueFormatString: "$#,##0"
-                    },
-                    data: [{
-                        type: "boxAndWhisker",
-                        color: "#3498db",
-                        dataPoints: dataPoints
-                    }]
-                });
+                if (wage['10'] == "*" || wage['25'] == "*" || wage['50'] == "*" || wage['75'] == "*" || wage['90'] == "*") {
+                    let meanText = document.createElement('p');
+                    meanText.textContent = "Insufficient Salary Data for Job Type";
 
-                chart.render();
+                    let img = document.createElement('img');
+                    img.src = 'oops.png'; 
+                    img.alt = 'Tiger with questionmarks'; 
+                    
+                    let wageDiv = document.getElementById('salaryDiv');
+                    wageDiv.appendChild(img);
+                    wageDiv.appendChild(meanText);
+                } else {
+                    // Create the chart
+                    var chart = new CanvasJS.Chart("salaryChart", {
+                        theme: "light2",
+                        axisY: {
+                            title: "Annual Salary ($)",
+                            valueFormatString: "$#,##0"
+                        },
+                        data: [{
+                            type: "boxAndWhisker",
+                            color: "#3498db",
+                            dataPoints: dataPoints
+                        }]
+                    });
 
-                let meanText = document.createElement('p');
-                meanText.textContent = `Mean Salary: $${wage['mean'].toLocaleString()}`;
-                let wageDiv = document.getElementById('salaryDiv');
-                wageDiv.appendChild(meanText);
+                    chart.render();
+
+                    let meanText = document.createElement('p');
+                    meanText.textContent = `Mean Salary: $${wage['mean'].toLocaleString()}`;
+                    let wageDiv = document.getElementById('salaryDiv');
+                    wageDiv.appendChild(meanText);
+                }
             }
 
             function getJobHtml(info) {
@@ -258,6 +273,7 @@
                 let skills = info['skills'];
                 let knowledge = info['knowledge'];
                 let wage = info['wage'];
+                let soc_code = info['soc_code'];
 
                 // Job title dispaly
                 let titleDiv = document.getElementById('titleDiv');
@@ -285,8 +301,88 @@
 
                 createSalaryBoxPlot(info['wage']);
 
-                let employerDiv = document.getElementById('employerDiv');
-                employerDiv.innerHTML = "Default";
+                loadComments(soc_code);
+            }
+
+            function handleLoadComments() {
+                const usernameElement = document.getElementById('username');
+                const username = usernameElement.textContent.trim() || 'Guest';
+                let comments = JSON.parse(this.response);
+                let soc_code = comments['soc_code'];
+                console.log(comments)
+                console.log(soc_code)
+                const commentsDiv = document.getElementById('commentsDiv');
+                commentsDiv.innerHTML = '';
+                if (comments['continue']) {
+                    comments = comments['full'];
+                    let template = `
+                        {{#comments}}
+                            <div>
+                                <strong>User {{user}}:</strong>
+                                <p>{{text}}</p>
+                            <div>
+                        {{/comments}}
+                    `;
+                                // insert when replies built
+                                // <button class="btn btn-sm btn-link" onclick="replyToComment({{id}})">Reply</button>
+                                // <div id="replies-{{id}}" class="ms-3 mt-2">
+                                //     {{#replies}}
+                                //         <p><strong>Reply:</strong> {{reply}}</p>
+                                //     {{/replies}}
+                                // </div>
+                    let map = {
+                        comments: comments
+                    }
+                    let html = Mustache.render(template, map);
+                    commentsDiv.innerHTML = html;
+                }
+                const endDiv = document.createElement('div');
+                endDiv.innerHTML = `
+                <textarea class="form-control mb-2" id="newComment" placeholder="Add a comment"></textarea>
+                <button class="btn btn-primary" onclick="addComment('` + soc_code + `')">Post Comment</button>
+                `
+                commentsDiv.appendChild(endDiv);
+            }
+
+            function loadComments(soc_code) {
+                let encodedSOC = encodeURIComponent(soc_code);
+                let url = '/comments?soc_code=' + encodedSOC;
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleLoadComments;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            function handleAddComment() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let info = JSON.parse(this.response)[1];
+                console.log(info)
+                loadComments(info);
+                // alert(info);
+            }
+
+            function addComment(soc_code) {
+                let encodedSOC = encodeURIComponent(soc_code);
+                const newComment = document.getElementById('newComment').value.trim();
+                let encodedComment = encodeURIComponent(newComment);
+                let url = "/write_comment?soc_code=" + encodedSOC + "&text=" + encodedComment;
+                // saveCommentsToServer(comments);
+
+                if (request !== null) {
+                    // alert(newComment);
+                    request.abort();
+                }
+                request = new XMLHttpRequest();
+                request.onload = handleAddComment;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
             }
 
             function handleSearchResponse() {
@@ -466,9 +562,7 @@
             }
 
             document.addEventListener('DOMContentLoaded', setup);
-            // document.addEventListener('DOMContentLoaded', getHeader);
-            // document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
-
+            
             // Get user
             function getUser() {
                 let req = new XMLHttpRequest();
