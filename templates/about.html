@@ -30,6 +30,10 @@
                 background-color: black;
                 color: white;
             }
+            .fixed-bottom {
+            position: fixed;
+            width: 100%;
+            }
         </style>
 
 
@@ -40,11 +44,55 @@
             {% include 'header.html' %}
         </header>
 
-        <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
-            About Us
+        <h1 class="mt-4 mb-5" style="text-align: center;">Our Team</h1>
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="bryan.png" class="card-img-top" alt="Bryan">
+                        <div class="card-body">
+                            <h2 class="card-title">Bryan Zhang</h2>
+                            <p class="card-text">Project Lead</p>
+                            <a href="https://www.linkedin.com/in/bryanzhang14916/" class="btn btn-outline-info">Linkedin</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="sarika.png" class="card-img-top" alt="Sarika">
+                        <div class="card-body">
+                            <h2 class="card-title">Sarika Ahire</h2>
+                            <p class="card-text">Database Management/Tech Lead</p>
+                            <a href="https://www.linkedin.com/in/sarika-ahire-103303237/" class="btn btn-outline-info">Linkedin</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="vitus.png" class="card-img-top" alt="Vitus">
+                        <div class="card-body">
+                            <h2 class="card-title">Vitus Larrieu</h2>
+                            <p class="card-text">Front End/Design Lead</p>
+                            <a href="https://vl7131.github.io/" class="btn btn-outline-info">Personal Website</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="daniel.png" class="card-img-top" alt="Daniel">
+                        <div class="card-body">
+                            <h2 class="card-title">Daniel Wang</h2>
+                            <p class="card-text">Backend Lead</p>
+                            <a href="https://www.linkedin.com/in/danielywang4/" class="btn btn-outline-info">Linkedin</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-        {% include 'footer.html' %}
+        
+        <footer class="fixed-bottom">
+            {% include 'footer.html' %}
+        </footer>
     </body>
 </html>
