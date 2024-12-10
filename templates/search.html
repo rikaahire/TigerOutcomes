@@ -202,9 +202,10 @@
                             <!-- Card for Common Employers -->
                             <div class="col"> <div class="card"> <div class="card-body">
                                 <h5 class="card-title">Search for Jobs in Field</h5>
+                                <p>(Requires Linkedin/Handshake account to be logged in)</p>
                                 <!-- Buttons for querying job search websites -->
                                 <button class="btn btn-primary mt-1 mb-1 me-2" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
-                                    Open LinkedIn Job Search
+                                    Open Linkedin Job Search
                                 </button>
                                 <button class="btn btn-warning mt-1 mb-1 me-2" type="button" id="handshake-search" onclick="openHandshakeSearch()">
                                     Open Handshake Job Search
@@ -322,7 +323,7 @@
             function createSalaryBoxPlot(wage) {
                 // Create a chart container if it doesn't exist
                 let chartContainer = document.getElementById('salaryChart');
-                if (!chartContainer) {
+                if (!chartContainer && (wage['10'] != "*" || wage['25'] != "*" || wage['50'] != "*" || wage['75'] != "*" || wage['90'] != "*")) {
                     chartContainer = document.createElement('div');
                     chartContainer.id = 'salaryChart';
                     chartContainer.style.height = '300px';
@@ -344,29 +345,40 @@
                     }
                 ];
 
-                // Create the chart
-                var chart = new CanvasJS.Chart("salaryChart", {
-                    theme: "light2",
-                    axisY: {
-                        title: "Annual Salary ($)",
-                        valueFormatString: "$#,##0"
-                    },
-                    data: [{
-                        type: "boxAndWhisker",
-                        color: "#3498db",
-                        dataPoints: dataPoints
-                    }]
-                });
+                if (wage['10'] == "*" || wage['25'] == "*" || wage['50'] == "*" || wage['75'] == "*" || wage['90'] == "*") {
+                    let meanText = document.createElement('p');
+                    meanText.textContent = "Insufficient Salary Data for Job Type";
 
-                chart.render();
+                    let img = document.createElement('img');
+                    img.src = 'oops.png'; 
+                    img.alt = 'Tiger with questionmarks'; 
+                    img.style.display = 'block';
+                    
+                    let wageDiv = document.getElementById('salaryDiv');
+                    wageDiv.appendChild(img);
+                    wageDiv.appendChild(meanText);
+                } else {
+                    // Create the chart
+                    var chart = new CanvasJS.Chart("salaryChart", {
+                        theme: "light2",
+                        axisY: {
+                            title: "Annual Salary ($)",
+                            valueFormatString: "$#,##0"
+                        },
+                        data: [{
+                            type: "boxAndWhisker",
+                            color: "#3498db",
+                            dataPoints: dataPoints
+                        }]
+                    });
 
-                let meanText = document.createElement('p');
-                meanText.textContent = `Mean Salary: $${wage['mean'].toLocaleString()}`;
-                // if (wage['mean'] == null){
-                //     meanText.textContent= "No salary data availible for this job."
-                // }
-                let wageDiv = document.getElementById('salaryDiv');
-                wageDiv.appendChild(meanText);
+                    chart.render();
+
+                    let meanText = document.createElement('p');
+                    meanText.textContent = `Mean Salary: $${wage['mean'].toLocaleString()}`;
+                    let wageDiv = document.getElementById('salaryDiv');
+                    wageDiv.appendChild(meanText);
+                }
             }
 
             function getJobHtml(info) {
