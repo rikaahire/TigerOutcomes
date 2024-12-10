@@ -256,7 +256,7 @@
             }
 
             function getComments() {
-                let url = '/list_unapproved_comments';
+                let url = '/list_flagged_comments';
                 if (request !== null)
                     request.abort();
                 request = new XMLHttpRequest();
@@ -266,7 +266,7 @@
                 request.send();
             }
 
-            setInterval(getComments, 30000)
+            setInterval(getComments, 10000)
 
             document.addEventListener('DOMContentLoaded', getAdmins);
 

@@ -227,6 +227,21 @@ def write_comment():
     response.headers['Content-Type'] = 'application/json'
     return response
 
+@app.route('/flag_comment', methods=['GET'])
+def flag_comment():
+    user = auth.authenticate()
+    id = flask.request.args.get('id')
+    if not id:
+        json_doc = [False, "Missing id"]
+    try:
+        ret = db.update_comment(user, id, False)
+        json_doc = json.dumps([True, ret])
+    except Exception as e:
+        json_doc = [False, f"Error flagging comment: {e}"]
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
 @app.route('/comments', methods=['GET'])
 def see_comments():
     soc_code = flask.request.args.get('soc_code')

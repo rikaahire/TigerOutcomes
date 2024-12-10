@@ -6,7 +6,7 @@ import sys
 import argparse
 import sqlalchemy
 import sqlalchemy.orm
-from sqlalchemy import select, distinct, and_, desc, func, cast, Integer, case
+from sqlalchemy import select, distinct, and_, desc, func, cast, Integer, case, update
 from sqlalchemy.exc import SQLAlchemyError
 import dotenv
 
@@ -143,6 +143,23 @@ def write_comment(name, soc_code, comment, valid=True):
             conn.commit()
             print(name + " " + soc_code + " " + comment)
             ret = soc_code
+        except SQLAlchemyError as e:
+            ret = f"Error deleting favorites: {e}"
+            conn.rollback()
+    return ret
+
+def update_comment(name, id, valid):
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
+    ret = ''
+    with engine.connect() as conn:
+        try:
+            conn.execute(
+                update(table).where(table.c.id==id).values(valid=valid)
+            )
+            conn.commit()
+            print(name + " " + id + " " + valid)
+            ret = name
         except SQLAlchemyError as e:
             ret = f"Error deleting favorites: {e}"
             conn.rollback()

@@ -72,10 +72,10 @@ def remove_admin():
     response.headers['Content-Type'] = 'application/json'
     return response
 
-@app.route('/list_unapproved_comments', methods=['GET'])
+@app.route('/list_flagged_comments', methods=['GET'])
 def list_unapproved_comments():
     if check_admin():
-        html_code = dba.fetch_unapproved_comments()
+        html_code = dba.fetch_flagged_comments()
     else:
         html_code = "Bad user"
     json_doc = json.dumps(html_code)

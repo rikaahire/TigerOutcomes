@@ -387,7 +387,7 @@
                 let wage = info['wage'];
                 let soc_code = info['soc_code'];
 
-                // Job title dispaly
+                // Job title display
                 let titleDiv = document.getElementById('titleDiv');
                 titleDiv.textContent = info['title'];
 
@@ -593,7 +593,7 @@
                     let template = `
                         {{#comments}}
                             <div>
-                                <strong>User {{user}}:</strong>
+                                <strong>User {{user}}:</strong> <button class="btn btn-sm btn-link" onclick="flagComment({{id}})">Flag</button>
                                 <p>{{text}}</p>
                             <div>
                         {{/comments}}
@@ -655,6 +655,28 @@
                 }
                 request = new XMLHttpRequest();
                 request.onload = handleAddComment;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            function handleFlagComment() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                console.log(this.response)
+            }
+
+            function flagComment(id) {
+                let encodedID = encodeURIComponent(id);
+                let url = "/flag_comment?id=" + encodedID;
+                
+                if (request !== null) {
+                    request.abort();
+                }
+                request = new XMLHttpRequest();
+                request.onload = handleFlagComment;
                 request.onerror = handleError;
                 request.open('GET', url);
                 request.send();

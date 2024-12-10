@@ -19,7 +19,7 @@ engine = sqlalchemy.create_engine(DATABASE_URL)
 default_limit = 10
 #-----------------------------------------------------------------------
 
-def fetch_unapproved_comments():
+def fetch_flagged_comments():
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
     stmt = select(table).where(table.c.valid == False)
