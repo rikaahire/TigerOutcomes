@@ -129,6 +129,7 @@ def job_details():
                'skills': [tuple(row) for row in skills], 
                'knowledge': [tuple(row) for row in knowledge], 
                'wage': wage,
+               'soc_code': soc_code,
                'title': [tuple(row) for row in title]}
     json_doc = json.dumps(descript)
     response = flask.make_response(json_doc)
@@ -207,31 +208,33 @@ def delete():
 
 #-----------------------------------------------------------------------
 
-@app.route('/comments', methods=['GET'])
-def comment():
+@app.route('/write_comment', methods=['GET'])
+def write_comment():
     user = auth.authenticate()
-    # soc_code = flask.request.args.get('soc_code')
-    # if not soc_code:
-    #     json_doc = [False, "Missing soc_code"]
-    soc_code = '11-1011.00'
-    # else:
+    soc_code = flask.request.args.get('soc_code')
+    if not soc_code:
+        json_doc = [False, "Missing soc_code"]
+    print(soc_code)
+    text = flask.request.args.get('text')
+    if not text:
+        json_doc = [False, "Missing text"]
     try:
-        comment = flask.request.args.get('comment')
-        ret = db.write_comment(user, soc_code, comment, valid=True)
-        json_doc = [True, json.dumps(ret)]
+        ret = db.write_comment(user, soc_code, text, valid=True)
+        json_doc = json.dumps([True, ret])
     except Exception as e:
         json_doc = [False, f"Error posting comments: {e}"]
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
     return response
 
-# might not need
-@app.route('/seecomments', methods=['GET'])
+@app.route('/comments', methods=['GET'])
 def see_comments():
-    soc_code = '11-1011.00'
+    soc_code = flask.request.args.get('soc_code')
+    if not soc_code:
+        json_doc = [False, "Missing soc_code"]
     try:
         comments = db.fetch_comments(soc_code)
-        json_doc = [True, "hi", json.dumps(comments)]
+        json_doc = json.dumps({"soc_code": soc_code, "continue": True, "full": comments})
     except Exception as e:
         json_doc = [False, f"Error getting comments: {e}"]
     response = flask.make_response(json_doc)

@@ -128,23 +128,24 @@ def clear_favorites(name, status=None, soc_code=None):
 def write_comment(name, soc_code, comment, valid=True):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
-    ret = []
+    ret = ''
     with engine.connect() as conn:
-        conn.execute(
-            table.insert().values({
-            'user': name,
-            'soc_code': soc_code,
-            'text': comment,
-            'valid': valid,
-            'replies': []
-        })
-        )
-        ret.append({
-            "user": name,
-            "soc_code": soc_code,
-            "text": comment
-        })
-        conn.commit()
+        try:
+            conn.execute(
+                table.insert().values(
+                user=name,
+                soc_code=soc_code,
+                text=comment,
+                valid=valid,
+                # 'replies': []
+            )
+            )
+            conn.commit()
+            print(name + " " + soc_code + " " + comment)
+            ret = soc_code
+        except SQLAlchemyError as e:
+            ret = f"Error deleting favorites: {e}"
+            conn.rollback()
     return ret
 
 
@@ -152,9 +153,12 @@ def fetch_comments(soc_code):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
     with engine.connect() as conn:
-        #rows = conn.execute(select(table).where(table.c.soc_code == soc_code)).fetchall()
-        rows = conn.execute(select(table).where('11-1011.00' == soc_code)).fetchall()
-    return [{"user": row.user, "comment": row.comment, "valid": row.valid} for row in rows]
+        rows = conn.execute(select(table).where(table.c.soc_code == soc_code)).fetchall()
+    ret = [{"id": row.id, "user": row.user, 
+            "text": row.text, 
+            # "replies": [{"reply": reply} for reply in row.replies]
+            } for row in rows]
+    return ret
 
 
 #-----------------------------------------------------------------------

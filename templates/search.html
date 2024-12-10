@@ -274,50 +274,50 @@
                 return html;
             }
 
-            function getCardHtml(info) {
-                info=getJobHtml(info)
-                let template = 
-                `
-                <!-- Card Description -->
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Description</h5>
-                        <p class="card-text"> {{description}} </p>
-                    </div>
-                    </div>
-                    <!-- Card for Tasks & Skills -->
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Tasks and Skills</h5>
-                        <p class="card-text"> {{skills}} </p>
-                    </div>
-                    </div>
-                    <!-- Card for Salary -->
-                    <!-- Might need to do some more here with data graphics -->
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Salary Range</h5>
-                        <p class="card-text"> {{salary}} </p>
-                    </div>
-                    </div>
-                    <!-- Card for Common Employers -->
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Common Employers</h5>
-                        <p class="card-text"> {{employer}} </p>
-                    </div>
-                </div>
-                `;
-                let map = {
-                    description: info['descript'],
-                    skills: info['skills'],
-                    salary: info['salary'],
-                    employer: info['employer']
-                }
-                console.log(salary);
-                let html = Mustache.render(template, map);
-                return html;
-            }
+            // function getCardHtml(info) {
+            //     info=getJobHtml(info)
+            //     let template = 
+            //     `
+            //     <!-- Card Description -->
+            //     <div class="card">
+            //         <div class="card-body">
+            //             <h5 class="card-title">Description</h5>
+            //             <p class="card-text"> {{description}} </p>
+            //         </div>
+            //         </div>
+            //         <!-- Card for Tasks & Skills -->
+            //         <div class="card">
+            //         <div class="card-body">
+            //             <h5 class="card-title">Tasks and Skills</h5>
+            //             <p class="card-text"> {{skills}} </p>
+            //         </div>
+            //         </div>
+            //         <!-- Card for Salary -->
+            //         <!-- Might need to do some more here with data graphics -->
+            //         <div class="card">
+            //         <div class="card-body">
+            //             <h5 class="card-title">Salary Range</h5>
+            //             <p class="card-text"> {{salary}} </p>
+            //         </div>
+            //         </div>
+            //         <!-- Card for Common Employers -->
+            //         <div class="card">
+            //         <div class="card-body">
+            //             <h5 class="card-title">Common Employers</h5>
+            //             <p class="card-text"> {{employer}} </p>
+            //         </div>
+            //     </div>
+            //     `;
+            //     let map = {
+            //         description: info['descript'],
+            //         skills: info['skills'],
+            //         salary: info['salary'],
+            //         employer: info['employer']
+            //     }
+            //     console.log(salary);
+            //     let html = Mustache.render(template, map);
+            //     return html;
+            // }
 
             function createSalaryBoxPlot(wage) {
                 // Create a chart container if it doesn't exist
@@ -374,6 +374,7 @@
                 let skills = info['skills'];
                 let knowledge = info['knowledge'];
                 let wage = info['wage'];
+                let soc_code = info['soc_code'];
 
                 // Job title dispaly
                 let titleDiv = document.getElementById('titleDiv');
@@ -388,7 +389,7 @@
                     skills = "No tasks or skills available for this job.";
                 }
                 
-                wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
+                // wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
 
                 let descriptionDiv = document.getElementById('descriptionDiv');
                 descriptionDiv.innerHTML = description;
@@ -401,7 +402,7 @@
 
                 createSalaryBoxPlot(info['wage']);
 
-                
+                loadComments(soc_code);
             }
 
             function handleSearchResponse() {
@@ -424,7 +425,6 @@
                 }
                 let info = JSON.parse(this.response);
                 getJobHtml(info);
-                loadComments();
                 // Hide welcome msg, show cards
                 document.getElementById('welcomeMessage').style.display = 'none';
                 document.getElementById('cardsContent').style.display = 'block';
@@ -549,7 +549,6 @@
                 request.send();
             }
 
-
             function favorite(soc_code, status='True') {
                 let encodedSOC = encodeURIComponent(soc_code);
                 let encodedStatus = encodeURIComponent(status);
@@ -564,53 +563,74 @@
                 request.send();
             }
 
-            let comments = []; // Placeholder for comments
-
-            function loadComments() {
+            function handleLoadComments() {
                 const usernameElement = document.getElementById('username');
                 const username = usernameElement.textContent.trim() || 'Guest';
-
+                let comments = JSON.parse(this.response);
+                let soc_code = comments['soc_code'];
+                console.log(comments)
+                console.log(soc_code)
                 const commentsDiv = document.getElementById('commentsDiv');
                 commentsDiv.innerHTML = '';
-                // comments.forEach((comment, index) => {
-                //     const commentDiv = document.createElement('div');
-                //     commentDiv.className = 'mb-2';
-                //     commentDiv.innerHTML = `
-                //         <strong>User ${username}:</strong>
-                //         <p>${comment.comment}</p>
-                //         <button class="btn btn-sm btn-link" onclick="replyToComment(${index})">Reply</button>
-                //         <div id="replies-${index}" class="ms-3 mt-2">
-                //             ${comment.replies.map(reply => `<p><strong>Reply:</strong> ${reply}</p>`).join('')}
-                //         </div>
-                //     `;
-                //     commentsDiv.appendChild(commentDiv);
-                // });
+                if (comments['continue']) {
+                    comments = comments['full'];
+                    let template = `
+                        {{#comments}}
+                            <div>
+                                <strong>User {{user}}:</strong>
+                                <p>{{text}}</p>
+                                <button class="btn btn-sm btn-link" onclick="replyToComment({{id}})">Reply</button>
+                            <div>
+                        {{/comments}}
+                    `;
+                                // insert when replies fixed
+                                // <div id="replies-{{id}}" class="ms-3 mt-2">
+                                //     {{#replies}}
+                                //         <p><strong>Reply:</strong> {{reply}}</p>
+                                //     {{/replies}}
+                                // </div>
+                    let map = {
+                        comments: comments
+                    }
+                    let html = Mustache.render(template, map);
+                    commentsDiv.innerHTML = html;
+                }
                 const endDiv = document.createElement('div');
                 endDiv.innerHTML = `
                 <textarea class="form-control mb-2" id="newComment" placeholder="Add a comment"></textarea>
-                <button class="btn btn-primary" onclick="addComment()">Post Comment</button>
+                <button class="btn btn-primary" onclick="addComment('` + soc_code + `')">Post Comment</button>
                 `
                 commentsDiv.appendChild(endDiv);
             }
 
-            function handleComment() {
+            function loadComments(soc_code) {
+                let encodedSOC = encodeURIComponent(soc_code);
+                let url = '/comments?soc_code=' + encodedSOC;
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleLoadComments;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            function handleAddComment() {
                 if (this.status !== 200) {
                     alert('Error: Failed to fetch data from server');
                     return;
                 }
-                let info = JSON.parse(this.response);
+                let info = JSON.parse(this.response)[1];
+                console.log(info)
+                loadComments(info);
                 // alert(info);
             }
 
-            function addComment() {
-                let encodedSOC = encodeURIComponent('11-1011.00');
+            function addComment(soc_code) {
+                let encodedSOC = encodeURIComponent(soc_code);
                 const newComment = document.getElementById('newComment').value.trim();
                 let encodedComment = encodeURIComponent(newComment);
-                let url = `/comments?soc_code=${encodedSOC}&comment=${encodedComment}`;
-
-                comments.push({ user: username, soc_code: '11-1011.00', comment: newComment, replies: [] });
-                document.getElementById('newComment').value = '';
-                loadComments();
+                let url = "/write_comment?soc_code=" + encodedSOC + "&text=" + encodedComment;
                 // saveCommentsToServer(comments);
 
                 if (request !== null) {
@@ -618,20 +638,20 @@
                     request.abort();
                 }
                 request = new XMLHttpRequest();
-                request.onload = handleComment;
+                request.onload = handleAddComment;
                 request.onerror = handleError;
                 request.open('GET', url);
                 request.send();
             }
 
-            function replyToComment(index) {
-                const reply = prompt('Enter your reply:');
-                if (reply) {
-                    comments[index].replies.push(reply);
-                    loadComments();
-                    // saveCommentsToServer(comments);
-                }
-            }
+            // function replyToComment(index) {
+            //     const reply = prompt('Enter your reply:');
+            //     if (reply) {
+            //         comments[index].replies.push(reply);
+            //         loadComments();
+            //         // saveCommentsToServer(comments);
+            //     }
+            // }
 
             // function saveCommentsToServer(comments) {
             //     fetch('/comments', {
@@ -639,16 +659,6 @@
             //         headers: { 'Content-Type': 'application/json' },
             //         body: JSON.stringify({ comments }),
             //     }).catch(err => console.error('Failed to save comments', err));
-            // }
-
-            // function fetchCommentsFromServer() {
-            //     fetch('/seecomments')
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             comments = data.comments || [];
-            //             loadComments();
-            //         })
-            //         .catch(err => console.error('Failed to fetch comments', err));
             // }
 
             let timer = null;
