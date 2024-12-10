@@ -46,17 +46,17 @@
         <header class="sticky-top" id="header">
             <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="https://tigeroutcomes.onrender.com/">TigerOutcomes</a>
+                    <a class="navbar-brand" href="/home">TigerOutcomes</a>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/home">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/about">About Us</a>
+                            <a class="nav-link active" aria-current="page" href="/search">Search</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/favorites">Favorites</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/about">About Us</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/admin">Admin</a>
@@ -85,11 +85,12 @@
                         <div id="responseDiv"></div>
                     </div>
                 </div>
-                <div class="col-9 d-flex flex-column align-items-center">
-                    <h3>Unapproved Comments:</h3>
+                <div class="col-9 d-flex flex-column">
+                    <h3>Flagged Comments:</h3>
                     <div class="d-flex flex-row">
-                        <div class="col-8"> Text </div>
-                        <div> Approve? </div>
+                        <div class="col-6"> Text </div>
+                        <div class="col-2"> Approve? </div>
+                        <div class="col-2"> Remove? </div>
                     </div>
                     <div id="commentsDiv"></div>
                 </div>
@@ -130,10 +131,15 @@
                 let template = `
                 {{#comments}}
                     <div class="d-flex flex-row">
-                        <div class="col-8">
+                        <div class="col-6">
                             {{text}}
                         </div>
-                        <button type="button" onclick="approveComment({{id}})"> Approve </button>
+                        <div class="col-2">
+                            <button type="button" onclick="approveComment({{id}})"> Approve </button>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" onclick="removeComment({{id}})"> Remove </button>
+                        </div>
                     </div>
                     <br>
                 {{/comments}}
@@ -177,6 +183,16 @@
             }
 
             function handleApproveCommentResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let response = JSON.parse(this.response);
+                alert(response);
+                getComments()
+            }
+
+            function handleRemoveCommentResponse() {
                 if (this.status !== 200) {
                     alert('Error: Failed to fetch data from server');
                     return;
@@ -255,6 +271,18 @@
                 request.send();
             }
 
+            function removeComment(id) {
+                let encodedId = encodeURIComponent(id);
+                let url = '/remove_comment?id=' + encodedId;
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleApproveCommentResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
             function getComments() {
                 let url = '/list_flagged_comments';
                 if (request !== null)
@@ -266,9 +294,7 @@
                 request.send();
             }
 
-            setInterval(getComments, 10000)
-
-            document.addEventListener('DOMContentLoaded', getAdmins);
+            setInterval(getComments, 5000)
 
             // Get user
             function getUser() {
@@ -292,7 +318,12 @@
                 req.onerror = handleError;
                 req.send();
             }
-            document.addEventListener('DOMContentLoaded', getUser);
+
+            function setup() {
+                getAdmins()
+                getUser()
+            }
+            document.addEventListener('DOMContentLoaded', setup);
             
         </script>
     </body>

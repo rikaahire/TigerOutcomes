@@ -9,6 +9,7 @@ import flask
 import auth
 import json
 import admin_database as dba
+import database as db
 
 from top import app
 
@@ -85,6 +86,20 @@ def list_unapproved_comments():
 
 @app.route('/approve_comment', methods=['GET'])
 def approve_comment():
+    id = flask.request.args.get('id')
+    if id is None:
+        html_code = "No comment selected"
+    if check_admin():
+        html_code = dba.approve(id)
+    else:
+        html_code = "Not an admin"
+    json_doc = json.dumps(html_code)
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+@app.route('/remove_comment', methods=['GET'])
+def remove_comment():
     id = flask.request.args.get('id')
     if id is None:
         html_code = "No comment selected"
