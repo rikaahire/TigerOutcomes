@@ -331,19 +331,6 @@
                     wageDiv.appendChild(chartContainer);
                 }
 
-                let dataPoints = [
-                    { 
-                        label: "Salary Distribution", 
-                        y: [
-                            Number(wage['10']),   // Minimum 
-                            Number(wage['25']),   // First quartile
-                            Number(wage['75']),   // Median
-                            Number(wage['90']),   // Third quartile
-                            Number(wage['50'])    // Maximum 
-                        ] 
-                    }
-                ];
-
                 if (wage['10'] == "*" || wage['25'] == "*" || wage['50'] == "*" || wage['75'] == "*" || wage['90'] == "*") {
                     let meanText = document.createElement('p');
                     meanText.textContent = "Insufficient Salary Data for Job Type";
@@ -358,6 +345,18 @@
                     wageDiv.appendChild(meanText);
                 } else {
                     // Create the chart
+                    let dataPoints = [
+                        { 
+                            label: "Salary Distribution", 
+                            y: [
+                                Number(wage['10']),   // Minimum 
+                                Number(wage['25']),   // First quartile
+                                Number(wage['75']),   // Median
+                                Number(wage['90']),   // Third quartile
+                                Number(wage['50'])    // Maximum 
+                            ] 
+                        }
+                    ];
                     var chart = new CanvasJS.Chart("salaryChart", {
                         theme: "light2",
                         axisY: {
