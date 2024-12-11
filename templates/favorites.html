@@ -134,34 +134,29 @@
                       <div class="d-flex">
                           <h1 class="me-4" id="titleDiv"></h1>
                       </div>
-  
+                      <!-- Buttons for querying job search websites -->
+                      <button class="btn btn-primary mt-1 mb-1 me-2" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
+                        Open Linkedin Job Search
+                    </button>
+                    <button class="btn btn-warning mt-1 mb-1 me-2" type="button" id="handshake-search" onclick="openHandshakeSearch()">
+                        Open Handshake Job Search
+                    </button>
                       <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5">
-                        <div class="col">
-                            <!-- Card Description -->
-                            <div class="col"> <div class="card"> <div class="card-body">
-                                <h5 class="card-title">Description</h5>
-                                <div class="card-text" id="descriptionDiv"></div>
-                            </div> </div> </div>
-                            <hr>
-                            <!-- Card for Tasks & Skills -->
-                            <div class="col"> <div class="card"> <div class="card-body">
-                                <h5 class="card-title">Tasks and Skills</h5>
-                                <div class="card-text" id="taskDiv"></div>
-                            </div> </div> </div>
-                            <hr>
-                            <!-- Card for Finding Employment -->
-                            <div class="col"> <div class="card"> <div class="card-body">
-                                <h5 class="card-title">Search for Jobs in Field</h5>
-                                <p>(Requires Linkedin/Handshake account to be logged in)</p>
-                                <!-- Buttons for querying job search websites -->
-                                <button class="btn btn-primary mt-1 mb-1 me-2" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
-                                    Open Linkedin Job Search
-                                </button>
-                                <button class="btn btn-warning mt-1 mb-1 me-2" type="button" id="handshake-search" onclick="openHandshakeSearch()">
-                                    Open Handshake Job Search
-                                </button>
-                            </div> </div> </div>
-                        </div>
+                        <!-- Card Description -->
+                        <div class="col"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Description</h5>
+                            <div class="card-text" id="descriptionDiv"></div>
+                        </div> </div> </div>
+                        <!-- Card for Tasks & Skills -->
+                        <div class="col"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Tasks and Skills</h5>
+                            <div class="card-text" id="taskDiv"></div>
+                        </div> </div> </div>
+                        <!-- Card for Work Styles -->
+                        <div class="col"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Work Styles</h5>
+                            <div class="card-text" id="workstylesDiv"></div>
+                        </div> </div> </div>
                         <!-- Card for Salary -->
                         <!-- Might need to do some more here with data graphics -->
                         <div class="col"> <div class="card"> <div class="card-body">
@@ -295,8 +290,9 @@
                 let knowledge = info['knowledge'];
                 let wage = info['wage'];
                 let soc_code = info['soc_code'];
+                let work_styles = info['work_styles']
 
-                // Job title dispaly
+                // Job title display
                 let titleDiv = document.getElementById('titleDiv');
                 titleDiv.textContent = info['title'];
 
@@ -308,9 +304,15 @@
                 else {
                     skills = "No tasks or skills available for this job.";
                 }
-                
-                wage = Mustache.render("Mean: {{mean}} 10: {{10}} 25: {{25}} 50: {{50}} 75: {{75}} 90: {{90}}", wage);
 
+                if (work_styles && Array.isArray(work_styles) && work_styles.length > 0) {
+                    let numberedWork_styles = work_styles.map((work_styles, index) => `${index + 1}. ${work_styles[0]}`).join('<br>'); // Number each work_style
+                    work_styles = Mustache.render("{{{work_styles}}}", { work_styles: numberedWork_styles });
+                }
+                else {
+                    work_styles = "No work styles available for this job.";
+                }
+                
                 let descriptionDiv = document.getElementById('descriptionDiv');
                 descriptionDiv.innerHTML = description;
 
@@ -319,6 +321,10 @@
 
                 let wageDiv = document.getElementById('salaryDiv');
                 wageDiv.innerHTML = ''; 
+
+                let workstylesDiv = document.getElementById('workstylesDiv');
+                workstylesDiv.innerHTML = work_styles;
+
 
                 createSalaryBoxPlot(info['wage']);
 
