@@ -172,20 +172,20 @@
                             Minimum Average Income
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" onclick="setWage(0)">0</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(25000)">25,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(50000)">50,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(75000)">75,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(100000)">100,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(125000)">125,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(150000)">150,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(200000)">200,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(300000)">300,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(400000)">400,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(0)">$0</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(25000)">$25,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(50000)">$50,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(75000)">$75,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(100000)">$100,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(125000)">$125,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(150000)">$150,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(200000)">$200,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(300000)">$300,000</a></li>
+                            <li><a class="dropdown-item" onclick="setWage(400000)">$400,000</a></li>
                         </ul>
                     </div>
                     <!-- Display users selection -->
-                    <h5 id="filterDisplay">0</h5>
+                    <h5 id="filterDisplay">$0</h5>
                     <!-- <form>
                         <label for="income">Minimum Average Income (0–400,000)</label>
                         <input class="form-control" type="range" id="incomeInput" 
@@ -219,22 +219,7 @@
 
                             <!-- column 1 -->
                             <div class="col" style="margin-top: 0px !important;">
-                                <!-- Card Description -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Description</h5>
-                                        <div class="card-text" id="descriptionDiv"></div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <!-- Card for Tasks & Skills -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Tasks and Skills</h5>
-                                        <div class="card-text" id="taskDiv"></div>
-                                    </div>
-                                </div>
-                                <hr>
+
                                 <!-- Card for Finding Employment -->
                                 <div class="card">
                                     <div class="card-body">
@@ -251,6 +236,23 @@
                                         </button>
                                     </div>
                                 </div>
+                                <hr>
+                                <!-- Card Description -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Description</h5>
+                                        <div class="card-text" id="descriptionDiv"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Card for Tasks & Skills -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tasks and Skills</h5>
+                                        <div class="card-text" id="taskDiv"></div>
+                                    </div>
+                                </div>
+                                
                             </div>
 
                             <!-- column 2 -->
@@ -549,7 +551,7 @@
         function setWage(wage) {
             min_wage = wage;
             getSearchResults();
-            filterDisplay.textContent = wage;
+            filterDisplay.textContent = '$' + Number(min_wage).toLocaleString();
         }
 
         function getSearchResults() {
