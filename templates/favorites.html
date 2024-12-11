@@ -122,60 +122,97 @@
                 </div>
 
                 <!-- Cards -->
+            <!-- Cards -->
             <div class="col-9">
                 <div class="col-md-9 cards-container" id="cardsContainer">
-                  <div id="welcomeMessage" class="text-center p-5">
-                      <h3>These are your favorite jobs!</h3>
-                      <p>Select one to view its details, or compare their salaries with "View Salary Comparison."</p>
-                  </div>
-                  
-                  <div id="cardsContent" style="display: none;">
-                      <!-- Title of Job -->
-                      <div class="d-flex">
-                          <h1 class="me-4" id="titleDiv"></h1>
-                      </div>
-                      <!-- Buttons for querying job search websites -->
-                      <button class="btn btn-primary mt-1 mb-1 me-2" type="button" id="linkedin-search" onclick="openLinkedInSearch()">
-                        Open Linkedin Job Search
-                    </button>
-                    <button class="btn btn-warning mt-1 mb-1 me-2" type="button" id="handshake-search" onclick="openHandshakeSearch()">
-                        Open Handshake Job Search
-                    </button>
-                      <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5">
-                        <!-- Card Description -->
-                        <div class="col"> <div class="card"> <div class="card-body">
-                            <h5 class="card-title">Description</h5>
-                            <div class="card-text" id="descriptionDiv"></div>
-                        </div> </div> </div>
-                        <!-- Card for Tasks & Skills -->
-                        <div class="col"> <div class="card"> <div class="card-body">
-                            <h5 class="card-title">Tasks and Skills</h5>
-                            <div class="card-text" id="taskDiv"></div>
-                        </div> </div> </div>
-                        <!-- Card for Work Styles -->
-                        <div class="col"> <div class="card"> <div class="card-body">
-                            <h5 class="card-title">Work Styles</h5>
-                            <div class="card-text" id="workstylesDiv"></div>
-                        </div> </div> </div>
-                        <!-- Card for Salary -->
-                        <!-- Might need to do some more here with data graphics -->
-                        <div class="col"> <div class="card"> <div class="card-body">
-                            <h5 class="card-title">Salary Range</h5>
-                            <div class="card-text" id="salaryDiv"></div>
-                        </div> </div> </div>
-                        <!-- Card for Commenting Section -->
-                        <div class="col-12"> <div class="card"> <div class="card-body">
-                            <h5 class="card-title">Comments</h5>
-                            <div id="commentsDiv" class="mb-3">
-                            <!-- Comments will be dynamically loaded here -->
-                            </div>
-                        </div> </div> </div>
-                    </div> </div> </div>
-                    </div> </div> </div>
-                  </div>
-              </div>
-            </div>                
+                    <div id="welcomeMessage" class="text-center p-5">
+                        <h3>Welcome to TigerOutcomes!</h3>
+                        <p style="margin-bottom: 5px;">Start by searching by your major to explore your career
+                            opportunities.</p>
+                        <p>Click on ★ to favorite a job!</p>
+                    </div>
 
+                    <div id="cardsContent" style="display: none;">
+                        <!-- Title of Job -->
+                        <div class="d-flex">
+                            <h1 class="me-4" id="titleDiv"></h1>
+                        </div>
+
+                        <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5" style="margin-top: 0px !important;">
+
+                            <!-- column 1 -->
+                            <div class="col" style="margin-top: 0px !important;">
+
+                                <!-- Card for Finding Employment -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Search for Jobs in Field</h5>
+                                        <p>(Requires Linkedin/Handshake account to be logged in)</p>
+                                        <!-- Buttons for querying job search websites -->
+                                        <button class="btn btn-primary mt-1 mb-1 me-2" type="button"
+                                            id="linkedin-search" onclick="openLinkedInSearch()">
+                                            Open Linkedin Job Search
+                                        </button>
+                                        <button class="btn btn-warning mt-1 mb-1 me-2" type="button"
+                                            id="handshake-search" onclick="openHandshakeSearch()">
+                                            Open Handshake Job Search
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Card Description -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Description</h5>
+                                        <div class="card-text" id="descriptionDiv"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Card for Tasks & Skills -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tasks and Skills</h5>
+                                        <div class="card-text" id="taskDiv"></div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            <!-- column 2 -->
+                            <div class="col" style="margin-top: 0px !important;">
+                                <!-- Card for Salary -->
+                                <!-- Might need to do some more here with data graphics -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Salary Range</h5>
+                                        <div class="card-text" id="salaryDiv"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Card for Work Styles -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Work Styles</h5>
+                                        <div class="card-text" id="workstylesDiv"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- Card for Commenting Section -->
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Comments</h5>
+                                        <div id="commentsDiv" class="mb-3">
+                                            <!-- Comments will be dynamically loaded here -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                 <footer class="py-3 bg-light sticky-bottom">
             <div class="container">
                 <span class="text-muted">Created by the TigerOutcomes <a href="/about">team</a>.</span>
