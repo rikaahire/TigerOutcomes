@@ -42,6 +42,28 @@
               overflow-y: auto;
             }
 
+            .flag-icon {
+                color: rgb(184, 184, 184);
+                font-size: 1.1rem;
+                position: relative;
+            }
+            .flag-icon:hover {
+                color: gray;
+            }
+            .flag-icon:active {
+                color: red;
+            }
+            .flag-icon:hover::after {
+                content: "Report this comment";
+                color: gray;
+                font-size: 0.9rem;
+                position: absolute;
+                left: 1.5rem;
+                top: 0;
+                white-space: nowrap;
+            }
+
+
         </style>
         <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
     </head>
@@ -583,7 +605,8 @@
                     let template = `
                         {{#comments}}
                             <div>
-                                <strong>User {{user}}:</strong> <button class="btn btn-sm btn-link" onclick="flagComment({{id}})">Flag</button>
+                                <strong>User {{user}}:</strong>
+                                <span class="flag-icon" onclick="flagComment({{id}})" style="cursor: pointer;">⚑</span>
                                 <p>{{text}}</p>
                             <div>
                         {{/comments}}

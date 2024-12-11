@@ -28,7 +28,7 @@
                 color: white;
             }
               
-              .cards-container {
+            .cards-container {
                 position: sticky;
                 top: 75px; 
                 right: 0;
@@ -36,11 +36,32 @@
                 overflow-y: auto; 
                 padding-right: 15px; 
                 width: 100%;
-              }
-  
-              .cards-container .card {
+            }
+
+            .cards-container .card {
                 overflow-y: auto;
-              }
+            }
+
+            .flag-icon {
+                color: rgb(184, 184, 184);
+                font-size: 1.1rem;
+                position: relative;
+            }
+            .flag-icon:hover {
+                color: gray;
+            }
+            .flag-icon:active {
+                color: red;
+            }
+            .flag-icon:hover::after {
+                content: "Report this comment";
+                color: gray;
+                font-size: 0.9rem;
+                position: absolute;
+                left: 1.5rem;
+                top: 0;
+                white-space: nowrap;
+            }
   
           </style>
           <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
@@ -262,7 +283,7 @@
                     chart.render();
 
                     let meanText = document.createElement('p');
-                    meanText.textContent = `Mean Salary: $${wage['mean'].toLocaleString()}`;
+                    meanText.textContent = `Mean Salary: $${Number(wage['mean']).toLocaleString('en-US')}`;
                     let wageDiv = document.getElementById('salaryDiv');
                     wageDiv.appendChild(meanText);
                 }
@@ -319,6 +340,7 @@
                         {{#comments}}
                             <div>
                                 <strong>User {{user}}:</strong>
+                                <span class="flag-icon" onclick="flagComment({{id}})" style="cursor: pointer;">⚑</span>
                                 <p>{{text}}</p>
                             <div>
                         {{/comments}}
@@ -380,6 +402,28 @@
                 }
                 request = new XMLHttpRequest();
                 request.onload = handleAddComment;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            function handleFlagComment() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                console.log(this.response)
+            }
+
+            function flagComment(id) {
+                let encodedID = encodeURIComponent(id);
+                let url = "/flag_comment?id=" + encodedID;
+                
+                if (request !== null) {
+                    request.abort();
+                }
+                request = new XMLHttpRequest();
+                request.onload = handleFlagComment;
                 request.onerror = handleError;
                 request.open('GET', url);
                 request.send();
