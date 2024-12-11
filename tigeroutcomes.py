@@ -124,13 +124,15 @@ def job_details():
     skills = descript['skills']
     knowledge = descript['knowledge']
     wage = descript['wage']
+    work_styles = descript['work_styles']
     title = db.get_name_from_soc(soc_code)
     descript= {'description': [tuple(row) for row in description], 
                'skills': [tuple(row) for row in skills], 
                'knowledge': [tuple(row) for row in knowledge], 
                'wage': wage,
                'soc_code': soc_code,
-               'title': [tuple(row) for row in title]}
+               'title': [tuple(row) for row in title],
+               'work_styles': [tuple(row) for row in work_styles]}
     json_doc = json.dumps(descript)
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'

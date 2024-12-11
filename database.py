@@ -26,7 +26,7 @@ sys.path.append('/Volumes/TigerOutcomes/SQL')
 # Database and SMB configuration
 #DATABASE_URL = 'postgresql://bz5989@localhost:5432/mydb'
 server_path = "smb://files/dept/InstResearch/TigerOutcomes"
-mount_path = "/Volumes/TigerOutcomes-1"  # Where the server will be mounted on your Mac
+mount_path = "/Volumes/TigerOutcomes"  # Where the server will be mounted on your Mac
 
 # Excel files and their corresponding Postgres tables
 files_to_tables = {
@@ -42,6 +42,7 @@ files_to_tables = {
     "Skills.xlsx": "onet_skills",
     "Knowledge.xlsx": "onet_knowledge",
     "Alternate Titles.xlsx": "onet_alternate_titles",
+    "Work Styles.xlsx": "onet_work_styles",
     # "soc_classification_definitions.xlsx": "soc_classification_definitions", # not relevant
     "bls_wage_data_2023.xlsx": "bls_wage_data",
 }
@@ -323,9 +324,16 @@ def get_occupational_data_full(soc_code):
     table_skills = sqlalchemy.Table("onet_skills", metadata, autoload_with=engine)
     table_knowledge = sqlalchemy.Table("onet_knowledge", metadata, autoload_with=engine)
     table_wage = sqlalchemy.Table("bls_wage_data", metadata, autoload_with=engine)
+    table_work_tyles = sqlalchemy.Table("onet_work_styles", metadata, autoload_with=engine)
+    
     # Create a select query
     stmt_descrip = sqlalchemy.select(table_descrip.c.Description).where(table_descrip.columns["O*NET-SOC Code"] == soc_code)
     stmt_skills = (sqlalchemy.select(table_skills.c['Element Name'])
+                   .where(table_skills.columns["O*NET-SOC Code"] == soc_code)
+                   .where(table_skills.columns["Scale ID"] == "IM")
+                   .order_by(desc(table_skills.c["Data Value"]))
+                   .limit(5))
+    stmt_work_styles = (sqlalchemy.select(table_work_tyles.c['Element Name'])
                    .where(table_skills.columns["O*NET-SOC Code"] == soc_code)
                    .where(table_skills.columns["Scale ID"] == "IM")
                    .order_by(desc(table_skills.c["Data Value"]))
@@ -339,9 +347,10 @@ def get_occupational_data_full(soc_code):
         skills = conn.execute(stmt_skills).fetchall()
         knowledge = conn.execute(stmt_knowledge).fetchall()
         wage = conn.execute(stmt_wage).fetchall()
+        work_styles = conn.execute(stmt_work_styles).fetchall()
 
     wage = {"mean": wage[0][18], "10": wage[0][25], "25": wage[0][26], "50": wage[0][27], "75": wage[0][28], "90": wage[0][29]}
-    return {'description': description, 'skills': skills, 'knowledge': knowledge, 'wage': wage}
+    return {'description': description, 'skills': skills, 'knowledge': knowledge, 'wage': wage, "work_styles": work_styles}
 
 #-----------------------------------------------------------------------
 

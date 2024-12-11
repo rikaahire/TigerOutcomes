@@ -235,6 +235,12 @@
                             <h5 class="card-title">Salary Range</h5>
                             <div class="card-text" id="salaryDiv"></div>
                         </div> </div> </div>
+                        <!-- Card for Work Styles -->
+            
+                        <div class="col"> <div class="card"> <div class="card-body">
+                            <h5 class="card-title">Work Styles</h5>
+                            <div class="card-text" id="workstylesDiv"></div>
+                        </div> </div> </div>
                         <!-- Card for Commenting Section -->
                         <div class="col-12"> <div class="card"> <div class="card-body">
                             <h5 class="card-title">Comments</h5>
@@ -403,6 +409,7 @@
                 let knowledge = info['knowledge'];
                 let wage = info['wage'];
                 let soc_code = info['soc_code'];
+                let work_styles = info['work_styles']
 
                 // Job title display
                 let titleDiv = document.getElementById('titleDiv');
@@ -425,6 +432,10 @@
 
                 let wageDiv = document.getElementById('salaryDiv');
                 wageDiv.innerHTML = ''; 
+
+                let workstylesDiv = document.getElementById('workstylesDiv');
+                workstylesDiv.innerHTML = work_styles;
+
 
                 createSalaryBoxPlot(info['wage']);
 
@@ -450,6 +461,7 @@
                     return;
                 }
                 let info = JSON.parse(this.response);
+                console.log(info)
                 getJobHtml(info);
                 // Hide welcome msg, show cards
                 document.getElementById('welcomeMessage').style.display = 'none';
