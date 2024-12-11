@@ -369,7 +369,7 @@
                     chart.render();
 
                     let meanText = document.createElement('p');
-                    meanText.textContent = `Mean Salary: $${wage['mean'].toLocaleString()}`;
+                    meanText.textContent = `Mean Salary: $${Number(wage['mean']).toLocaleString('en-US')}`;
                     let wageDiv = document.getElementById('salaryDiv');
                     wageDiv.appendChild(meanText);
                 }
