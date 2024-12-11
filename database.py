@@ -334,9 +334,9 @@ def get_occupational_data_full(soc_code):
                    .order_by(desc(table_skills.c["Data Value"]))
                    .limit(5))
     stmt_work_styles = (sqlalchemy.select(table_work_tyles.c['Element Name'])
-                   .where(table_skills.columns["O*NET-SOC Code"] == soc_code)
-                   .where(table_skills.columns["Scale ID"] == "IM")
-                   .order_by(desc(table_skills.c["Data Value"]))
+                   .where(table_work_tyles.columns["O*NET-SOC Code"] == soc_code)
+                   .where(table_work_tyles.columns["Scale ID"] == "IM")
+                   .order_by(desc(table_work_tyles.c["Data Value"]))
                    .limit(5))
     stmt_knowledge = sqlalchemy.select(distinct(table_knowledge.c['Element Name'])).where(table_knowledge.columns["O*NET-SOC Code"] == soc_code)
     mod_soc_code = soc_code[:7]

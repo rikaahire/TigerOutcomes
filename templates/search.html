@@ -423,6 +423,14 @@
                 else {
                     skills = "No tasks or skills available for this job.";
                 }
+
+                if (work_styles && Array.isArray(work_styles) && work_styles.length > 0) {
+                    let numberedWork_styles = work_styles.map((work_styles, index) => `${index + 1}. ${work_styles[0]}`).join('<br>'); // Number each work_style
+                    work_styles = Mustache.render("{{{work_styles}}}", { work_styles: numberedWork_styles });
+                }
+                else {
+                    work_styles = "No work styles available for this job.";
+                }
                 
                 let descriptionDiv = document.getElementById('descriptionDiv');
                 descriptionDiv.innerHTML = description;
