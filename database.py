@@ -73,7 +73,7 @@ def read_favorites(name, soc_code=None, status=None, limit=default_limit):
     if status is not None:
         query = query.where(table.c.status == status)
     
-    query = query.limit(limit)
+    # query = query.limit(limit)
     with engine.connect() as conn:
         # Execute the query and fetch results
         rows = conn.execute(query).fetchall()
