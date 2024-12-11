@@ -148,11 +148,12 @@
                 </datalist>
 
                 <hr>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="sort"
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <label for="sortAlgoButton" style="white-space: nowrap;">Sort by:</label>
+                    <div class="dropdown" style="flex: 1;">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="sortAlgoButton"
                             data-bs-toggle="dropdown"
-                            style="display: inline-block; white-space: normal; word-wrap: break-word; width: 100%; max-width: 300px;">
+                            style="display: inline-block; white-space: normal; word-wrap: break-word;">
                             Sort by
                         </button>
                         <ul class="dropdown-menu">
@@ -161,13 +162,14 @@
                         </ul>
                     </div>
                     <!-- Display users selection -->
-                    <div id="algoDisplay" style="margin-top: 8px !important; margin-bottom: 8px !important; font-size: 1rem;">Alphabetical</div>
+                    <!-- <div id="algoDisplay" style="margin-top: 8px !important; margin-bottom: 8px !important; font-size: 1rem;">Alphabetical</div> -->
                 </div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-top: 2px !important;">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="sort"
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 2px !important;">
+                    <label for="sortFilterButton" style="white-space: nowrap;">Minimum Average Income:</label>
+                    <div class="dropdown" style="flex: 1;">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="sortFilterButton"
                             data-bs-toggle="dropdown"
-                            style="display: inline-block; white-space: normal; word-wrap: break-word; width: 100%; max-width: 300px;">
+                            style="display: inline-block; white-space: normal; word-wrap: break-word;">
                             Minimum Average Income
                         </button>
                         <ul class="dropdown-menu">
@@ -184,7 +186,7 @@
                         </ul>
                     </div>
                     <!-- Display users selection -->
-                    <div id="filterDisplay" style="margin-top: 8px !important; margin-bottom: 8px !important; font-size: 1rem;">$0</div>
+                    <!-- <div id="filterDisplay" style="margin-top: 8px !important; margin-bottom: 8px !important; font-size: 1rem;">$0</div> -->
 
                     <!-- <form>
                         <label for="income">Minimum Average Income (0–400,000)</label>
@@ -541,17 +543,20 @@
             algo = algorithm;
             getSearchResults();
             if (algo == "common") {
-                algoDisplay.textContent = "Most Common";
-            } else if (algo == "alphabetical") {
-                algoDisplay.textContent = "Alphabetical";
+                // algoDisplay.textContent = "Most Common";
+                document.getElementById('sortAlgoButton').textContent = "Most Common";
+            } else {
+                // algoDisplay.textContent = "Alphabetical";
+                document.getElementById('sortAlgoButton').textContent = "Alphabetical";
             }
-
         }
 
         function setWage(wage) {
             min_wage = wage;
             getSearchResults();
-            filterDisplay.textContent = '$' + Number(min_wage).toLocaleString();
+            // filterDisplay.textContent = '$' + Number(min_wage).toLocaleString();
+            let wageText = '$' + Number(min_wage).toLocaleString();
+            document.getElementById('sortFilterButton').textContent = wageText;
         }
 
         function getSearchResults() {
@@ -839,7 +844,10 @@
             window.open(handshakeUrl, '_blank');
         }
 
-
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('sortAlgoButton').textContent = 'Alphabetical';
+            document.getElementById('sortFilterButton').textContent = '$0';
+        });
 
     </script>
 </body>
