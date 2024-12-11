@@ -534,8 +534,11 @@
             }
 
             function fetchFavoriteJobDetails(jobs) {
-                // Fetch details for each favorite job
-                let jobDetailsPromises = jobs.map(job => 
+                // Fetch details for 5 favorites
+                const limitedJobs = jobs.slice(0, 5);
+
+                // Fetch details for each limited job
+                let jobDetailsPromises = limitedJobs.map(job => 
                     fetch(`/job?soc_code=${encodeURIComponent(job.soc_code)}`)
                         .then(response => response.json())
                 );
