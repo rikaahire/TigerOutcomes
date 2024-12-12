@@ -88,15 +88,27 @@ def approve(id):
 def remove(id):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
-    stmt = select(table).where(table.c.id == id)
     ret = ''
     with engine.connect() as conn:
         try:
-            favorite = conn.execute(stmt).fetchall()
-            if favorite:
-                new_stmt = delete(table).where(table.c.id == id)
-                conn.execute(new_stmt)
-                ret = f"Removed comment with id: {id}."
+            stmt = delete(table).where(table.c.id == id)
+            conn.execute(stmt)
+            ret = f"Removed comment with id: {id}."
+            conn.commit()
+        except SQLAlchemyError as e:
+            ret = f"Error approving comment: {e}"
+            conn.rollback()
+    return ret
+
+def removeAll():
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
+    ret = ''
+    with engine.connect() as conn:
+        try:
+            stmt = delete(table)
+            conn.execute(stmt)
+            ret = f"Removed all comments."
             conn.commit()
         except SQLAlchemyError as e:
             ret = f"Error approving comment: {e}"

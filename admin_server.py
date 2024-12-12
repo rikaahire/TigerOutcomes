@@ -111,3 +111,14 @@ def remove_comment():
     response = flask.make_response(json_doc)
     response.headers['Content-Type'] = 'application/json'
     return response
+
+@app.route('/flush_comments', methods=['GET'])
+def flush_comments():
+    if check_admin():
+        html_code = dba.removeAll()
+    else:
+        html_code = "Not an admin"
+    json_doc = json.dumps(html_code)
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response
