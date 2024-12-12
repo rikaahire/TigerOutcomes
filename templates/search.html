@@ -388,7 +388,7 @@
             if (!chartContainer && (wage['10'] != "*" || wage['25'] != "*" || wage['50'] != "*" || wage['75'] != "*" || wage['90'] != "*")) {
                 chartContainer = document.createElement('div');
                 chartContainer.id = 'salaryChart';
-                chartContainer.style.height = '300px';
+                chartContainer.style.height = '350px';
                 chartContainer.style.width = '100%';
                 let wageDiv = document.getElementById('salaryDiv');
                 wageDiv.appendChild(chartContainer);
@@ -417,7 +417,7 @@
                             Number(wage['75']),   // Median
                             Number(wage['90']),   // Third quartile
                             Number(wage['50'])    // Maximum 
-                        ]
+                        ],
                     }
                 ];
                 var chart = new CanvasJS.Chart("salaryChart", {
@@ -426,10 +426,12 @@
                         title: "Annual Salary ($)",
                         valueFormatString: "$#,##0"
                     },
+                    dataPointWidth: 20,
                     data: [{
                         type: "boxAndWhisker",
                         color: "#3498db",
-                        dataPoints: dataPoints
+                        dataPoints: dataPoints,
+                        yValueFormatString: "$###,###",
                     }]
                 });
 
