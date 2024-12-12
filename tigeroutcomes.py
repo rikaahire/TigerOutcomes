@@ -20,7 +20,6 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 @app.route('/index', methods=['GET'])
 @app.route('/landing', methods=['GET'])
 def landing():
-
     # auth.authenticate()
     try:
         html_code = flask.render_template('landingpage.html')
@@ -71,22 +70,15 @@ def help():
 
 @app.route('/search', methods=['GET'])
 def search():
+    auth.authenticate()
     return flask.send_file('templates/search.html')
 
 @app.route('/favorites', methods=['GET'])
 def favorite():
+    auth.authenticate()
     return flask.send_file('templates/favorites.html')
 
 #-----------------------------------------------------------------------
-
-# get results from a major search
-@app.route('/header', methods=['GET'])
-def header():
-    results = flask.render_template('header.html')
-    json_doc = json.dumps(results)
-    response = flask.make_response(json_doc)
-    response.headers['Content-Type'] = 'application/json'
-    return response
 
 # get results from a major search
 @app.route('/results', methods=['GET'])

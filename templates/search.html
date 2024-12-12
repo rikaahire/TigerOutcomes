@@ -581,27 +581,6 @@
             request.send();
         }
 
-        function handleHeaderResponse() {
-            if (this.status !== 200) {
-                alert('Error: Failed to fetch data from server');
-                return;
-            }
-            let html = this.response;
-            let headerDiv = document.getElementById('header');
-            headerDiv.innerHTML = html;
-        }
-
-        function getHeader() {
-            let url = '/header';
-            if (request !== null)
-                request.abort();
-            request = new XMLHttpRequest();
-            request.onload = handleHeaderResponse;
-            request.onerror = handleError;
-            request.open('GET', url);
-            request.send();
-        }
-
         function getJobResults(soc_code) {
             let encodedSOC = encodeURIComponent(soc_code);
             let url = '/job?soc_code=' + encodedSOC;
@@ -768,14 +747,6 @@
         //     }
         // }
 
-        // function saveCommentsToServer(comments) {
-        //     fetch('/comments', {
-        //         method: 'GET',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify({ comments }),
-        //     }).catch(err => console.error('Failed to save comments', err));
-        // }
-
         let timer = null;
 
         function debouncedGetResults() {
@@ -790,8 +761,6 @@
 
         document.addEventListener('DOMContentLoaded', setup);
         document.addEventListener('DOMContentLoaded', getSearchResults);
-        // document.addEventListener('DOMContentLoaded', getHeader);
-        // document.addEventListener('DOMContentLoaded', fetchCommentsFromServer);
 
 
         // Get user
