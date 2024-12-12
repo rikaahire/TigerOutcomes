@@ -104,7 +104,7 @@ def remove_comment():
     if id is None:
         html_code = "No comment selected"
     if check_admin():
-        html_code = dba.approve(id)
+        html_code = dba.remove(id)
     else:
         html_code = "Not an admin"
     json_doc = json.dumps(html_code)
