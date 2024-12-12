@@ -5,7 +5,7 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
-# favorites table
+# Admin table
 class Admin(Base):
     __tablename__ = 'admin'
 

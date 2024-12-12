@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import pandas as pd
 import random
 
@@ -11,7 +12,6 @@ for column in df.columns:
 
 # Save to new Excel file
 df.to_excel('COS333_Demographics.xlsx', index=False)
-
 
 # Load Excel file
 df = pd.read_excel('/Users/suria./Documents/COLLEGE/3rd Year/cos333/COS333_AcA_Student_Outcomes.xlsx')

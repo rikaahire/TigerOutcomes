@@ -5,7 +5,7 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
-# favorites table
+# Favorites table
 class Favorites(Base):
     __tablename__ = 'favorites'
 

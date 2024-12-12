@@ -17,20 +17,25 @@ DATABASE_URL = 'postgresql://tigeroutcomesdb_x9pf_user:Ewfihh7sXhDfzBS1JX51rem45
 engine = sqlalchemy.create_engine(DATABASE_URL)
 
 default_limit = 10
+
+# admin scope capabilities
 #-----------------------------------------------------------------------
 
-def fetch_flagged_comments():
+# get list of admins
+def get_admins():
     metadata = sqlalchemy.MetaData()
-    table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
-    stmt = select(table).where(table.c.valid == False)
-    with engine.connect() as conn:
-        rows = conn.execute(stmt).fetchall()
-    return [{"id": row.id, "text": row.text} for row in rows]
+    table = sqlalchemy.Table('admin', metadata, autoload_with=engine)
 
+    with engine.connect() as conn:
+        rows = conn.execute(select(table)).fetchall()
+    return [{"Admin": row.name} for row in rows]
+
+# add a new admin
 def add_admin(username):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('admin', metadata, autoload_with=engine)
     ret = ''
+
     with engine.connect() as conn:
         try:
             stmt = table.insert().values(name=username)
@@ -42,10 +47,12 @@ def add_admin(username):
             conn.rollback()
     return ret
 
+# remove an admin
 def remove_admin(username):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('admin', metadata, autoload_with=engine)
     ret = ''
+
     with engine.connect() as conn:
         try:
             stmt = delete(table).where(table.c.name == username)
@@ -57,6 +64,7 @@ def remove_admin(username):
             conn.rollback()
     return ret
 
+# check if name is on admin list
 def check_admin(username):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('admin', metadata, autoload_with=engine)
@@ -67,11 +75,25 @@ def check_admin(username):
             ret = True
     return ret
 
+# admin comment capabilities
+#-----------------------------------------------------------------------
+
+# get all user-flagged comments
+def fetch_flagged_comments():
+    metadata = sqlalchemy.MetaData()
+    table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
+    stmt = select(table).where(table.c.valid == False)
+    with engine.connect() as conn:
+        rows = conn.execute(stmt).fetchall()
+    return [{"id": row.id, "text": row.text} for row in rows]
+
+# approve a comment (don't remove)
 def approve(id):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
     stmt = select(table).where(table.c.id == id)
     ret = ''
+
     with engine.connect() as conn:
         try:
             favorite = conn.execute(stmt).fetchall()
@@ -85,10 +107,12 @@ def approve(id):
             conn.rollback()
     return ret
 
+# remove a comment (when not approved)
 def remove(id):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
     ret = ''
+    
     with engine.connect() as conn:
         try:
             stmt = delete(table).where(table.c.id == id)
@@ -100,10 +124,12 @@ def remove(id):
             conn.rollback()
     return ret
 
+# clear comments database
 def removeAll():
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('comments', metadata, autoload_with=engine)
     ret = ''
+
     with engine.connect() as conn:
         try:
             stmt = delete(table)
@@ -115,14 +141,7 @@ def removeAll():
             conn.rollback()
     return ret
 
-def get_admins():
-    metadata = sqlalchemy.MetaData()
-    table = sqlalchemy.Table('admin', metadata, autoload_with=engine)
-    with engine.connect() as conn:
-        rows = conn.execute(select(table)).fetchall()
-    return [{"Admin": row.name} for row in rows]
-
-# get all column names (for use with get_rows for column names)
+# get all column names
 def get_cols():
     metadata = sqlalchemy.MetaData()
     cols = {}
@@ -137,50 +156,6 @@ def get_cols():
 
 #-----------------------------------------------------------------------
 
-# generic when given table, column, and equal
-def get_rows(table_name, col_name, query, limit=default_limit):
-    # input: table_name (sqlalchemy.Table): query table , col_name (str): target str, 
-    #   query (str): rows we want to match
-    #   limit (int): maximum number of rows that we want to return
-    # output: finds all rows in table where row.col_name = query
-
-    metadata = sqlalchemy.MetaData()
-    metadata.reflect(engine)
-
-    # Get table
-    table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
-
-    # Create a select query
-    stmt = select(table).where(table.c[col_name] == query).limit(limit)
-
-    # Execute the query and fetch the results
-    with engine.connect() as conn:
-        rows = conn.execute(stmt).fetchall()
-
-    return rows
-
-#-----------------------------------------------------------------------
-
-# generic for all options (should be initial)
-def get_all_instances(table_name, col_name):
-    # input: table name and column name
-    # output: returns a list of all unique rows within the column
-
-    metadata = sqlalchemy.MetaData()
-    metadata.reflect(engine)
-
-    # Get table
-    table = sqlalchemy.Table(table_name, metadata, autoload_with=engine)
-
-    # Create a select query
-    stmt = select(distinct(table.c[col_name]))
-
-    # Execute the query and fetch the results
-    with engine.connect() as conn:
-        rows = conn.execute(stmt).fetchall()
-
-    return rows
-
 def main():
 
     cols = get_cols()
@@ -188,9 +163,6 @@ def main():
         print(key + ":")
         print(value)
         print("\n")
-    # rows = get_rows("demographics", 10)
-    # for row in rows:
-    #     print(row)
 
 if __name__ == '__main__':
     main()
