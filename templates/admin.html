@@ -277,7 +277,7 @@
                 if (request !== null)
                     request.abort();
                 request = new XMLHttpRequest();
-                request.onload = handleApproveCommentResponse;
+                request.onload = handleRemoveCommentResponse;
                 request.onerror = handleError;
                 request.open('GET', url);
                 request.send();
