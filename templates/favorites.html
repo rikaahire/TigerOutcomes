@@ -62,6 +62,20 @@
                 top: 0;
                 white-space: nowrap;
             }
+
+            .row.g-4 {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .equal-height {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .equal-height .card {
+                flex-grow: 1;
+            }
   
           </style>
           <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
@@ -143,7 +157,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <h5 class="card-title">Search for Jobs in Field</h5>
-                                        <p>(Requires Linkedin/Handshake account to be logged in)</p>
+                                        <p class="fw-light">(Requires Linkedin/Handshake account to be logged in)</p>
                                         <!-- Buttons for querying job search websites -->
                                         <button class="btn btn-primary mt-1 mb-1 me-2" type="button"
                                             id="linkedin-search" onclick="openLinkedInSearch()">
