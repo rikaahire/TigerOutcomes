@@ -106,7 +106,7 @@
         <div class="row">
             <div class="col-3 d-flex flex-column align-items-stretch flex-shrink-0">
 
-                <input class="form-control" list="majorInputlist" type="text" id="majorInput" aria-label="majorsearch">
+                <input class="form-control fs-5" list="majorInputlist" type="text" id="majorInput" aria-label="majorsearch">
                 <datalist id="majorInputlist">
                     <option value="African American Studies">
                     <option value="American Studies">
@@ -402,6 +402,8 @@
                 img.src = 'static/images/oops.png';
                 img.alt = 'Tiger with questionmarks';
                 img.style.display = 'block';
+                img.style.margin = '0 auto';
+                img.style.position = 'relative';
 
                 let wageDiv = document.getElementById('salaryDiv');
                 wageDiv.appendChild(img);
