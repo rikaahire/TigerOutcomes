@@ -333,11 +333,11 @@
             }
 
             function setup() {
+                setTimeout(getUser, 1000)
                 getAdmins()
-                getUser()
             }
 
-            var delay = 1000;
+            var delay = 2000;
             (function cycleComments() {
                 setTimeout(cycleComments, delay);
                 delay = 10000;
