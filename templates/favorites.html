@@ -77,8 +77,8 @@
                 flex-grow: 1;
             }
   
-          </style>
-          <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
+        </style>
+        <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
     </head>
     <body>
         <header class="sticky-top" id="header">
@@ -134,87 +134,87 @@
                 </div>
 
                 <!-- Cards -->
-            <!-- Cards -->
-            <div class="col-9">
-                <div class="col-md-9 cards-container" id="cardsContainer">
-                    <div id="welcomeMessage" class="text-center p-5">
-                        <h3>These are your favorite jobs!</h3>
-                        <p style="margin-bottom: 5px;">Select one to view its details, or compare their salaries with "View Salary Comparison."</p>
-                    </div>
-
-                    <div id="cardsContent" style="display: none;">
-                        <!-- Title of Job -->
-                        <div class="d-flex">
-                            <h1 class="me-4" id="titleDiv"></h1>
+                <div class="col-9">
+                    <div class="col-md-9 cards-container" id="cardsContainer">
+                        <div id="welcomeMessage" class="text-center p-5">
+                            <h3>These are your favorite jobs!</h3>
+                            <p style="margin-bottom: 5px;">Select one to view its details, or compare their salaries with "View Salary Comparison."</p>
                         </div>
 
-                        <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5" style="margin-top: 0px !important;">
-
-                            <!-- column 1 -->
-                            <div class="col equal-height" style="margin-top: 0px !important;">
-
-                                <!-- Card for Finding Employment -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Search for Jobs in Field</h5>
-                                        <p class="fw-light">(Requires Linkedin/Handshake account to be logged in)</p>
-                                        <!-- Buttons for querying job search websites -->
-                                        <button class="btn btn-primary mt-1 mb-1 me-2" type="button"
-                                            id="linkedin-search" onclick="openLinkedInSearch()">
-                                            Open Linkedin Job Search
-                                        </button>
-                                        <button class="btn btn-warning mt-1 mb-1 me-2" type="button"
-                                            id="handshake-search" onclick="openHandshakeSearch()">
-                                            Open Handshake Job Search
-                                        </button>
-                                    </div>
-                                </div>
-                                <hr>
-                                <!-- Card Description -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Description</h5>
-                                        <div class="card-text" id="descriptionDiv"></div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <!-- Card for Tasks & Skills -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Tasks and Skills</h5>
-                                        <div class="card-text" id="taskDiv"></div>
-                                    </div>
-                                </div>
-                                
+                        <div id="cardsContent" style="display: none;">
+                            <!-- Title of Job -->
+                            <div class="d-flex">
+                                <h1 class="me-4" id="titleDiv"></h1>
                             </div>
 
-                            <!-- column 2 -->
-                            <div class="col equal-height" style="margin-top: 0px !important;">
-                                <!-- Card for Salary -->
-                                <!-- Might need to do some more here with data graphics -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Salary Range</h5>
-                                        <div class="card-text" id="salaryDiv"></div>
+                            <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5" style="margin-top: 0px !important;">
+
+                                <!-- column 1 -->
+                                <div class="col equal-height" style="margin-top: 0px !important;">
+
+                                    <!-- Card for Finding Employment -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Search for Jobs in Field</h5>
+                                            <p class="fw-light">(Requires Linkedin/Handshake account to be logged in)</p>
+                                            <!-- Buttons for querying job search websites -->
+                                            <button class="btn btn-primary mt-1 mb-1 me-2" type="button"
+                                                id="linkedin-search" onclick="openLinkedInSearch()">
+                                                Open Linkedin Job Search
+                                            </button>
+                                            <button class="btn btn-warning mt-1 mb-1 me-2" type="button"
+                                                id="handshake-search" onclick="openHandshakeSearch()">
+                                                Open Handshake Job Search
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <!-- Card for Work Styles -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Work Styles</h5>
-                                        <div class="card-text" id="workstylesDiv"></div>
+                                    <hr>
+                                    <!-- Card Description -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Description</h5>
+                                            <div class="card-text" id="descriptionDiv"></div>
+                                        </div>
                                     </div>
+                                    <hr>
+                                    <!-- Card for Tasks & Skills -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Tasks and Skills</h5>
+                                            <div class="card-text" id="taskDiv"></div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
 
-                            </div>
-                            <!-- Card for Commenting Section -->
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Comments</h5>
-                                        <div id="commentsDiv" class="mb-3">
-                                            <!-- Comments will be dynamically loaded here -->
+                                <!-- column 2 -->
+                                <div class="col equal-height" style="margin-top: 0px !important;">
+                                    <!-- Card for Salary -->
+                                    <!-- Might need to do some more here with data graphics -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Salary Range</h5>
+                                            <div class="card-text" id="salaryDiv"></div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <!-- Card for Work Styles -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Work Styles</h5>
+                                            <div class="card-text" id="workstylesDiv"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- Card for Commenting Section -->
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Comments</h5>
+                                            <div id="commentsDiv" class="mb-3">
+                                                <!-- Comments will be dynamically loaded here -->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -223,12 +223,13 @@
                     </div>
                 </div>
             </div>
-            <footer class="py-3 bg-light sticky-bottom">
-                <div class="container d-flex justify-content-between align-items-center">
-                    <span class="text-muted">Created by the TigerOutcomes <a href="/about">team</a>.</span>
-                    <span><a class="link-secondary" href="/admin">Admin</a></span>
-                </div>
-              </footer>
+        </div>
+        <footer class="py-3 bg-light sticky-bottom">
+            <div class="container d-flex justify-content-between align-items-center">
+                <span class="text-muted">Created by the TigerOutcomes <a href="/about">team</a>.</span>
+                <span><a class="link-secondary" href="/admin">Admin</a></span>
+            </div>
+        </footer>
 
         <script 
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
@@ -241,8 +242,13 @@
 
         <script>
             'use strict';
+            let request = null;
 
-            // results specifics
+            function handleError() {
+                alert('Error: Failed to fetch data from server');
+            }
+
+            // generate side list of favorites
             function convertToHtml(jobs) {
                 let template = `
                 {{#jobs}}
@@ -272,6 +278,159 @@
                 return html;
             }
 
+            function getFavorites() {
+                let url = '/preferences';
+
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = function() {
+                    if (this.status !== 200) {
+                        alert('Error: Failed to fetch data from server');
+                        return;
+                    }
+                    let jobs = JSON.parse(this.response);
+                    let html = convertToHtml(jobs);
+                    let resultsDiv = document.getElementById('resultsDiv');
+                    resultsDiv.innerHTML = html;
+
+                    fetchFavoriteJobDetails(jobs);
+                };
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+
+                loadFavorites();
+            }
+
+            // initialize state for favorites
+            function handleLoadFavorites() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let favorites = JSON.parse(this.response);
+                for (var i = 0; i < favorites.length; i++) {
+                    if (!favorites[i].soc_code) continue;
+                    var button = document.getElementById('favorite' + favorites[i].soc_code);
+                    if (button) {
+                        button.classList.add('active');
+                    }
+                }
+            }
+
+            function loadFavorites() {
+                let url = '/preferences';
+                request = new XMLHttpRequest();
+                request.onload = handleLoadFavorites;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // Delete a favorite
+            function handleDeleteFavorite() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let info = JSON.parse(this.response);
+                if (info[0]) {
+                    location.reload();
+                }
+            }
+
+            function deleteFavorite(soc_code) {
+                let url = '/delete?soc_code=' + soc_code + '&status=True';
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleDeleteFavorite;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // Generate salary comparison graph
+            function createFavoriteSalaryComparison(favoriteJobs) {
+                let dataPoints = favoriteJobs.map(job => ({
+                    label: job.title,
+                    y: [
+                        Number(job.wage['10']),
+                        Number(job.wage['25']),
+                        Number(job.wage['75']),
+                        Number(job.wage['90']),
+                        Number(job.wage['50'])
+                    ]
+                }));
+
+                var chart = new CanvasJS.Chart("favoriteSalaryChart", {
+                    theme: "light2",
+                    axisY: {
+                        title: "Annual Salary ($)",
+                        valueFormatString: "$#,##0"
+                    },
+                    dataPointWidth: 20,
+                    data: [{
+                        type: "boxAndWhisker",
+                        color: "#3498db",
+                        dataPoints: dataPoints,
+                        yValueFormatString: "$###,###",
+                    }]
+                });
+
+                chart.render();
+            }
+
+            function fetchFavoriteJobDetails(jobs) {
+                // Fetch details for 5 favorites
+                const limitedJobs = jobs.slice(0, 5);
+
+                // Fetch details for each limited job
+                let jobDetailsPromises = limitedJobs.map(job => 
+                    fetch(`/job?soc_code=${encodeURIComponent(job.soc_code)}`)
+                        .then(response => response.json())
+                );
+
+                Promise.all(jobDetailsPromises)
+                    .then(jobDetails => {
+                        // Create salary comparison chart when all details are fetched
+                        createFavoriteSalaryComparison(jobDetails);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching job details:', error);
+                    });
+            }
+
+            // Generate linkedin/handshake links
+            function openLinkedInSearch() {
+                // Grab the current job title from the page
+                const title = document.getElementById('titleDiv').textContent;
+                // Encode the title so it can be safely used in the URL
+                const encodedTitle = encodeURIComponent(title);
+                
+                // Construct the LinkedIn job search URL
+                const linkedInUrl = `http://linkedin.com/jobs/search/?keywords=${encodedTitle}`;
+
+                // Open the URL in a new browser tab
+                window.open(linkedInUrl, '_blank');
+            }
+
+            function openHandshakeSearch() {
+                // Grab the current job title from the page
+                const title = document.getElementById('titleDiv').textContent;
+                // Encode the title for URL
+                const encodedTitle = encodeURIComponent(title);
+                
+                // Handshake job search URL
+                // Example: https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=Software%20Engineer
+                const handshakeUrl = `https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=${encodedTitle}`;
+
+                // Open in new tab
+                window.open(handshakeUrl, '_blank');
+            }
+
+            // Generate salary box plot given values
             function createSalaryBoxPlot(wage) {
                 // Create a chart container if it doesn't exist
                 let chartContainer = document.getElementById('salaryChart');
@@ -334,6 +493,7 @@
                 }
             }
 
+            // Load in most info for job
             function getJobHtml(info) {
                 let description = info['description'];
                 let skills = info['skills'];
@@ -375,12 +535,38 @@
                 let workstylesDiv = document.getElementById('workstylesDiv');
                 workstylesDiv.innerHTML = work_styles;
 
-
                 createSalaryBoxPlot(info['wage']);
-
                 loadComments(soc_code);
             }
 
+            // Set off chain of job item requests
+            function handleJobResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let info = JSON.parse(this.response);
+                getJobHtml(info);
+
+                // Hide welcome msg, show cards
+                document.getElementById('welcomeMessage').style.display = 'none';
+                document.getElementById('cardsContent').style.display = 'block';
+            }
+
+            function getJobResults(soc_code) {
+                let encodedSOC = encodeURIComponent(soc_code);
+                let url = '/job?soc_code=' + encodedSOC;
+
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleJobResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // Load comments for a job
             function handleLoadComments() {
                 const usernameElement = document.getElementById('username');
                 const username = usernameElement.textContent.trim() || 'Guest';
@@ -398,16 +584,16 @@
                                 <strong>User {{user}}:</strong>
                                 <span class="flag-icon" onclick="flagComment({{id}})" style="cursor: pointer;">⚑</span>
                                 <p>{{text}}</p>
-                            <div>
+                            </div>
                         {{/comments}}
                     `;
-                                // insert when replies built
-                                // <button class="btn btn-sm btn-link" onclick="replyToComment({{id}})">Reply</button>
-                                // <div id="replies-{{id}}" class="ms-3 mt-2">
-                                //     {{#replies}}
-                                //         <p><strong>Reply:</strong> {{reply}}</p>
-                                //     {{/replies}}
-                                // </div>
+                    // insert when replies built
+                    // <button class="btn btn-sm btn-link" onclick="replyToComment({{id}})">Reply</button>
+                    // <div id="replies-{{id}}" class="ms-3 mt-2">
+                    //     {{#replies}}
+                    //         <p><strong>Reply:</strong> {{reply}}</p>
+                    //     {{/replies}}
+                    // </div>
                     let map = {
                         comments: comments
                     }
@@ -434,15 +620,14 @@
                 request.send();
             }
 
+            // Add a comment
             function handleAddComment() {
                 if (this.status !== 200) {
                     alert('Error: Failed to fetch data from server');
                     return;
                 }
                 let info = JSON.parse(this.response)[1];
-                console.log(info)
                 loadComments(info);
-                // alert(info);
             }
 
             function addComment(soc_code) {
@@ -450,10 +635,8 @@
                 const newComment = document.getElementById('newComment').value.trim();
                 let encodedComment = encodeURIComponent(newComment);
                 let url = "/write_comment?soc_code=" + encodedSOC + "&text=" + encodedComment;
-                // saveCommentsToServer(comments);
 
                 if (request !== null) {
-                    // alert(newComment);
                     request.abort();
                 }
                 request = new XMLHttpRequest();
@@ -463,12 +646,12 @@
                 request.send();
             }
 
+            // Flag comments
             function handleFlagComment() {
                 if (this.status !== 200) {
                     alert('Error: Failed to fetch data from server');
                     return;
                 }
-                console.log(this.response)
             }
 
             function flagComment(id) {
@@ -484,189 +667,6 @@
                 request.open('GET', url);
                 request.send();
             }
-
-            function handleSearchResponse() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let jobs = JSON.parse(this.response);
-                let html = convertToHtml(jobs);
-                let resultsDiv = document.getElementById('resultsDiv');
-                resultsDiv.innerHTML = html;
-            }
-
-            function handleJobResponse() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let info = JSON.parse(this.response);
-                getJobHtml(info);
-
-                // Hide welcome msg, show cards
-                document.getElementById('welcomeMessage').style.display = 'none';
-                document.getElementById('cardsContent').style.display = 'block';
-            }
-
-            function handleLoadFavorites() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let favorites = JSON.parse(this.response);
-                for (var i = 0; i < favorites.length; i++) {
-                    if (!favorites[i].soc_code) continue;
-                    var button = document.getElementById('favorite' + favorites[i].soc_code);
-                    if (button) {
-                        button.classList.add('active');
-                    }
-                }
-            }
-
-            function loadFavorites() {
-                let url = '/preferences';
-                request = new XMLHttpRequest();
-                request.onload = handleLoadFavorites;
-                request.onerror = handleError;
-                request.open('GET', url);
-                request.send();
-            }
-
-            let request = null;
-
-
-            function createFavoriteSalaryComparison(favoriteJobs) {
-                let dataPoints = favoriteJobs.map(job => ({
-                    label: job.title,
-                    y: [
-                        Number(job.wage['10']),
-                        Number(job.wage['25']),
-                        Number(job.wage['75']),
-                        Number(job.wage['90']),
-                        Number(job.wage['50'])
-                    ]
-                }));
-
-                var chart = new CanvasJS.Chart("favoriteSalaryChart", {
-                    theme: "light2",
-                    axisY: {
-                        title: "Annual Salary ($)",
-                        valueFormatString: "$#,##0"
-                    },
-                    dataPointWidth: 20,
-                    data: [{
-                        type: "boxAndWhisker",
-                        color: "#3498db",
-                        dataPoints: dataPoints,
-                        yValueFormatString: "$###,###",
-                    }]
-                });
-
-                chart.render();
-            }
-
-            function getFavorites() {
-                let url = '/preferences';
-
-                if (request !== null)
-                    request.abort();
-                request = new XMLHttpRequest();
-                request.onload = function() {
-                    if (this.status !== 200) {
-                        alert('Error: Failed to fetch data from server');
-                        return;
-                    }
-                    let jobs = JSON.parse(this.response);
-                    let html = convertToHtml(jobs);
-                    let resultsDiv = document.getElementById('resultsDiv');
-                    resultsDiv.innerHTML = html;
-
-                    fetchFavoriteJobDetails(jobs);
-                };
-                request.onerror = handleError;
-                request.open('GET', url);
-                request.send();
-
-                loadFavorites();
-            }
-
-            function fetchFavoriteJobDetails(jobs) {
-                // Fetch details for 5 favorites
-                const limitedJobs = jobs.slice(0, 5);
-
-                // Fetch details for each limited job
-                let jobDetailsPromises = limitedJobs.map(job => 
-                    fetch(`/job?soc_code=${encodeURIComponent(job.soc_code)}`)
-                        .then(response => response.json())
-                );
-
-                Promise.all(jobDetailsPromises)
-                    .then(jobDetails => {
-                        // Create salary comparison chart when all details are fetched
-                        createFavoriteSalaryComparison(jobDetails);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching job details:', error);
-                    });
-            }
-
-
-            function handleDeleteFavorite() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let info = JSON.parse(this.response);
-                // alert(info[1])
-                if (info[0]) {
-                    location.reload();
-                }
-            }
-
-            function deleteFavorite(soc_code) {
-                let url = '/delete?soc_code=' + soc_code + '&status=True';
-                if (request !== null)
-                    request.abort();
-                request = new XMLHttpRequest();
-                request.onload = handleDeleteFavorite;
-                request.onerror = handleError;
-                request.open('GET', url);
-                request.send();
-            }
-
-            function handleError() {
-                alert('Error: Failed to fetch data from server');
-            }
-
-            function getJobResults(soc_code) {
-                let encodedSOC = encodeURIComponent(soc_code);
-                let url = '/job?soc_code=' + encodedSOC;
-
-                if (request !== null)
-                    request.abort();
-                request = new XMLHttpRequest();
-                request.onload = handleJobResponse;
-                request.onerror = handleError;
-                request.open('GET', url);
-                request.send();
-            }
-
-            document.addEventListener('DOMContentLoaded', getFavorites);
-
-            let timer = null;
-
-            function debouncedGetResults() {
-                clearTimeout(timer);
-                timer = setTimeout(getSearchResults, 500);
-            }
-
-            function setup() {
-                let majorInput = document.getElementById('majorInput');
-                majorInput.addEventListener('input', debouncedGetResults);
-            }
-
-            document.addEventListener('DOMContentLoaded', setup);
             
             // Get user
             function getUser() {
@@ -690,34 +690,10 @@
                 req.onerror = handleError;
                 req.send();
             }
+
             document.addEventListener('DOMContentLoaded', getUser);
+            document.addEventListener('DOMContentLoaded', getFavorites);
 
-            function openLinkedInSearch() {
-                // Grab the current job title from the page
-                const title = document.getElementById('titleDiv').textContent;
-                // Encode the title so it can be safely used in the URL
-                const encodedTitle = encodeURIComponent(title);
-                
-                // Construct the LinkedIn job search URL
-                const linkedInUrl = `http://linkedin.com/jobs/search/?keywords=${encodedTitle}`;
-
-                // Open the URL in a new browser tab
-                window.open(linkedInUrl, '_blank');
-            }
-
-            function openHandshakeSearch() {
-                // Grab the current job title from the page
-                const title = document.getElementById('titleDiv').textContent;
-                // Encode the title for URL
-                const encodedTitle = encodeURIComponent(title);
-                
-                // Handshake job search URL
-                // Example: https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=Software%20Engineer
-                const handshakeUrl = `https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=${encodedTitle}`;
-
-                // Open in new tab
-                window.open(handshakeUrl, '_blank');
-            }
         </script>
     </body>
 </html>

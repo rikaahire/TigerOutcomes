@@ -121,6 +121,11 @@
             'use strict';
             let request = null;
 
+            function handleError() {
+                alert('Error: Failed to fetch data from server');
+            }
+
+            // List admins
             function convertToHtml(names) {
                 let template = `
                 {{#admins}}
@@ -135,6 +140,83 @@
                 return html;
             }
 
+            function handleAdminResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let admins = JSON.parse(this.response);
+                let html = convertToHtml(admins);
+                let adminsDiv = document.getElementById('adminsDiv');
+                adminsDiv.innerHTML = html;
+            }
+
+            function getAdmins() {
+                let url = '/list_admin';
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleAdminResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // Add admin
+            function handleAddAdminResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let response = JSON.parse(this.response);
+                let responseDiv = document.getElementById('responseDiv');
+                responseDiv.innerHTML = response;
+                getAdmins()
+            }
+
+            function addAdmin() {
+                let adminInput = document.getElementById('adminInput');
+                let admin = adminInput.value;
+                if (admin == null) admin = ""
+                let encodedadmin = encodeURIComponent(admin);
+                let url = '/add_admin?user=' + encodedadmin;
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleAddAdminResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // Remove admin
+            function handleRemoveAdminResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let response = JSON.parse(this.response);
+                let responseDiv = document.getElementById('responseDiv');
+                responseDiv.innerHTML = response;
+                getAdmins()
+            }
+
+            function removeAdmin() {
+                let adminInput = document.getElementById('adminInput');
+                let admin = adminInput.value;
+                if (admin == null) admin = ""
+                let encodedadmin = encodeURIComponent(admin);
+                let url = '/remove_admin?user=' + encodedadmin;
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleRemoveAdminResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // List comments
             function commentHTML(comments) {
                 let template = `
                 {{#comments}}
@@ -157,59 +239,6 @@
                 let html = Mustache.render(template, map);
                 return html;
             }
-            
-            function handleAdminResponse() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let admins = JSON.parse(this.response);
-                let html = convertToHtml(admins);
-                let adminsDiv = document.getElementById('adminsDiv');
-                adminsDiv.innerHTML = html;
-            }
-
-            function handleAddAdminResponse() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let response = JSON.parse(this.response);
-                let responseDiv = document.getElementById('responseDiv');
-                responseDiv.innerHTML = response;
-                getAdmins()
-            }
-
-            function handleRemoveAdminResponse() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let response = JSON.parse(this.response);
-                let responseDiv = document.getElementById('responseDiv');
-                responseDiv.innerHTML = response;
-                getAdmins()
-            }
-
-            function handleApproveCommentResponse() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let response = JSON.parse(this.response);
-                alert(response);
-                getComments()
-            }
-
-            function handleRemoveCommentResponse() {
-                if (this.status !== 200) {
-                    alert('Error: Failed to fetch data from server');
-                    return;
-                }
-                let response = JSON.parse(this.response);
-                alert(response);
-                getComments()
-            }
 
             function handleCommentResponse() {
                 if (this.status !== 200) {
@@ -223,49 +252,26 @@
                 commentsDiv.innerHTML = html;
             }
 
-            function handleError() {
-                alert('Error: Failed to fetch data from server');
-            }
-
-            function getAdmins() {
-                let url = '/list_admin';
+            function getComments() {
+                let url = '/list_flagged_comments';
                 if (request !== null)
                     request.abort();
                 request = new XMLHttpRequest();
-                request.onload = handleAdminResponse;
+                request.onload = handleCommentResponse;
                 request.onerror = handleError;
                 request.open('GET', url);
                 request.send();
             }
 
-            function addAdmin() {
-                let adminInput = document.getElementById('adminInput');
-                let admin = adminInput.value;
-                if (admin == null) admin = ""
-                let encodedadmin = encodeURIComponent(admin);
-                let url = '/add_admin?user=' + encodedadmin;
-                if (request !== null)
-                    request.abort();
-                request = new XMLHttpRequest();
-                request.onload = handleAddAdminResponse;
-                request.onerror = handleError;
-                request.open('GET', url);
-                request.send();
-            }
-
-            function removeAdmin() {
-                let adminInput = document.getElementById('adminInput');
-                let admin = adminInput.value;
-                if (admin == null) admin = ""
-                let encodedadmin = encodeURIComponent(admin);
-                let url = '/remove_admin?user=' + encodedadmin;
-                if (request !== null)
-                    request.abort();
-                request = new XMLHttpRequest();
-                request.onload = handleRemoveAdminResponse;
-                request.onerror = handleError;
-                request.open('GET', url);
-                request.send();
+            // Approve a comment
+            function handleApproveCommentResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let response = JSON.parse(this.response);
+                alert(response);
+                getComments()
             }
 
             function approveComment(id) {
@@ -280,6 +286,17 @@
                 request.send();
             }
 
+            // Remove a comment
+            function handleRemoveCommentResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let response = JSON.parse(this.response);
+                alert(response);
+                getComments()
+            }
+
             function removeComment(id) {
                 let encodedId = encodeURIComponent(id);
                 let url = '/remove_comment?id=' + encodedId;
@@ -291,19 +308,6 @@
                 request.open('GET', url);
                 request.send();
             }
-
-            function getComments() {
-                let url = '/list_flagged_comments';
-                if (request !== null)
-                    request.abort();
-                request = new XMLHttpRequest();
-                request.onload = handleCommentResponse;
-                request.onerror = handleError;
-                request.open('GET', url);
-                request.send();
-            }
-
-            setInterval(getComments, 5000)
 
             // Get user
             function getUser() {
@@ -332,6 +336,14 @@
                 getAdmins()
                 getUser()
             }
+
+            var delay = 1000;
+            (function cycleComments() {
+                setTimeout(cycleComments, delay);
+                delay = 10000;
+                getComments();
+            })();
+
             document.addEventListener('DOMContentLoaded', setup);
             
         </script>

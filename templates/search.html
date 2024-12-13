@@ -1,301 +1,292 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <title>TigerOutcomes</title>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>TigerOutcomes</title>
+        <style>
+            .button-fav {
+                border: 2px solid #FFD235;
+                color: #FFD235;
+                font-size: 1rem;
+                font-weight: normal;
+                background-color: white;
+                border-radius: 30px;
+                padding: 5px 9px;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease-in-out;
+            }
 
-    <style>
-        .button-fav {
-            border: 2px solid #FFD235;
-            color: #FFD235;
-            font-size: 1rem;
-            font-weight: normal;
-            background-color: white;
-            border-radius: 30px;
-            padding: 5px 9px;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease-in-out;
-        }
+            .button-fav:hover {
+                background-color: #FFD235;
+                color: white;
+            }
 
-        .button-fav:hover {
-            background-color: #FFD235;
-            color: white;
-        }
+            .button-fav.active {
+                background-color: #FFD235;
+                color: white;
+            }
 
-        .button-fav.active {
-            background-color: #FFD235;
-            color: white;
-        }
+            .cards-container {
+                position: sticky;
+                top: 75px;
+                right: 0;
+                max-height: calc(100vh - 40px);
+                overflow-y: auto;
+                padding-right: 15px;
+                width: 100%;
+            }
 
-        .cards-container {
-            position: sticky;
-            top: 75px;
-            right: 0;
-            max-height: calc(100vh - 40px);
-            overflow-y: auto;
-            padding-right: 15px;
-            width: 100%;
-        }
+            .cards-container .card {
+                overflow-y: auto;
+            }
 
-        .cards-container .card {
-            overflow-y: auto;
-        }
+            .flag-icon {
+                color: rgb(184, 184, 184);
+                font-size: 1.1rem;
+                position: relative;
+            }
 
-        .flag-icon {
-            color: rgb(184, 184, 184);
-            font-size: 1.1rem;
-            position: relative;
-        }
+            .flag-icon:hover {
+                color: gray;
+            }
 
-        .flag-icon:hover {
-            color: gray;
-        }
+            .flag-icon:active {
+                color: red;
+            }
 
-        .flag-icon:active {
-            color: red;
-        }
+            .flag-icon:hover::after {
+                content: "Report this comment";
+                color: gray;
+                font-size: 0.9rem;
+                position: absolute;
+                left: 1.5rem;
+                top: 0;
+                white-space: nowrap;
+            }
 
-        .flag-icon:hover::after {
-            content: "Report this comment";
-            color: gray;
-            font-size: 0.9rem;
-            position: absolute;
-            left: 1.5rem;
-            top: 0;
-            white-space: nowrap;
-        }
+            .row.g-4 {
+                display: flex;
+                flex-wrap: wrap;
+            }
 
-        .row.g-4 {
-            display: flex;
-            flex-wrap: wrap;
-        }
+            .equal-height {
+                display: flex;
+                flex-direction: column;
+            }
 
-        .equal-height {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .equal-height .card {
-            flex-grow: 1;
-        }
-    </style>
-    <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
-</head>
-
-<body>
-    <header class="sticky-top" id="header">
-        <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/home">TigerOutcomes</a>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/search">Search</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/favorites">Favorites</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/about">About Us</a>
-                        </li>
-                    </ul>
-                    <div id="user">
-                        <a><span id="username"></span></a>
-                    </div>
-                    <button class="btn btn-outline" type="credentials"><a style="text-decoration: none; color: azure;"
-                            href="logoutcas">Logout</a></button>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container-fluid pt-3">
-        <div class="row">
-            <div class="col-3 d-flex flex-column align-items-stretch flex-shrink-0">
-
-                <input class="form-control fs-5" list="majorInputlist" type="text" id="majorInput" aria-label="majorsearch">
-                <datalist id="majorInputlist">
-                    <option value="African American Studies">
-                    <!-- <option value="American Studies"> -->
-                    <option value="Anthropology">
-                    <option value="Architecture">
-                    <option value="Art & Archaeology">
-                    <option value="Astrophysical Sciences">
-                    <option value="Chemical and Biological Engr">
-                    <option value="Chemistry">
-                    <option value="Civil & Environmental Engr">
-                    <option value="Classics">
-                    <option value="Comparative Literature">
-                    <option value="Computer Science">
-                    <option value="East Asian Studies">
-                    <option value="Ecology & Evolutionary Biology">
-                    <option value="Economics">
-                    <option value="Electrical & Computer Engr">
-                    <option value="English">
-                    <option value="French and Italian">
-                    <option value="Geosciences">
-                    <option value="German">
-                    <option value="History">
-                    <option value="Independent Study - AB">
-                    <option value="Independent Study-Linguistics">
-                    <option value="Mathematics">
-                    <option value="Mechanical & Aerospace Engr">
-                    <option value="Molecular Biology">
-                    <option value="Music">
-                    <option value="Near Eastern Studies">
-                    <option value="Neuroscience">
-                    <option value="Ops Research & Financial Engr">
-                    <option value="Philosophy">
-                    <option value="Physics">
-                    <option value="Politics">
-                    <option value="Psychology">
-                    <option value="Public & International Affairs">
-                    <option value="Religion">
-                    <option value="Slavic Languages & Literatures">
-                    <option value="Sociology">
-                    <option value="Spanish and Portuguese">
-                </datalist>
-
-                <hr>
-                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                    <label for="sortAlgoButton" style="white-space: normal;">Sort by:</label>
-                    <div class="dropdown" style="flex: 1;">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="sortAlgoButton"
-                            data-bs-toggle="dropdown"
-                            style="display: inline-block; white-space: normal; word-wrap: break-word;">
-                            Sort by
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" onclick="setAlgo('alphabetical')">Alphabetical</a></li>
-                            <li><a class="dropdown-item" onclick="setAlgo('common')">Most Common</a></li>
+            .equal-height .card {
+                flex-grow: 1;
+            }
+        </style>
+        <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
+    </head>
+    <body>
+        <header class="sticky-top" id="header">
+            <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E77500;">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/home">TigerOutcomes</a>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/search">Search</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/favorites">Favorites</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/about">About Us</a>
+                            </li>
                         </ul>
+                        <div id="user">
+                            <a><span id="username"></span></a>
+                        </div>
+                        <button class="btn btn-outline" type="credentials"><a style="text-decoration: none; color: azure;"
+                                href="logoutcas">Logout</a></button>
                     </div>
-                    <!-- Display users selection -->
-                    <!-- <div id="algoDisplay" style="margin-top: 8px !important; margin-bottom: 8px !important; font-size: 1rem;">Alphabetical</div> -->
                 </div>
-                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 2px !important;">
-                    <label for="sortFilterButton" style="white-space: normal;">Minimum Average Income:</label>
-                    <div class="dropdown" style="flex: 1;">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="sortFilterButton"
-                            data-bs-toggle="dropdown"
-                            style="display: inline-block; white-space: normal; word-wrap: break-word;">
-                            Minimum Average Income
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" onclick="setWage(0)">$0</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(25000)">$25,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(50000)">$50,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(75000)">$75,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(100000)">$100,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(125000)">$125,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(150000)">$150,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(200000)">$200,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(300000)">$300,000</a></li>
-                            <li><a class="dropdown-item" onclick="setWage(400000)">$400,000</a></li>
-                        </ul>
+            </nav>
+        </header>
+        <div class="container-fluid pt-3">
+            <div class="row">
+                <div class="col-3 d-flex flex-column align-items-stretch flex-shrink-0">
+                    <input class="form-control fs-5" list="majorInputlist" type="text" id="majorInput" aria-label="majorsearch">
+                    <datalist id="majorInputlist">
+                        <option value="African American Studies">
+                        <!-- <option value="American Studies"> -->
+                        <option value="Anthropology">
+                        <option value="Architecture">
+                        <option value="Art & Archaeology">
+                        <option value="Astrophysical Sciences">
+                        <option value="Chemical and Biological Engr">
+                        <option value="Chemistry">
+                        <option value="Civil & Environmental Engr">
+                        <option value="Classics">
+                        <option value="Comparative Literature">
+                        <option value="Computer Science">
+                        <option value="East Asian Studies">
+                        <option value="Ecology & Evolutionary Biology">
+                        <option value="Economics">
+                        <option value="Electrical & Computer Engr">
+                        <option value="English">
+                        <option value="French and Italian">
+                        <option value="Geosciences">
+                        <option value="German">
+                        <option value="History">
+                        <option value="Independent Study - AB">
+                        <option value="Independent Study-Linguistics">
+                        <option value="Mathematics">
+                        <option value="Mechanical & Aerospace Engr">
+                        <option value="Molecular Biology">
+                        <option value="Music">
+                        <option value="Near Eastern Studies">
+                        <option value="Neuroscience">
+                        <option value="Ops Research & Financial Engr">
+                        <option value="Philosophy">
+                        <option value="Physics">
+                        <option value="Politics">
+                        <option value="Psychology">
+                        <option value="Public & International Affairs">
+                        <option value="Religion">
+                        <option value="Slavic Languages & Literatures">
+                        <option value="Sociology">
+                        <option value="Spanish and Portuguese">
+                    </datalist>
+                    <hr>
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <label for="sortAlgoButton" style="white-space: normal;">Sort by:</label>
+                        <div class="dropdown" style="flex: 1;">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="sortAlgoButton"
+                                data-bs-toggle="dropdown"
+                                style="display: inline-block; white-space: normal; word-wrap: break-word;">
+                                Sort by
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" onclick="setAlgo('alphabetical')">Alphabetical</a></li>
+                                <li><a class="dropdown-item" onclick="setAlgo('common')">Most Common</a></li>
+                            </ul>
+                        </div>
+                        <!-- Display users selection -->
+                        <!-- <div id="algoDisplay" style="margin-top: 8px !important; margin-bottom: 8px !important; font-size: 1rem;">Alphabetical</div> -->
                     </div>
-                    <!-- Display users selection -->
-                    <!-- <div id="filterDisplay" style="margin-top: 8px !important; margin-bottom: 8px !important; font-size: 1rem;">$0</div> -->
-
-                    <!-- <form>
-                        <label for="income">Minimum Average Income (0–400,000)</label>
-                        <input class="form-control" type="range" id="incomeInput" 
-                                style="text-align: center" name="income" 
-                                aria-label="incomeRange" min="0" max="400000">
-                    </form> -->
-                </div>
-                <hr>
-                <div class="list-group list-group-flush scrollarea"
-                    style="display: inline-block; white-space: normal; word-wrap: break-word; width: 100%; max-width: 600px;">
-                    <div class="border" id="resultsDiv"></div>
-                </div>
-            </div>
-            <!-- Cards -->
-            <div class="col-9">
-                <div class="col-md-9 cards-container" id="cardsContainer">
-                    <div id="welcomeMessage" class="text-center p-5">
-                        <h3>Welcome to TigerOutcomes!</h3>
-                        <p style="margin-bottom: 5px;">Start by searching by your major to explore your career
-                            opportunities.</p>
-                        <p>Click on ★ to favorite a job!</p>
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 2px !important;">
+                        <label for="sortFilterButton" style="white-space: normal;">Minimum Average Income:</label>
+                        <div class="dropdown" style="flex: 1;">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="sortFilterButton"
+                                data-bs-toggle="dropdown"
+                                style="display: inline-block; white-space: normal; word-wrap: break-word;">
+                                Minimum Average Income
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" onclick="setWage(0)">$0</a></li>
+                                <li><a class="dropdown-item" onclick="setWage(25000)">$25,000</a></li>
+                                <li><a class="dropdown-item" onclick="setWage(50000)">$50,000</a></li>
+                                <li><a class="dropdown-item" onclick="setWage(75000)">$75,000</a></li>
+                                <li><a class="dropdown-item" onclick="setWage(100000)">$100,000</a></li>
+                                <li><a class="dropdown-item" onclick="setWage(125000)">$125,000</a></li>
+                                <li><a class="dropdown-item" onclick="setWage(150000)">$150,000</a></li>
+                                <li><a class="dropdown-item" onclick="setWage(200000)">$200,000</a></li>
+                                <li><a class="dropdown-item" onclick="setWage(300000)">$300,000</a></li>
+                                <li><a class="dropdown-item" onclick="setWage(400000)">$400,000</a></li>
+                            </ul>
+                        </div>
+                        <!-- Display users selection -->
+                        <!-- <div id="filterDisplay" style="margin-top: 8px !important; margin-bottom: 8px !important; font-size: 1rem;">$0</div> -->
                     </div>
-
-                    <div id="cardsContent" style="display: none;">
-                        <!-- Title of Job -->
-                        <div class="d-flex">
-                            <h1 class="me-4" id="titleDiv"></h1>
+                    <hr>
+                    <div class="list-group list-group-flush scrollarea"
+                        style="display: inline-block; white-space: normal; word-wrap: break-word; width: 100%; max-width: 600px;">
+                        <div class="border" id="resultsDiv"></div>
+                    </div>
+                </div>
+                <!-- Cards -->
+                <div class="col-9">
+                    <div class="col-md-9 cards-container" id="cardsContainer">
+                        <div id="welcomeMessage" class="text-center p-5">
+                            <h3>Welcome to TigerOutcomes!</h3>
+                            <p style="margin-bottom: 5px;">Start by searching by your major to explore your career
+                                opportunities.</p>
+                            <p>Click on ★ to favorite a job!</p>
                         </div>
 
-                        <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5" style="margin-top: 0px !important;">
-
-                            <!-- column 1 -->
-                            <div class="col equal-height" style="margin-top: 0px !important;">
-
-                                <!-- Card for Finding Employment -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Search for Jobs in Field</h5>
-                                        <p class="fw-light">(Requires Linkedin/Handshake account to be logged in)</p>
-                                        <!-- Buttons for querying job search websites -->
-                                        <button class="btn btn-primary mt-1 mb-1 me-2" type="button"
-                                            id="linkedin-search" onclick="openLinkedInSearch()">
-                                            Open Linkedin Job Search
-                                        </button>
-                                        <button class="btn btn-warning mt-1 mb-1 me-2" type="button"
-                                            id="handshake-search" onclick="openHandshakeSearch()">
-                                            Open Handshake Job Search
-                                        </button>
-                                    </div>
-                                </div>
-                                <hr>
-                                <!-- Card Description -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Description</h5>
-                                        <div class="card-text" id="descriptionDiv"></div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <!-- Card for Tasks & Skills -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Tasks and Skills</h5>
-                                        <div class="card-text" id="taskDiv"></div>
-                                    </div>
-                                </div>
-                                
+                        <div id="cardsContent" style="display: none;">
+                            <!-- Title of Job -->
+                            <div class="d-flex">
+                                <h1 class="me-4" id="titleDiv"></h1>
                             </div>
 
-                            <!-- column 2 -->
-                            <div class="col equal-height" style="margin-top: 0px !important;">
-                                <!-- Card for Salary -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Salary Range</h5>
-                                        <div class="card-text" id="salaryDiv"></div>
+                            <div class="row row-cols-1 row-cols-md-2 g-4 mt-3 mb-5" style="margin-top: 0px !important;">
+
+                                <!-- column 1 -->
+                                <div class="col equal-height" style="margin-top: 0px !important;">
+
+                                    <!-- Card for Finding Employment -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Search for Jobs in Field</h5>
+                                            <p class="fw-light">(Requires Linkedin/Handshake account to be logged in)</p>
+                                            <!-- Buttons for querying job search websites -->
+                                            <button class="btn btn-primary mt-1 mb-1 me-2" type="button"
+                                                id="linkedin-search" onclick="openLinkedInSearch()">
+                                                Open Linkedin Job Search
+                                            </button>
+                                            <button class="btn btn-warning mt-1 mb-1 me-2" type="button"
+                                                id="handshake-search" onclick="openHandshakeSearch()">
+                                                Open Handshake Job Search
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <!-- Card for Work Styles -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Work Styles</h5>
-                                        <div class="card-text" id="workstylesDiv"></div>
+                                    <hr>
+                                    <!-- Card Description -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Description</h5>
+                                            <div class="card-text" id="descriptionDiv"></div>
+                                        </div>
                                     </div>
+                                    <hr>
+                                    <!-- Card for Tasks & Skills -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Tasks and Skills</h5>
+                                            <div class="card-text" id="taskDiv"></div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
 
-                            </div>
-                            <!-- Card for Commenting Section -->
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Comments</h5>
-                                        <div id="commentsDiv" class="mb-3">
-                                            <!-- Comments will be dynamically loaded here -->
+                                <!-- column 2 -->
+                                <div class="col equal-height" style="margin-top: 0px !important;">
+                                    <!-- Card for Salary -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Salary Range</h5>
+                                            <div class="card-text" id="salaryDiv"></div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <!-- Card for Work Styles -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Work Styles</h5>
+                                            <div class="card-text" id="workstylesDiv"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Card for Commenting Section -->
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Comments</h5>
+                                            <div id="commentsDiv" class="mb-3">
+                                                <!-- Comments will be dynamically loaded here -->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -305,538 +296,464 @@
                 </div>
             </div>
         </div>
-    </div>
-    <footer class="py-3 bg-light sticky-bottom">
-        <div class="container d-flex justify-content-between align-items-center">
-            <span class="text-muted">Created by the TigerOutcomes <a href="/about">team</a>.</span>
-            <span><a class="link-secondary" href="/admin">Admin</a></span>
-        </div>
-    </footer>
+        <footer class="py-3 bg-light sticky-bottom">
+            <div class="container d-flex justify-content-between align-items-center">
+                <span class="text-muted">Created by the TigerOutcomes <a href="/about">team</a>.</span>
+                <span><a class="link-secondary" href="/admin">Admin</a></span>
+            </div>
+        </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
         </script>
-    <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js">
-    </script>
+        <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
 
-    <script>
-        'use strict';
+        <script>
+            'use strict';
+            let request = null;
+            let algo = 'alphabetical'
+            let min_wage = 0
+            let timer = null;
 
-        function convertToHtml(jobs) {
-            let template = `
-                {{#jobs}}
-                    <div class="list-group-item list-group-item-action py-3 lh-tight">
-                    <div class="row align-items-center">
-                        <!-- Column for Jobs -->
-                        <a onclick="getJobResults('{{soc_code}}')" class="col text-decoration-none text-dark">
-                        <div>
-                            <strong class="mt-1 mb-1">{{ row }}</strong>
-                        </div>
-                        </a>
-                        <!-- Column for Button -->
-                        <div class="col-auto">
-                        <button type="button" onclick="favorite('{{soc_code}}')" 
-                        id="favorite{{soc_code}}" class="button-fav" data-bs-toggle="button">
-                            ★
-                        </button>
-                        </div>
-                    </div>
-                    </div>
-                    <br>
-                {{/jobs}}
-                `;
-            let map = { jobs: jobs };
-            let html = Mustache.render(template, map);
-            return html;
-        }
-
-        // function getCardHtml(info) {
-        //     info=getJobHtml(info)
-        //     let template = 
-        //     `
-        //     <!-- Card Description -->
-        //     <div class="card">
-        //         <div class="card-body">
-        //             <h5 class="card-title">Description</h5>
-        //             <p class="card-text"> {{description}} </p>
-        //         </div>
-        //         </div>
-        //         <!-- Card for Tasks & Skills -->
-        //         <div class="card">
-        //         <div class="card-body">
-        //             <h5 class="card-title">Tasks and Skills</h5>
-        //             <p class="card-text"> {{skills}} </p>
-        //         </div>
-        //         </div>
-        //         <!-- Card for Salary -->
-        //         <!-- Might need to do some more here with data graphics -->
-        //         <div class="card">
-        //         <div class="card-body">
-        //             <h5 class="card-title">Salary Range</h5>
-        //             <p class="card-text"> {{salary}} </p>
-        //         </div>
-        //         </div>
-        //         <!-- Card for Common Employers -->
-        //         <div class="card">
-        //         <div class="card-body">
-        //             <h5 class="card-title">Common Employers</h5>
-        //             <p class="card-text"> {{employer}} </p>
-        //         </div>
-        //     </div>
-        //     `;
-        //     let map = {
-        //         description: info['descript'],
-        //         skills: info['skills'],
-        //         salary: info['salary'],
-        //         employer: info['employer']
-        //     }
-        //     console.log(salary);
-        //     let html = Mustache.render(template, map);
-        //     return html;
-        // }
-
-        function createSalaryBoxPlot(wage) {
-            // Create a chart container if it doesn't exist
-            let chartContainer = document.getElementById('salaryChart');
-            if (!chartContainer && (wage['10'] != "*" || wage['25'] != "*" || wage['50'] != "*" || wage['75'] != "*" || wage['90'] != "*")) {
-                chartContainer = document.createElement('div');
-                chartContainer.id = 'salaryChart';
-                chartContainer.style.height = '350px';
-                chartContainer.style.width = '100%';
-                let wageDiv = document.getElementById('salaryDiv');
-                wageDiv.appendChild(chartContainer);
-            }
-
-            if (wage['10'] == "*" || wage['25'] == "*" || wage['50'] == "*" || wage['75'] == "*" || wage['90'] == "*") {
-                let meanText = document.createElement('p');
-                meanText.textContent = "Insufficient Salary Data for Job Type";
-
-                let img = document.createElement('img');
-                img.src = 'static/images/oops.png';
-                img.alt = 'Tiger with questionmarks';
-                img.style.display = 'block';
-                img.style.margin = '0 auto';
-                img.style.position = 'relative';
-                img.style.maxWidth = '300px'
-
-                let wageDiv = document.getElementById('salaryDiv');
-                wageDiv.appendChild(img);
-                wageDiv.appendChild(meanText);
-            } else {
-                // Create the chart
-                let dataPoints = [
-                    {
-                        label: "Salary Distribution",
-                        y: [
-                            Number(wage['10']),   // Minimum 
-                            Number(wage['25']),   // First quartile
-                            Number(wage['75']),   // Median
-                            Number(wage['90']),   // Third quartile
-                            Number(wage['50'])    // Maximum 
-                        ],
-                    }
-                ];
-                var chart = new CanvasJS.Chart("salaryChart", {
-                    theme: "light2",
-                    axisY: {
-                        title: "Annual Salary ($)",
-                        valueFormatString: "$#,##0"
-                    },
-                    dataPointWidth: 20,
-                    data: [{
-                        type: "boxAndWhisker",
-                        color: "#3498db",
-                        dataPoints: dataPoints,
-                        yValueFormatString: "$###,###",
-                    }]
-                });
-
-                chart.render();
-
-                let meanText = document.createElement('p');
-                meanText.textContent = `Mean Salary: $${Number(wage['mean']).toLocaleString('en-US')}`;
-                let wageDiv = document.getElementById('salaryDiv');
-                wageDiv.appendChild(meanText);
-            }
-        }
-
-        function getJobHtml(info) {
-            let description = info['description'];
-            let skills = info['skills'];
-            let knowledge = info['knowledge'];
-            let wage = info['wage'];
-            let soc_code = info['soc_code'];
-            let work_styles = info['work_styles']
-
-            // Job title display
-            let titleDiv = document.getElementById('titleDiv');
-            titleDiv.textContent = info['title'];
-
-            description = Mustache.render("{{.}}", description);
-            if (skills && Array.isArray(skills) && skills.length > 0) {
-                let numberedSkills = skills.map((skill, index) => `${index + 1}. ${skill[0]}`).join('<br>'); // Number each skill
-                skills = Mustache.render("{{{skills}}}", { skills: numberedSkills });
-            }
-            else {
-                skills = "No tasks or skills available for this job.";
-            }
-
-            if (work_styles && Array.isArray(work_styles) && work_styles.length > 0) {
-                let numberedWork_styles = work_styles.map((work_styles, index) => `${index + 1}. ${work_styles[0]}`).join('<br>'); // Number each work_style
-                work_styles = Mustache.render("{{{work_styles}}}", { work_styles: numberedWork_styles });
-            }
-            else {
-                work_styles = "No work styles available for this job.";
-            }
-
-            let descriptionDiv = document.getElementById('descriptionDiv');
-            descriptionDiv.innerHTML = description;
-
-            let skillsDiv = document.getElementById('taskDiv');
-            skillsDiv.innerHTML = skills;
-
-            let wageDiv = document.getElementById('salaryDiv');
-            wageDiv.innerHTML = '';
-
-            let workstylesDiv = document.getElementById('workstylesDiv');
-            workstylesDiv.innerHTML = work_styles;
-
-
-            createSalaryBoxPlot(info['wage']);
-
-            loadComments(soc_code);
-        }
-
-        function handleSearchResponse() {
-            if (this.status !== 200) {
+            function handleError() {
                 alert('Error: Failed to fetch data from server');
-                return;
             }
-            let jobs = JSON.parse(this.response);
-            let html = convertToHtml(jobs);
-            let resultsDiv = document.getElementById('resultsDiv');
-            resultsDiv.innerHTML = html;
 
-            loadFavorites();
-        }
-
-        function handleJobResponse() {
-            if (this.status !== 200) {
-                alert('Error: Failed to fetch data from server');
-                return;
-            }
-            let info = JSON.parse(this.response);
-            console.log(info)
-            getJobHtml(info);
-            // Hide welcome msg, show cards
-            document.getElementById('welcomeMessage').style.display = 'none';
-            document.getElementById('cardsContent').style.display = 'block';
-
-            // let html = getCardHtml(info);
-            // let modal = document.getElementById('classModalBody');
-            // modal.innerHTML = html;
-            // let classModalNode = document.getElementById('classModal');
-            // let classModal = new bootstrap.Modal(classModalNode);
-            // classModal.show();
-        }
-
-        function handleFavorite() {
-            if (this.status !== 200) {
-                alert('Error: Failed to fetch data from server');
-                return;
-            }
-            let info = JSON.parse(this.response);
-            //alert(info);
-        }
-
-        function handleError() {
-            alert('Error: Failed to fetch data from server');
-        }
-
-        let request = null;
-        let algo = 'alphabetical'
-        let min_wage = 0
-
-        function setAlgo(algorithm) {
-            algo = algorithm;
-            getSearchResults();
-            if (algo == "common") {
-                // algoDisplay.textContent = "Most Common";
-                document.getElementById('sortAlgoButton').textContent = "Most Common";
-            } else {
-                // algoDisplay.textContent = "Alphabetical";
-                document.getElementById('sortAlgoButton').textContent = "Alphabetical";
-            }
-        }
-
-        function setWage(wage) {
-            min_wage = wage;
-            getSearchResults();
-            // filterDisplay.textContent = '$' + Number(min_wage).toLocaleString();
-            let wageText = '$' + Number(min_wage).toLocaleString();
-            document.getElementById('sortFilterButton').textContent = wageText;
-        }
-
-        function getSearchResults() {
-            let majorInput = document.getElementById('majorInput');
-            let major = majorInput.value;
-            if (major == null || major == '')
-                major = 'all'
-            let encodedMajor = encodeURIComponent(major);
-            let url = '/results?major=' + encodedMajor + '&algo=' + algo + '&min_wage=' + min_wage;
-
-            if (major == 'all')
-                majorInput.placeholder = 'All Results'
-
-            if (request !== null)
-                request.abort();
-            request = new XMLHttpRequest();
-            request.onload = handleSearchResponse;
-            request.onerror = handleError;
-            request.open('GET', url);
-            request.send();
-        }
-
-        function getJobResults(soc_code) {
-            let encodedSOC = encodeURIComponent(soc_code);
-            let url = '/job?soc_code=' + encodedSOC;
-
-            if (request !== null)
-                request.abort();
-            request = new XMLHttpRequest();
-            request.onload = handleJobResponse;
-            request.onerror = handleError;
-            request.open('GET', url);
-            request.send();
-        }
-
-        function handleLoadFavorites() {
-            if (this.status !== 200) {
-                alert('Error: Failed to fetch data from server');
-                return;
-            }
-            let favorites = JSON.parse(this.response);
-            for (var i = 0; i < favorites.length; i++) {
-                if (!favorites[i].soc_code) continue;
-                var button = document.getElementById('favorite' + favorites[i].soc_code);
-                if (button) {
-                    button.classList.add('active');
-                }
-            }
-        }
-
-        function loadFavorites() {
-            let url = '/preferences';
-            if (request !== null)
-                request.abort();
-            request = new XMLHttpRequest();
-            request.onload = handleLoadFavorites;
-            request.onerror = handleError;
-            request.open('GET', url);
-            request.send();
-        }
-
-        function favorite(soc_code, status = 'True') {
-            let encodedSOC = encodeURIComponent(soc_code);
-            let encodedStatus = encodeURIComponent(status);
-            let url = '/update?soc_code=' + encodedSOC +
-                '&status=' + encodedStatus;
-            if (request !== null)
-                request.abort();
-            request = new XMLHttpRequest();
-            request.onload = handleFavorite;
-            request.onerror = handleError;
-            request.open('GET', url);
-            request.send();
-        }
-
-        function handleLoadComments() {
-            const usernameElement = document.getElementById('username');
-            const username = usernameElement.textContent.trim() || 'Guest';
-            let comments = JSON.parse(this.response);
-            let soc_code = comments['soc_code'];
-            console.log(comments)
-            console.log(soc_code)
-            const commentsDiv = document.getElementById('commentsDiv');
-            commentsDiv.innerHTML = '';
-            if (comments['continue']) {
-                comments = comments['full'];
+            // Generate list of search results
+            function convertToHtml(jobs) {
                 let template = `
-                        {{#comments}}
+                    {{#jobs}}
+                        <div class="list-group-item list-group-item-action py-3 lh-tight">
+                        <div class="row align-items-center">
+                            <!-- Column for Jobs -->
+                            <a onclick="getJobResults('{{soc_code}}')" class="col text-decoration-none text-dark">
                             <div>
-                                <strong>User {{user}}:</strong>
-                                <span class="flag-icon" onclick="flagComment({{id}})" style="cursor: pointer;">⚑</span>
-                                <p>{{text}}</p>
-                            <div>
-                        {{/comments}}
+                                <strong class="mt-1 mb-1">{{ row }}</strong>
+                            </div>
+                            </a>
+                            <!-- Column for Button -->
+                            <div class="col-auto">
+                            <button type="button" onclick="favorite('{{soc_code}}')" 
+                            id="favorite{{soc_code}}" class="button-fav" data-bs-toggle="button">
+                                ★
+                            </button>
+                            </div>
+                        </div>
+                        </div>
+                        <br>
+                    {{/jobs}}
                     `;
-                // insert when replies built
-                // <button class="btn btn-sm btn-link" onclick="replyToComment({{id}})">Reply</button>
-                // <div id="replies-{{id}}" class="ms-3 mt-2">
-                //     {{#replies}}
-                //         <p><strong>Reply:</strong> {{reply}}</p>
-                //     {{/replies}}
-                // </div>
-                let map = {
-                    comments: comments
-                }
+                let map = { jobs: jobs };
                 let html = Mustache.render(template, map);
-                commentsDiv.innerHTML = html;
+                return html;
             }
-            const endDiv = document.createElement('div');
-            endDiv.innerHTML = `
-                <textarea class="form-control mb-2" id="newComment" placeholder="Add a comment"></textarea>
-                <button class="btn btn-primary" onclick="addComment('` + soc_code + `')">Post Comment</button>
-                `
-            commentsDiv.appendChild(endDiv);
-        }
 
-        function loadComments(soc_code) {
-            let encodedSOC = encodeURIComponent(soc_code);
-            let url = '/comments?soc_code=' + encodedSOC;
-            if (request !== null)
-                request.abort();
-            request = new XMLHttpRequest();
-            request.onload = handleLoadComments;
-            request.onerror = handleError;
-            request.open('GET', url);
-            request.send();
-        }
+            function handleSearchResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let jobs = JSON.parse(this.response);
+                let html = convertToHtml(jobs);
+                let resultsDiv = document.getElementById('resultsDiv');
+                resultsDiv.innerHTML = html;
 
-        function handleAddComment() {
-            if (this.status !== 200) {
-                alert('Error: Failed to fetch data from server');
-                return;
+                loadFavorites();
             }
-            let info = JSON.parse(this.response)[1];
-            console.log(info)
-            loadComments(info);
-            // alert(info);
-        }
 
-        function addComment(soc_code) {
-            let encodedSOC = encodeURIComponent(soc_code);
-            const newComment = document.getElementById('newComment').value.trim();
-            let encodedComment = encodeURIComponent(newComment);
-            let url = "/write_comment?soc_code=" + encodedSOC + "&text=" + encodedComment;
-            // saveCommentsToServer(comments);
+            function getSearchResults() {
+                let majorInput = document.getElementById('majorInput');
+                let major = majorInput.value;
+                if (major == null || major == '')
+                    major = 'all'
+                let encodedMajor = encodeURIComponent(major);
+                let url = '/results?major=' + encodedMajor + '&algo=' + algo + '&min_wage=' + min_wage;
 
-            if (request !== null) {
-                // alert(newComment);
-                request.abort();
+                if (major == 'all')
+                    majorInput.placeholder = 'All Results'
+
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleSearchResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
             }
-            request = new XMLHttpRequest();
-            request.onload = handleAddComment;
-            request.onerror = handleError;
-            request.open('GET', url);
-            request.send();
-        }
 
-        function handleFlagComment() {
-            if (this.status !== 200) {
-                alert('Error: Failed to fetch data from server');
-                return;
+            // Functions for setting algorithm and wage
+            function setAlgo(algorithm) {
+                algo = algorithm;
+                getSearchResults();
+                if (algo == "common") {
+                    // algoDisplay.textContent = "Most Common";
+                    document.getElementById('sortAlgoButton').textContent = "Most Common";
+                } else {
+                    // algoDisplay.textContent = "Alphabetical";
+                    document.getElementById('sortAlgoButton').textContent = "Alphabetical";
+                }
             }
-            console.log(this.response)
-        }
 
-        function flagComment(id) {
-            let encodedID = encodeURIComponent(id);
-            let url = "/flag_comment?id=" + encodedID;
-
-            if (request !== null) {
-                request.abort();
+            function setWage(wage) {
+                min_wage = wage;
+                getSearchResults();
+                // filterDisplay.textContent = '$' + Number(min_wage).toLocaleString();
+                let wageText = '$' + Number(min_wage).toLocaleString();
+                document.getElementById('sortFilterButton').textContent = wageText;
             }
-            request = new XMLHttpRequest();
-            request.onload = handleFlagComment;
-            request.onerror = handleError;
-            request.open('GET', url);
-            request.send();
-        }
 
-        // function replyToComment(index) {
-        //     const reply = prompt('Enter your reply:');
-        //     if (reply) {
-        //         comments[index].replies.push(reply);
-        //         loadComments();
-        //         // saveCommentsToServer(comments);
-        //     }
-        // }
+            // Generate linkedin/handshake links
+            function openLinkedInSearch() {
+                // Grab the current job title from the page
+                const title = document.getElementById('titleDiv').textContent;
+                // Encode the title so it can be safely used in the URL
+                const encodedTitle = encodeURIComponent(title);
 
-        let timer = null;
+                // Construct the LinkedIn job search URL
+                const linkedInUrl = `http://linkedin.com/jobs/search/?keywords=${encodedTitle}`;
 
-        function debouncedGetResults() {
-            clearTimeout(timer);
-            timer = setTimeout(getSearchResults, 500);
-        }
+                // Open the URL in a new browser tab
+                window.open(linkedInUrl, '_blank');
+            }
 
-        function setup() {
-            let majorInput = document.getElementById('majorInput');
-            majorInput.addEventListener('input', debouncedGetResults);
-        }
+            function openHandshakeSearch() {
+                // Grab the current job title from the page
+                const title = document.getElementById('titleDiv').textContent;
+                // Encode the title for URL
+                const encodedTitle = encodeURIComponent(title);
 
-        document.addEventListener('DOMContentLoaded', setup);
-        document.addEventListener('DOMContentLoaded', getSearchResults);
+                // Handshake job search URL
+                // Example: https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=Software%20Engineer
+                const handshakeUrl = `https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=${encodedTitle}`;
+
+                // Open in new tab
+                window.open(handshakeUrl, '_blank');
+            }
+
+            // Generate salary box plot given values
+            function createSalaryBoxPlot(wage) {
+                // Create a chart container if it doesn't exist
+                let chartContainer = document.getElementById('salaryChart');
+                if (!chartContainer && (wage['10'] != "*" || wage['25'] != "*" || wage['50'] != "*" || wage['75'] != "*" || wage['90'] != "*")) {
+                    chartContainer = document.createElement('div');
+                    chartContainer.id = 'salaryChart';
+                    chartContainer.style.height = '350px';
+                    chartContainer.style.width = '100%';
+                    let wageDiv = document.getElementById('salaryDiv');
+                    wageDiv.appendChild(chartContainer);
+                }
+
+                if (wage['10'] == "*" || wage['25'] == "*" || wage['50'] == "*" || wage['75'] == "*" || wage['90'] == "*") {
+                    let meanText = document.createElement('p');
+                    meanText.textContent = "Insufficient Salary Data for Job Type";
+
+                    let img = document.createElement('img');
+                    img.src = 'static/images/oops.png';
+                    img.alt = 'Tiger with questionmarks';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.position = 'relative';
+                    img.style.maxWidth = '300px'
+
+                    let wageDiv = document.getElementById('salaryDiv');
+                    wageDiv.appendChild(img);
+                    wageDiv.appendChild(meanText);
+                } else {
+                    // Create the chart
+                    let dataPoints = [
+                        {
+                            label: "Salary Distribution",
+                            y: [
+                                Number(wage['10']),   // Minimum 
+                                Number(wage['25']),   // First quartile
+                                Number(wage['75']),   // Median
+                                Number(wage['90']),   // Third quartile
+                                Number(wage['50'])    // Maximum 
+                            ],
+                        }
+                    ];
+                    var chart = new CanvasJS.Chart("salaryChart", {
+                        theme: "light2",
+                        axisY: {
+                            title: "Annual Salary ($)",
+                            valueFormatString: "$#,##0"
+                        },
+                        dataPointWidth: 20,
+                        data: [{
+                            type: "boxAndWhisker",
+                            color: "#3498db",
+                            dataPoints: dataPoints,
+                            yValueFormatString: "$###,###",
+                        }]
+                    });
+
+                    chart.render();
+
+                    let meanText = document.createElement('p');
+                    meanText.textContent = `Mean Salary: $${Number(wage['mean']).toLocaleString('en-US')}`;
+                    let wageDiv = document.getElementById('salaryDiv');
+                    wageDiv.appendChild(meanText);
+                }
+            }
+
+            // Load in most info for job
+            function getJobHtml(info) {
+                let description = info['description'];
+                let skills = info['skills'];
+                let knowledge = info['knowledge'];
+                let wage = info['wage'];
+                let soc_code = info['soc_code'];
+                let work_styles = info['work_styles']
+
+                // Job title display
+                let titleDiv = document.getElementById('titleDiv');
+                titleDiv.textContent = info['title'];
+
+                description = Mustache.render("{{.}}", description);
+                if (skills && Array.isArray(skills) && skills.length > 0) {
+                    let numberedSkills = skills.map((skill, index) => `${index + 1}. ${skill[0]}`).join('<br>'); // Number each skill
+                    skills = Mustache.render("{{{skills}}}", { skills: numberedSkills });
+                }
+                else {
+                    skills = "No tasks or skills available for this job.";
+                }
+
+                if (work_styles && Array.isArray(work_styles) && work_styles.length > 0) {
+                    let numberedWork_styles = work_styles.map((work_styles, index) => `${index + 1}. ${work_styles[0]}`).join('<br>'); // Number each work_style
+                    work_styles = Mustache.render("{{{work_styles}}}", { work_styles: numberedWork_styles });
+                }
+                else {
+                    work_styles = "No work styles available for this job.";
+                }
+
+                let descriptionDiv = document.getElementById('descriptionDiv');
+                descriptionDiv.innerHTML = description;
+
+                let skillsDiv = document.getElementById('taskDiv');
+                skillsDiv.innerHTML = skills;
+
+                let wageDiv = document.getElementById('salaryDiv');
+                wageDiv.innerHTML = '';
+
+                let workstylesDiv = document.getElementById('workstylesDiv');
+                workstylesDiv.innerHTML = work_styles;
 
 
-        // Get user
-        function getUser() {
-            let req = new XMLHttpRequest();
-            req.open("GET", "/get_user", true);
+                createSalaryBoxPlot(info['wage']);
 
-            req.onload = function () {
-                const usernameElement = document.getElementById("username");
-                if (req.status === 200) {
-                    const info = JSON.parse(req.response);
-                    if (info.user) {
-                        usernameElement.textContent = info.user;
-                    } else if (info.error) {
+                loadComments(soc_code);
+            }
+
+            // Set off chain of job item requests
+            function handleJobResponse() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let info = JSON.parse(this.response);
+                getJobHtml(info);
+                // Hide welcome msg, show cards
+                document.getElementById('welcomeMessage').style.display = 'none';
+                document.getElementById('cardsContent').style.display = 'block';
+            }
+
+            function getJobResults(soc_code) {
+                let encodedSOC = encodeURIComponent(soc_code);
+                let url = '/job?soc_code=' + encodedSOC;
+
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleJobResponse;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // Initialize state of favorites
+            function handleLoadFavorites() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let favorites = JSON.parse(this.response);
+                for (var i = 0; i < favorites.length; i++) {
+                    if (!favorites[i].soc_code) continue;
+                    var button = document.getElementById('favorite' + favorites[i].soc_code);
+                    if (button) {
+                        button.classList.add('active');
+                    }
+                }
+            }
+
+            function loadFavorites() {
+                let url = '/preferences';
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleLoadFavorites;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // Favorite/unfavorite a job
+            function handleFavorite() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let info = JSON.parse(this.response);
+            }
+
+            function favorite(soc_code, status = 'True') {
+                let encodedSOC = encodeURIComponent(soc_code);
+                let encodedStatus = encodeURIComponent(status);
+                let url = '/update?soc_code=' + encodedSOC +
+                    '&status=' + encodedStatus;
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleFavorite;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // Load comments
+            function handleLoadComments() {
+                const usernameElement = document.getElementById('username');
+                const username = usernameElement.textContent.trim() || 'Guest';
+                let comments = JSON.parse(this.response);
+                let soc_code = comments['soc_code'];
+                console.log(comments)
+                console.log(soc_code)
+                const commentsDiv = document.getElementById('commentsDiv');
+                commentsDiv.innerHTML = '';
+                if (comments['continue']) {
+                    comments = comments['full'];
+                    let template = `
+                            {{#comments}}
+                                <div>
+                                    <strong>User {{user}}:</strong>
+                                    <span class="flag-icon" onclick="flagComment({{id}})" style="cursor: pointer;">⚑</span>
+                                    <p>{{text}}</p>
+                                <div>
+                            {{/comments}}
+                        `;
+                    let map = {
+                        comments: comments
+                    }
+                    let html = Mustache.render(template, map);
+                    commentsDiv.innerHTML = html;
+                }
+                const endDiv = document.createElement('div');
+                endDiv.innerHTML = `
+                    <textarea class="form-control mb-2" id="newComment" placeholder="Add a comment"></textarea>
+                    <button class="btn btn-primary" onclick="addComment('` + soc_code + `')">Post Comment</button>
+                    `
+                commentsDiv.appendChild(endDiv);
+            }
+
+            function loadComments(soc_code) {
+                let encodedSOC = encodeURIComponent(soc_code);
+                let url = '/comments?soc_code=' + encodedSOC;
+                if (request !== null)
+                    request.abort();
+                request = new XMLHttpRequest();
+                request.onload = handleLoadComments;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // Add a comment to a job
+            function handleAddComment() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+                let info = JSON.parse(this.response)[1];
+                loadComments(info);
+            }
+
+            function addComment(soc_code) {
+                let encodedSOC = encodeURIComponent(soc_code);
+                const newComment = document.getElementById('newComment').value.trim();
+                let encodedComment = encodeURIComponent(newComment);
+                let url = "/write_comment?soc_code=" + encodedSOC + "&text=" + encodedComment;
+
+                if (request !== null) {
+                    request.abort();
+                }
+                request = new XMLHttpRequest();
+                request.onload = handleAddComment;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+            
+            // Flag a comment
+            function handleFlagComment() {
+                if (this.status !== 200) {
+                    alert('Error: Failed to fetch data from server');
+                    return;
+                }
+            }
+
+            function flagComment(id) {
+                let encodedID = encodeURIComponent(id);
+                let url = "/flag_comment?id=" + encodedID;
+
+                if (request !== null) {
+                    request.abort();
+                }
+                request = new XMLHttpRequest();
+                request.onload = handleFlagComment;
+                request.onerror = handleError;
+                request.open('GET', url);
+                request.send();
+            }
+
+            // Get user      
+            function getUser() {
+                let req = new XMLHttpRequest();
+                req.open("GET", "/get_user", true);
+
+                req.onload = function () {
+                    const usernameElement = document.getElementById("username");
+                    if (req.status === 200) {
+                        const info = JSON.parse(req.response);
+                        if (info.user) {
+                            usernameElement.textContent = info.user;
+                        } else if (info.error) {
+                            usernameElement.textContent = "Guest";
+                        }
+                    } else {
+                        console.error("Error fetching user:", req.status);
                         usernameElement.textContent = "Guest";
                     }
-                } else {
-                    console.error("Error fetching user:", req.status);
-                    usernameElement.textContent = "Guest";
-                }
-            };
-            req.onerror = handleError;
-            req.send();
-        }
-        document.addEventListener('DOMContentLoaded', getUser);
+                };
+                req.onerror = handleError;
+                req.send();
+            }
 
+            function debouncedGetResults() {
+                clearTimeout(timer);
+                timer = setTimeout(getSearchResults, 500);
+            }
 
-        function openLinkedInSearch() {
-            // Grab the current job title from the page
-            const title = document.getElementById('titleDiv').textContent;
-            // Encode the title so it can be safely used in the URL
-            const encodedTitle = encodeURIComponent(title);
+            function setup() {
+                let majorInput = document.getElementById('majorInput');
+                majorInput.addEventListener('input', debouncedGetResults);
+                document.getElementById('sortAlgoButton').textContent = 'Alphabetical';
+                document.getElementById('sortFilterButton').textContent = '$0';
+            }
 
-            // Construct the LinkedIn job search URL
-            const linkedInUrl = `http://linkedin.com/jobs/search/?keywords=${encodedTitle}`;
+            document.addEventListener('DOMContentLoaded', setup);
+            document.addEventListener('DOMContentLoaded', getSearchResults);
+            document.addEventListener('DOMContentLoaded', getUser);
 
-            // Open the URL in a new browser tab
-            window.open(linkedInUrl, '_blank');
-        }
-
-        function openHandshakeSearch() {
-            // Grab the current job title from the page
-            const title = document.getElementById('titleDiv').textContent;
-            // Encode the title for URL
-            const encodedTitle = encodeURIComponent(title);
-
-            // Handshake job search URL
-            // Example: https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=Software%20Engineer
-            const handshakeUrl = `https://princeton.joinhandshake.com/stu/postings?page=1&per_page=25&sort_direction=desc&sort_column=default&query=${encodedTitle}`;
-
-            // Open in new tab
-            window.open(handshakeUrl, '_blank');
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('sortAlgoButton').textContent = 'Alphabetical';
-            document.getElementById('sortFilterButton').textContent = '$0';
-        });
-
-    </script>
-</body>
-
+        </script>
+    </body>
 </html>

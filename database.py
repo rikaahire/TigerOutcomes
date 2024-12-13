@@ -104,7 +104,7 @@ def write_favorite(name, soc_code, status):
     return ret
 
 # delete favorite for user
-def clear_favorites(name, status=None, soc_code=None):
+def clear_favorites(name, soc_code=None, status=None):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
     stmt = table.delete().where(table.c.name == name)

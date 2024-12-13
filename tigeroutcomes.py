@@ -162,6 +162,29 @@ def update_favorite():
     response.headers['Content-Type'] = 'application/json'
     return response
 
+# delete comment for a user
+@app.route('/delete', methods=['GET'])
+def delete():
+    user = auth.authenticate()
+    soc_code = flask.request.args.get('soc_code')
+    if soc_code is None:
+        json_doc = [False, 'missing soc code']
+        response = flask.make_response(json_doc)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    try:
+        status = flask.request.args.get('status')
+        ret = [True, db.clear_favorites(user, soc_code, status)]
+        json_doc = json.dumps(ret)
+    except:
+        json_doc = [False, ('A server error occurred. Please contact'
+                    ' the system administrator')]
+
+    response = flask.make_response(json_doc)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
 # comments JSON database request functions
 #-----------------------------------------------------------------------
 
