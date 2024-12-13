@@ -443,32 +443,35 @@
                     wageDiv.appendChild(chartContainer);
                 }
 
-                let dataPoints = [
-                    { 
-                        label: "Salary Distribution", 
-                        y: [
-                            Number(wage['10']),   // Minimum 
-                            Number(wage['25']),   // First quartile
-                            Number(wage['75']),   // Median
-                            Number(wage['90']),   // Third quartile
-                            Number(wage['50'])    // Maximum 
-                        ] 
-                    }
-                ];
-
                 if (wage['10'] == "*" || wage['25'] == "*" || wage['50'] == "*" || wage['75'] == "*" || wage['90'] == "*") {
                     let meanText = document.createElement('p');
                     meanText.textContent = "Insufficient Salary Data for Job Type";
 
                     let img = document.createElement('img');
                     img.src = 'static/images/oops.png'; 
-                    img.alt = 'Tiger with questionmarks'; 
+                    img.alt = 'Tiger with questionmarks';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.position = 'relative';
+                    img.style.maxWidth = '300px';
                     
                     let wageDiv = document.getElementById('salaryDiv');
                     wageDiv.appendChild(img);
                     wageDiv.appendChild(meanText);
                 } else {
                     // Create the chart
+                    let dataPoints = [
+                        { 
+                            label: "Salary Distribution", 
+                            y: [
+                                Number(wage['10']),   // Minimum 
+                                Number(wage['25']),   // First quartile
+                                Number(wage['75']),   // Median
+                                Number(wage['90']),   // Third quartile
+                                Number(wage['50'])    // Maximum 
+                            ] 
+                        }
+                    ];
                     var chart = new CanvasJS.Chart("salaryChart", {
                         theme: "light2",
                         axisY: {
