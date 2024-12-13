@@ -134,7 +134,8 @@ def preferences():
     user = auth.authenticate()
 
     fav = db.read_favorites(name=user, status=True)
-    fav = [{"name": row[0], "soc_code": row[1], "title": row[3]} for row in fav]
+    fav = [{"name": row["name"], "soc_code": row["soc_code"],
+            "title": row["title"], "mean_wage": row["mean_wage"]} for row in fav]
 
     json_doc = json.dumps(fav)
     response = flask.make_response(json_doc)

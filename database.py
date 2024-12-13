@@ -21,14 +21,18 @@ def read_favorites(name, soc_code=None, status=None, limit=default_limit):
     metadata = sqlalchemy.MetaData()
     table = sqlalchemy.Table('favorites', metadata, autoload_with=engine)
     onet_occupation_data = sqlalchemy.Table('onet_occupation_data', metadata, autoload_with=engine)
-    
-    query = select(
-        table,
-        onet_occupation_data.c['Title']
-    ).select_from(
-        table.join(
-            onet_occupation_data, 
-            table.c.soc_code == onet_occupation_data.c['O*NET-SOC Code']
+    table_wage = sqlalchemy.Table('bls_wage_data', metadata, autoload_with=engine)
+
+    query = (
+        select(
+            table,
+            onet_occupation_data.c['Title']
+        )
+        .select_from(
+            table.join(
+                onet_occupation_data,
+                table.c.soc_code == onet_occupation_data.c['O*NET-SOC Code']
+            )
         )
     )
 
@@ -41,9 +45,37 @@ def read_favorites(name, soc_code=None, status=None, limit=default_limit):
         query = query.where(table.c.status == status)
     
     # query = query.limit(limit)
+    ret = []
     with engine.connect() as conn:
-        rows = conn.execute(query).fetchall()
-    return rows
+        try:
+            rows = conn.execute(query).fetchall()
+            # Order by descending mean wage
+            for row in rows:
+                soc_code = row.soc_code
+                stmt_wage = sqlalchemy.select(table_wage).where(
+                    table_wage.c["OCC_CODE"] == soc_code[:7]
+                )
+                wage_data = conn.execute(stmt_wage).fetchall()
+
+                if wage_data:
+                    mean_wage = wage_data[0][18]
+                    try:
+                        mean_wage = int(mean_wage)
+                    except (ValueError, TypeError):
+                        mean_wage = 0
+                else:
+                    mean_wage = 0
+
+                ret.append({
+                    "name": row.name,
+                    "soc_code": row.soc_code,
+                    "title": row.Title,
+                    "mean_wage": mean_wage
+                })
+            ret.sort(key=lambda x: x["mean_wage"], reverse=True)
+        except SQLAlchemyError as e:
+            ret = f"Error reading favorites: {e}"
+    return ret
 
 # write to favorites table
 def write_favorite(name, soc_code, status):
