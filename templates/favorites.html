@@ -636,6 +636,14 @@
             function addComment(soc_code) {
                 let encodedSOC = encodeURIComponent(soc_code);
                 const newComment = document.getElementById('newComment').value.trim();
+                if (newComment == "" || newComment == null) {
+                    alert("Comment cannot be empty!");
+                    return; // Prevents further action if input is empty
+                }
+                if (newComment.length > 250) {
+                    alert("Comment larger than 250 characters, please shorten")
+                    return;
+                }
                 let encodedComment = encodeURIComponent(newComment);
                 let url = "/write_comment?soc_code=" + encodedSOC + "&text=" + encodedComment;
 
