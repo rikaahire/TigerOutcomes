@@ -175,7 +175,11 @@
             function addAdmin() {
                 let adminInput = document.getElementById('adminInput');
                 let admin = adminInput.value;
-                if (admin == null) admin = ""
+                if (admin == "" || admin == null) {
+                    alert("Admin netID cannot be empty!");
+                    request.abort; 
+                    return;
+                }
                 let encodedadmin = encodeURIComponent(admin);
                 let url = '/add_admin?user=' + encodedadmin;
                 if (request !== null)
