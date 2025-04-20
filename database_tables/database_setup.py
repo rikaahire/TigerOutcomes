@@ -12,7 +12,7 @@ from sqlalchemy import select, distinct
 #-----------------------------------------------------------------------
 
 dotenv.load_dotenv()
-DATABASE_URL = 'postgresql://tigeroutcomesdb_x9pf_user:Ewfihh7sXhDfzBS1JX51rem45ebypkqa@dpg-ctb2vm52ng1s73dphqqg-a.ohio-postgres.render.com/tigeroutcomesdb_x9pf'
+DATABASE_URL = ''
 #DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
 engine = sqlalchemy.create_engine(DATABASE_URL)
 

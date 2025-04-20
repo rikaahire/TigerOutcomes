@@ -20,7 +20,7 @@ class Comments(Base):
         return f"<Comments(id={self.id}, user = {self.user}, soc_code = {self.soc_code}, text={self.text}, valid={self.valid}, replies={self.replies})>"
 
 # Database connection
-DATABASE_URL = 'postgresql://tigeroutcomesdb_x9pf_user:Ewfihh7sXhDfzBS1JX51rem45ebypkqa@dpg-ctb2vm52ng1s73dphqqg-a.ohio-postgres.render.com/tigeroutcomesdb_x9pf'
+DATABASE_URL = ''
 engine = sqlalchemy.create_engine(DATABASE_URL)
 
 # Create comments table
